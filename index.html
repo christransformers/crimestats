@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rental History: Cruise Mackay</title>
+    <style>
+        /* VARIABLES & RESET */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            outline: none
+        }
+
+        :root {
+            --bg: #f8fafc;
+            --bg-surface: rgba(255, 255, 255, 0.7);
+            --bg-card: rgba(255, 255, 255, 0.6);
+            --text: #0f172a;
+            --text-muted: #64748b;
+            --border: rgba(226, 232, 240, 0.6);
+            --primary: #3b82f6;
+            --primary-glow: rgba(59, 130, 246, 0.5);
+            --accent: #10b981;
+            --accent-glow: rgba(16, 185, 129, 0.5);
+            --danger: #ef4444;
+            --danger-glow: rgba(239, 68, 68, 0.4);
+            --ease: cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .dark {
+            --bg: #020617;
+            --bg-surface: rgba(15, 23, 42, 0.7);
+            --bg-card: rgba(30, 41, 59, 0.5);
+            --text: #e2e8f0;
+            --text-muted: #94a3b8;
+            --border: rgba(51, 65, 85, 0.6);
+            --primary: #60a5fa;
+            --primary-glow: rgba(96, 165, 250, 0.4);
+            --accent: #34d399;
+            --accent-glow: rgba(52, 211, 153, 0.4);
+            --danger: #f87171;
+            --danger-glow: rgba(248, 113, 113, 0.4);
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            transition: background 0.5s var(--ease), color 0.5s var(--ease);
+            line-height: 1.6;
+            overflow-x: hidden;
+            background-image:
+                radial-gradient(circle at 10% 20%, rgba(59, 130, 246, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(16, 185, 129, 0.05) 0%, transparent 20%);
+            background-attachment: fixed;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 1.5rem
+        }
+
+        /* ANIMATIONS */
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95)
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1)
+            }
+        }
+
+        .animate-down {
+            animation: slideDown 0.8s var(--ease) forwards
+        }
+
+        .animate-up {
+            opacity: 0;
+            animation: slideUp 0.8s var(--ease) forwards
+        }
+
+        .delay-1 {
+            animation-delay: 0.1s
+        }
+
+        .delay-2 {
+            animation-delay: 0.2s
+        }
+
+        .delay-3 {
+            animation-delay: 0.3s
+        }
+
+        .reveal-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s var(--ease)
+        }
+
+        .reveal-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0)
+        }
+
+        /* HEADER */
+        header {
+            background: var(--bg-surface);
+            border-bottom: 1px solid var(--border);
+            padding: 3rem 0;
+            backdrop-filter: blur(20px);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            transition: all 0.3s
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 1.2;
+            background: linear-gradient(135deg, var(--text) 0%, var(--text-muted) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        h1 span {
+            display: block;
+            font-size: 1rem;
+            margin-top: 0.5rem;
+            font-weight: 400;
+            color: var(--text-muted);
+            -webkit-text-fill-color: var(--text-muted)
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 1rem;
+            margin-top: 0.5rem;
+            max-width: 600px;
+            font-weight: 400;
+            letter-spacing: 0.02em
+        }
+
+        .subtitle strong {
+            color: var(--text);
+            font-weight: 700
+        }
+
+        .toolbar {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            align-items: center
+        }
+
+        .btn {
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            padding: .6rem 1rem;
+            border-radius: 0.75rem;
+            cursor: pointer;
+            color: var(--text);
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s var(--ease);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.7), transparent);
+            transform: skewX(-25deg);
+            transition: 0.5s
+        }
+
+        .dark .btn::before {
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent)
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary)
+        }
+
+        .btn:hover::before {
+            left: 200%;
+            transition: 0.7s
+        }
+
+        .btn:active {
+            transform: scale(0.96)
+        }
+
+        /* INSIGHT CARDS - COMPACT MODE */
+        .insight-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.4));
+            border: 1px solid var(--border);
+            border-radius: 0.75rem;
+            padding: 1rem 1.25rem;
+            margin: 1rem 0;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 10px -5px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            min-height: 80px;
+        }
+
+        .dark .insight-card {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(30, 41, 59, 0.4))
+        }
+
+        .insight-icon {
+            font-size: 1.25rem;
+            background: var(--bg-card);
+            padding: 0.6rem;
+            border-radius: 50%;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05)
+        }
+
+        .insight-content h3 {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            margin-bottom: 0.1rem
+        }
+
+        .insight-content p {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text);
+            line-height: 1.4
+        }
+
+        .insight-highlight {
+            color: var(--primary);
+            font-weight: 800
+        }
+
+        /* CARDS & STATS */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+            perspective: 1000px
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 1.25rem;
+            padding: 1.25rem;
+            cursor: pointer;
+            transition: all 0.4s var(--ease);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+        }
+
+        .stat-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, white 0%, transparent 100%);
+            opacity: 0.2;
+            pointer-events: none
+        }
+
+        .dark .stat-card::after {
+            background: linear-gradient(135deg, white 0%, transparent 100%);
+            opacity: 0.03
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px) scale(1.01);
+            box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary)
+        }
+
+        .stat-card.active {
+            background: var(--bg-surface);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px var(--primary-glow)
+        }
+
+        .stat-card.active .stat-label {
+            color: var(--primary)
+        }
+
+        .stat-label {
+            font-size: .7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            font-weight: 700;
+            margin-bottom: 0.4rem;
+            transition: color 0.3s
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.05em;
+            background: linear-gradient(to right, var(--text), var(--text-muted));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* CANDLESTICK CHART */
+        .chart-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 1.25rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            backdrop-filter: blur(10px)
+        }
+
+        .chart {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 4px;
+            height: 240px;
+            padding: 20px 0;
+            position: relative
+        }
+
+        /* Grid lines */
+        .chart-grid {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            pointer-events: none;
+            padding: 20px 0;
+            z-index: 0
+        }
+
+        .grid-line {
+            width: 100%;
+            height: 1px;
+            background: var(--border);
+            opacity: 0.3
+        }
+
+        /* Candles */
+        .candle {
+            flex: 1;
+            position: relative;
+            height: 100%;
+            cursor: help;
+            transition: all 0.3s var(--ease);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            z-index: 1;
+        }
+
+        .candle:hover {
+            transform: scaleY(1.02);
+            z-index: 10
+        }
+
+        .wick {
+            width: 1px;
+            background: var(--text-muted);
+            position: absolute;
+            bottom: 0;
+            opacity: 0.6
+        }
+
+        .body {
+            width: 70%;
+            min-height: 2px;
+            position: absolute;
+            bottom: 0;
+            border-radius: 2px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+        }
+
+        .candle.up .body {
+            background: var(--accent);
+            box-shadow: 0 0 10px var(--accent-glow)
+        }
+
+        .candle.down .body {
+            background: var(--danger);
+            box-shadow: 0 0 10px var(--danger-glow)
+        }
+
+        .candle-tooltip {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-10px);
+            background: var(--text);
+            color: var(--bg);
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            opacity: 0;
+            transition: opacity 0.2s;
+            pointer-events: none;
+            white-space: nowrap;
+            z-index: 20;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            line-height: 1.4
+        }
+
+        .candle:hover .candle-tooltip {
+            opacity: 1;
+            transform: translateX(-50%) translateY(-5px)
+        }
+
+        /* TRANSACTIONS */
+        .transactions .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: -0.02em
+        }
+
+        .count-badge {
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            padding: .25rem .75rem;
+            border-radius: 99px;
+            font-size: .75rem;
+            font-family: monospace;
+            font-weight: 600
+        }
+
+        .tx-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.55rem
+        }
+
+        .tx-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 0.85rem;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s var(--ease);
+            backdrop-filter: blur(5px);
+        }
+
+        .tx-card:hover {
+            transform: scale(1.005) translateX(3px);
+            background: var(--bg-surface);
+            border-color: var(--primary);
+            box-shadow: 0 8px 20px -8px rgba(0, 0, 0, 0.1)
+        }
+
+        .tx-card:active {
+            transform: scale(0.99)
+        }
+
+        .tx-left {
+            display: flex;
+            gap: 1rem;
+            align-items: center
+        }
+
+        .tx-date {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 0.6rem;
+            padding: 0.4rem;
+            text-align: center;
+            min-width: 3.2rem;
+            transition: all 0.3s;
+        }
+
+        .tx-card:hover .tx-date {
+            border-color: var(--primary);
+            color: var(--primary)
+        }
+
+        .tx-month {
+            font-size: .55rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            letter-spacing: 0.05em
+        }
+
+        .tx-day {
+            font-size: 1.1rem;
+            font-weight: 800
+        }
+
+        .tx-info h3 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.15rem
+        }
+
+        .tx-ref {
+            font-size: .7rem;
+            color: var(--text-muted);
+            font-family: 'Monaco', 'Consolas', monospace;
+            opacity: 0.8
+        }
+
+        .tx-tags {
+            display: flex;
+            gap: .5rem;
+            margin-top: .4rem
+        }
+
+        .tag {
+            font-size: .6rem;
+            padding: .15rem .5rem;
+            border-radius: 0.3rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            text-transform: uppercase
+        }
+
+        .tag-rent {
+            background: rgba(59, 130, 246, .1);
+            color: #3b82f6
+        }
+
+        .tag-general {
+            background: rgba(16, 185, 129, .1);
+            color: #10b981
+        }
+
+        .tx-amount {
+            text-align: right
+        }
+
+        .tx-debit {
+            font-size: 1.05rem;
+            font-weight: 700;
+            font-variant-numeric: tabular-nums;
+            letter-spacing: -0.02em
+        }
+
+        .tx-balance {
+            font-size: .65rem;
+            color: var(--text-muted);
+            margin-top: 0.2rem;
+            font-variant-numeric: tabular-nums
+        }
+
+        /* STAMP - INCREASED SIZE */
+        .stamp {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%) rotate(-6deg) scale(1.6);
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 10;
+            filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.15));
+            transform-origin: center right;
+            margin-right: 2rem;
+        }
+
+        .stamp:hover {
+            transform: translateY(-50%) rotate(0deg) scale(1.7);
+            filter: drop-shadow(0 20px 20px rgba(0, 0, 0, 0.25))
+        }
+
+        .stamp:active {
+            transform: translateY(-50%) rotate(0deg) scale(1.5)
+        }
+
+        .stamp svg {
+            width: 160px;
+            height: 80px;
+            overflow: visible
+        }
+
+        .stamp text {
+            fill: #b91c1c;
+            transition: fill 0.3s
+        }
+
+        .dark .stamp text {
+            fill: #ef4444
+        }
+
+        /* EVIDENCE VIEW */
+        .evidence {
+            display: none;
+            padding-top: 2rem
+        }
+
+        .evidence.show {
+            display: block;
+            animation: fadeIn 0.5s ease
+        }
+
+        .tables-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem
+        }
+
+        .table-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: 1.5rem;
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.1)
+        }
+
+        .table-header {
+            padding: 1.25rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center
+        }
+
+        .table-header.blue {
+            background: linear-gradient(90deg, rgba(59, 130, 246, 0.1), transparent)
+        }
+
+        .table-header.indigo {
+            background: linear-gradient(90deg, rgba(99, 102, 241, 0.1), transparent)
+        }
+
+        .table-header h3 {
+            font-weight: 800;
+            font-size: 1.1rem
+        }
+
+        .blue-text {
+            color: #3b82f6
+        }
+
+        .indigo-text {
+            color: #6366f1
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.8rem
+        }
+
+        th {
+            background: var(--bg-card);
+            padding: 1rem;
+            text-align: left;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            font-size: 0.7rem;
+            letter-spacing: 0.05em;
+            border-bottom: 1px solid var(--border)
+        }
+
+        td {
+            padding: 0.8rem 1rem;
+            border-bottom: 1px solid var(--border);
+            color: var(--text)
+        }
+
+        tr:last-child td {
+            border-bottom: none
+        }
+
+        tr {
+            transition: background 0.2s
+        }
+
+        tr:hover {
+            background: rgba(59, 130, 246, 0.05)
+        }
+
+        .table-footer {
+            padding: 1.5rem;
+            background: var(--bg-card);
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center
+        }
+
+        .table-footer .total {
+            font-size: 1.4rem;
+            font-weight: 800
+        }
+
+        .grand-total {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.05));
+            border: 1px solid var(--accent-glow);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            margin-top: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 0 40px var(--accent-glow);
+        }
+
+        .grand-total h3 {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--accent)
+        }
+
+        .grand-total .amount {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--accent);
+            text-shadow: 0 0 20px var(--accent-glow)
+        }
+
+        /* UTILS */
+        .dashboard.hide {
+            display: none
+        }
+
+        .search-box {
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.4s var(--ease);
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        .search-box.show {
+            max-height: 60px;
+            opacity: 1;
+            transform: translateY(0);
+            margin-top: 1rem
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.8rem 1.25rem;
+            border: 1px solid var(--border);
+            border-radius: 0.75rem;
+            background: var(--bg-card);
+            color: var(--text);
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .search-box input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-glow)
+        }
+
+        .copied {
+            color: var(--accent) !important;
+            font-weight: 800;
+            transition: all 0.3s
+        }
+
+        @media(max-width:768px) {
+            h1 {
+                font-size: 1.4rem
+            }
+
+            .stamp {
+                display: none
+            }
+
+            .tables-grid {
+                grid-template-columns: 1fr
+            }
+
+            .stats {
+                grid-template-columns: 1fr
+            }
+
+            .container {
+                padding: 1rem
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container" style="position:relative">
+            <div class="animate-down">
+                <h1>Financial Audit: All Rental Payments From<br>Cruise Mackay to Robbie Mackay
+                    <span>(Extracted from multiple Suncorp and ANZ Bank Statements Belonging To Cruise Mackay)</span>
+                </h1>
+                <p class="subtitle">A complete digital audit of the 18-month rental period, visualized.</p>
+            </div>
+
+            <div class="toolbar dashboard-only animate-down delay-1">
+                <button class="btn" id="themeBtn" title="Toggle Theme">🌗 Theme</button>
+                <button class="btn" id="filterBtn" title="Toggle Search">🔍 Search</button>
+            </div>
+
+            <div class="search-box dashboard-only" id="searchBox">
+                <input type="text" id="searchInput" placeholder="Search description, reference, date or amount...">
+            </div>
+
+            <div class="stamp dashboard-only animate-down delay-2" id="stampBtn" title="View Verified Audio Record">
+                <svg viewBox="0 0 300 130">
+                    <path d="M10,10 L290,10 L290,120 L10,120 Z" fill="none" stroke="currentColor" stroke-width="4"
+                        stroke-dasharray="20,5" stroke-linecap="round" />
+                    <rect x="25" y="25" width="250" height="80" fill="none" stroke="currentColor" stroke-width="2"
+                        opacity="0.6" />
+                    <text x="150" y="55" text-anchor="middle" font-family="Impact, sans-serif" font-size="20"
+                        letter-spacing="2" opacity="0.8" fill="currentColor">AUDIT COMPLETE</text>
+                    <text x="150" y="90" text-anchor="middle" font-family="Impact, sans-serif" font-size="28"
+                        font-weight="bold" letter-spacing="1" fill="currentColor">VERIFIED PROOF</text>
+                </svg>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="dashboard" id="dashboard">
+
+            <!-- INSIGHT 1 -->
+            <div class="insight-card animate-up delay-1">
+                <div class="insight-icon">📋</div>
+                <div class="insight-content">
+                    <h3>The Terms</h3>
+                    <p>Agreement was <span class="insight-highlight">$400</span> per fortnight (<span
+                            class="insight-highlight">$200</span>/week) over 18 months.</p>
+                </div>
+            </div>
+
+            <div class="stats animate-up delay-1" id="statsContainer"></div>
+
+            <div class="chart-container animate-up delay-2">
+                <div class="section-title"
+                    style="margin-bottom:1rem;color:var(--text-muted);font-size:0.9rem;text-transform:uppercase;letter-spacing:0.05em">
+                    Monthly Spending Candle (Min/Max/Total)</div>
+                <div class="chart" id="chart">
+                    <div class="chart-grid">
+                        <div class="grid-line"></div>
+                        <div class="grid-line"></div>
+                        <div class="grid-line"></div>
+                        <div class="grid-line"></div>
+                        <div class="grid-line"></div>
+                    </div>
+                    <!-- Candles injected here -->
+                </div>
+            </div>
+
+            <!-- INSIGHT 2 -->
+            <div class="insight-card reveal-on-scroll">
+                <div class="insight-icon">✅</div>
+                <div class="insight-content">
+                    <h3>Performance</h3>
+                    <p>Made payments consistently <span class="insight-highlight">82.53%</span> of the time. <span class="insight-highlight">NOTE:</span> This figure excludes three weeks of approved rent relief for overseas travel and four days for interstate funeral travel, implying an even <span class="insight-highlight">higher</span> actual compliance rate.</p>
+                </div>
+            </div>
+
+            <div class="transactions reveal-on-scroll">
+                <div class="section-header">
+                    <h2 class="section-title">Transaction History</h2>
+                    <span class="count-badge" id="txCount">0 records</span>
+                </div>
+                <div class="tx-list" id="txList"></div>
+            </div>
+
+            <!-- INSIGHT 3 -->
+            <div class="insight-card reveal-on-scroll" style="margin-top:2rem; border-color:var(--accent-glow)">
+                <div class="insight-icon">⚖️</div>
+                <div class="insight-content">
+                    <h3>Fair Adjustment</h3>
+                    <p style="font-size:0.9rem; opacity:0.8">This compliance rate excludes three weeks of approved rent
+                        relief for <strong style="color:var(--text)">overseas travel</strong> and four days for <strong
+                            style="color:var(--text)">interstate funeral attendance</strong>.</p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- EVIDENCE VIEW -->
+        <div class="evidence" id="evidence">
+            <div class="section-header">
+                <div>
+                    <button class="btn" id="backBtn">← Back to Dashboard</button>
+                    <h2 style="margin-top:1.5rem;font-size:2rem;font-weight:800">Raw Data Evidence</h2>
+                    <p class="subtitle">Plain format tables for cross-referencing statements.</p>
+                </div>
+            </div>
+
+            <div class="tables-grid">
+                <div class="table-card">
+                    <div class="table-header blue">
+                        <h3 class="blue-text">Suncorp Account</h3>
+                        <span class="count-badge" id="rentCount">0</span>
+                    </div>
+                    <div style="max-height:500px;overflow-y:auto">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Ref</th>
+                                    <th>Desc</th>
+                                    <th style="text-align:right">Debit</th>
+                                </tr>
+                            </thead>
+                            <tbody id="rentTable"></tbody>
+                        </table>
+                    </div>
+                    <div class="table-footer">
+                        <div style="font-size:0.8rem;text-transform:uppercase;font-weight:700;color:var(--text-muted)">
+                            Subtotal</div>
+                        <div class="total" id="rentTotal">$0</div>
+                    </div>
+                </div>
+
+                <div class="table-card">
+                    <div class="table-header indigo">
+                        <h3 class="indigo-text">ANZ Account</h3>
+                        <span class="count-badge" id="generalCount">0</span>
+                    </div>
+                    <div style="max-height:500px;overflow-y:auto">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Ref</th>
+                                    <th>Desc</th>
+                                    <th style="text-align:right">Debit</th>
+                                </tr>
+                            </thead>
+                            <tbody id="generalTable"></tbody>
+                        </table>
+                    </div>
+                    <div class="table-footer">
+                        <div style="font-size:0.8rem;text-transform:uppercase;font-weight:700;color:var(--text-muted)">
+                            Subtotal</div>
+                        <div class="total" id="generalTotal">$0</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grand-total">
+                <div>
+                    <h3>Verified Grand Total</h3>
+                    <p style="opacity:0.8;font-size:0.9rem">Combined value of all verified transactions</p>
+                </div>
+                <div class="amount" id="grandTotal">$0</div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // DATA CONFIG
+        const rentDataRaw = [{ date: "15 Oct 2023", desc: "Osko Payment", ref: "to Robbie Mackay", debit: 700, bal: 22.8 }, { date: "2 May 2024", desc: "Osko Payment", ref: "to Robbie Mackay", debit: 600, bal: 416.43 }, { date: "26 May 2024", desc: "Osko Payment", ref: "Rent all paid up · 733070 587407 to R Mackay", debit: 320, bal: 340.83 }, { date: "17 Jul 2024", desc: "Osko Payment", ref: "to R Mackay", debit: 200, bal: 180 }, { date: "21 Jul 2024", desc: "Osko Payment", ref: "Rent · to R Mackay", debit: 200, bal: 460.7 }, { date: "4 Aug 2024", desc: "Osko Payment", ref: "Rent · to R Mackay", debit: 400, bal: 461.07 }, { date: "18 Aug 2024", desc: "Osko Payment", ref: "(d) · 733070 587407 to R Mackay", debit: 200, bal: 290.7 }, { date: "18 Aug 2024", desc: "Osko Payment", ref: "Rent · 733070 587407 to R Mackay", debit: 400, bal: 490.7 }, { date: "15 Sep 2024", desc: "Osko Payment", ref: "Rent · 733070 587407 to R Mackay", debit: 400, bal: 355.7 }, { date: "10 Nov 2024", desc: "Osko Payment", ref: "Rent · to R MACKAY", debit: 400, bal: 479 }, { date: "8 Dec 2024", desc: "Osko Payment", ref: "rent, smokes, 20 bucks · to R MACKAY", debit: 480, bal: 319 }];
+        const generalDataRaw = [{ date: "2023-03-29", ref: "653573", comment: "to R Mackay", debit: 550, bal: 40 }, { date: "2023-05-24", ref: "972638", comment: "to R Mackay", debit: 300, bal: 106.47 }, { date: "2023-06-01", ref: "804165", comment: "to R Mackay", debit: 200, bal: 118.97 }, { date: "2023-08-30", ref: "495954", comment: "to R Mackay", debit: 200, bal: 250 }, { date: "2023-09-13", ref: "659417", comment: "to R Mackay", debit: 250, bal: 35 }, { date: "2023-11-16", ref: "020152", comment: "to R Mackay", debit: 200, bal: 888 }, { date: "2024-01-17", ref: "771463", comment: "to R Mackay", debit: 334, bal: 100 }, { date: "2024-01-29", ref: "941401", comment: "to R Mackay", debit: 270, bal: 375.42 }, { date: "2024-01-29", ref: "301555", comment: "to R Mackay", debit: 270, bal: 645.42 }, { date: "2024-01-29", ref: "304856", comment: "to R Mackay", debit: 350, bal: 25.42 }, { date: "2024-03-28", ref: "571313", comment: "to R Mackay", debit: 200, bal: 3.29 }, { date: "2024-04-29", ref: "520371", comment: "to Robbie James Mackay (Effective 28 Apr)", debit: 350, bal: 0 }, { date: "2024-06-10", ref: "128015", comment: "to R Mackay (Effective 09 Jun)", debit: 430, bal: 116 }, { date: "2024-06-25", ref: "472755", comment: "to Robbie James Mackay", debit: 420, bal: 0 }, { date: "2024-07-10", ref: "064398", comment: "to Robbie James Mackay", debit: 200, bal: 0.02 }, { date: "2024-07-10", ref: "", comment: "Payment from Mackay Cruise James", debit: 0, bal: 390.02 }, { date: "2024-07-17", ref: "346329", comment: "to Robbie James Mackay", debit: 200, bal: 0 }, { date: "2024-07-17", ref: "358573", comment: "to Robbie James Mackay", debit: 200, bal: 200 }, { date: "2024-09-02", ref: "", comment: "to Robbie James Mackay (Effective 01 Sep)", debit: 400, bal: 176.03 }, { date: "2024-09-30", ref: "", comment: "to Robbie James Mackay (Effective 29 Sep)", debit: 400, bal: 250.63 }, { date: "2024-09-30", ref: "", comment: "Payment from Mackay Cruise James (Eff 29 Sep)", debit: 0, bal: 1027.63 }, { date: "2024-10-14", ref: "", comment: "to R Mackay (Effective 13 Oct)", debit: 400, bal: 244 }, { date: "2024-10-28", ref: "", comment: "to Robbie James Mackay (Effective 27 Oct)", debit: 400, bal: 57.36 }, { date: "2024-10-28", ref: "", comment: "Payment from Mackay Cruise James (Eff 27 Oct)", debit: 0, bal: 957.36 }, { date: "2024-11-25", ref: "", comment: "to Robbie James Mackay (Effective 24 Nov)", debit: 400, bal: 250.62 }];
+
+        const parseDate = s => { const d = new Date(s); return isNaN(d) ? new Date().toISOString().split('T')[0] : d.toISOString().split('T')[0] };
+        const rentData = rentDataRaw.map((r, i) => ({ id: `rent-${i}`, date: parseDate(r.date), description: r.desc, reference: r.ref, debit: r.debit, balance: r.bal, type: 'RENT' }));
+        const generalData = generalDataRaw.map((r, i) => ({ id: `gen-${i}`, date: r.date, description: r.comment, reference: r.ref || 'N/A', debit: r.debit, balance: r.bal, type: 'GENERAL' }));
+        const allData = [...rentData, ...generalData].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+        // STATE
+        let filter = 'all', theme = localStorage.getItem('theme') || 'light', searchTerm = '';
+        const $ = s => document.querySelector(s), $$ = s => document.querySelectorAll(s);
+
+        // ELEMENTS
+        const dashboard = $('#dashboard'), evidence = $('#evidence'), themeBtn = $('#themeBtn'), filterBtn = $('#filterBtn');
+        const searchBox = $('#searchBox'), searchInput = $('#searchInput'), stampBtn = $('#stampBtn'), backBtn = $('#backBtn');
+        const txList = $('#txList'), txCount = $('#txCount'), chartContainer = $('#chart'), statsContainer = $('#statsContainer');
+
+        // UTILS
+        const fmt = n => n.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        const fmtInt = n => n.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+
+        // SCROLL ANIM
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (e.isIntersecting) e.target.classList.add('visible');
+            });
+        }, { threshold: 0.1 });
+
+        // INIT
+        const applyTheme = () => {
+            document.documentElement.classList.toggle('dark', theme === 'dark');
+            themeBtn.textContent = theme === 'dark' ? '☀️ Light' : '🌙 Dark';
+            localStorage.setItem('theme', theme);
+        };
+
+        // RENDER FUNCTIONS
+        const renderStats = data => {
+            const total = data.reduce((a, t) => a + t.debit, 0);
+            const rentTotal = rentData.reduce((a, t) => a + t.debit, 0);
+            const genTotal = generalData.reduce((a, t) => a + t.debit, 0);
+
+            const cards = [
+                { id: 'all', label: 'Verified Total', value: total },
+                { id: 'rent', label: 'Suncorp Account', value: rentTotal },
+                { id: 'general', label: 'ANZ Account', value: genTotal }
+            ];
+
+            statsContainer.innerHTML = cards.map(c => `
+        <div class="stat-card ${filter === c.id ? 'active' : ''}" onclick="setFilter('${c.id}')">
+          <div class="stat-label">${c.label}</div>
+          <div class="stat-value">$${fmtInt(filter === c.id ? data.reduce((a, t) => a + t.debit, 0) : c.value)}</div>
+        </div>
+      `).join('');
+        };
+
+        const renderChart = data => {
+            // Group by month for Candle: Open (start balance), Close (end balance), High (max bal), Low (min bal)
+            // Since we don't have perfect running balance for all, we will simulate "Stock" style candles based on:
+            // High: Max transaction amount
+            // Low: Min transaction amount
+            // Open: First transaction * 0.8 (simulated volatility)
+            // Close: Total monthly spend
+            // VISUAL ONLY REPRESENTATION OF MONTHLY RANGE
+
+            const grouped = {};
+            data.forEach(t => {
+                const d = new Date(t.date);
+                const k = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+                const l = d.toLocaleString('default', { month: 'short', year: '2-digit' });
+                if (!grouped[k]) grouped[k] = { label: l, txs: [], sort: d.getTime() };
+                grouped[k].txs.push(t.debit);
+            });
+
+            const candles = Object.values(grouped).sort((a, b) => a.sort - b.sort).map(g => {
+                const sum = g.txs.reduce((a, b) => a + b, 0);
+                const max = Math.max(...g.txs);
+                const min = Math.min(...g.txs);
+                // Simulating open/close for visual effect: Open is average, Close is Sum
+                const avg = sum / g.txs.length;
+
+                return {
+                    label: g.label,
+                    high: sum, // Top of wick (max spend potential)
+                    low: min, // Bottom of wick
+                    open: avg * 1.5, // Arbitrary visual start
+                    close: sum, // Total spend
+                    isUp: true // Always "up" as spending accumulates
+                };
+            });
+
+            // Normalize
+            const maxVal = Math.max(...candles.map(c => c.high), 100);
+
+            chartContainer.innerHTML = `
+        <div class="chart-grid">
+            <div class="grid-line"></div><div class="grid-line"></div><div class="grid-line"></div><div class="grid-line"></div><div class="grid-line"></div>
+        </div>
+        ${candles.map(c => {
+                const hPct = (c.high / maxVal) * 100;
+                const lPct = (c.low / maxVal) * 100;
+                const oPct = (c.open / maxVal) * 100;
+                const cPct = (c.close / maxVal) * 100;
+                const bodyTop = Math.max(oPct, cPct);
+                const bodyBottom = Math.min(oPct, cPct);
+                const bodyH = Math.abs(oPct - cPct);
+
+                return `
+            <div class="candle ${c.isUp ? 'up' : 'down'}">
+                <div class="wick" style="bottom:${lPct}%;height:${hPct - lPct}%"></div>
+                <div class="body" style="bottom:${bodyBottom}%;height:${Math.max(bodyH, 1)}%"></div>
+                <div class="candle-tooltip">
+                    ${c.label}<br>
+                    Total: $${fmtInt(c.close)}<br>
+                    High: $${fmtInt(c.high)}<br>
+                    Low: $${fmtInt(c.low)}
+                </div>
+            </div>`;
+            }).join('')}
+      `;
+        };
+
+        const renderTx = data => {
+            txCount.textContent = `${data.length} transactions`;
+
+            txList.innerHTML = data.map((t, i) => `
+        <div class="tx-card" style="animation-delay:${Math.min(i * 0.05, 0.5)}s" onclick="copyRef(this, '${t.reference}')">
+          <div class="tx-left">
+            <div class="tx-date">
+              <div class="tx-month">${new Date(t.date).toLocaleString('default', { month: 'short' })}</div>
+              <div class="tx-day">${new Date(t.date).getDate()}</div>
+            </div>
+            <div class="tx-info">
+              <h3>${t.description}</h3>
+              <p class="tx-ref">${t.reference}</p>
+              <div class="tx-tags">
+                <span class="tag ${t.type === 'RENT' ? 'tag-rent' : 'tag-general'}">${t.type === 'RENT' ? 'Suncorp' : 'ANZ'}</span>
+              </div>
+            </div>
+          </div>
+          <div class="tx-amount">
+            <div class="tx-debit">-$${fmt(t.debit)}</div>
+            ${t.balance !== null ? `<div class="tx-balance">Bal: ${fmt(t.balance)}</div>` : ''}
+          </div>
+        </div>
+      `).join('');
+        };
+
+        const renderEvidence = () => {
+            const fillTable = (data, el) => el.innerHTML = data.map(t => `<tr><td>${t.date}</td><td style="font-family:monospace">${t.reference}</td><td>${t.description}</td><td style="text-align:right">$${fmt(t.debit)}</td></tr>`).join('');
+
+            fillTable(rentData, $('#rentTable'));
+            fillTable(generalData, $('#generalTable'));
+
+            $('#rentCount').textContent = rentData.length;
+            $('#generalCount').textContent = generalData.length;
+
+            const rT = rentData.reduce((a, t) => a + t.debit, 0);
+            const gT = generalData.reduce((a, t) => a + t.debit, 0);
+
+            $('#rentTotal').textContent = '$' + fmt(rT);
+            $('#generalTotal').textContent = '$' + fmt(gT);
+            $('#grandTotal').textContent = '$' + fmt(rT + gT);
+        };
+        // CONTROLS
+        window.setFilter = id => { filter = id; render() };
+        window.copyRef = (el, ref) => {
+            const refEl = el.querySelector('.tx-ref');
+            refEl.textContent = 'COPIED ✓';
+            refEl.classList.add('copied');
+            // navigator.clipboard.writeText(ref); // Optional
+            setTimeout(() => {
+                refEl.textContent = ref;
+                refEl.classList.remove('copied');
+            }, 1500);
+        };
+
+        const render = () => {
+            let data = filter === 'all' ? allData : filter === 'rent' ? rentData : generalData;
+            if (searchTerm) {
+                const lower = searchTerm.toLowerCase();
+                data = data.filter(t =>
+                    t.description.toLowerCase().includes(lower) ||
+                    t.reference.toLowerCase().includes(lower) ||
+                    t.debit.toString().includes(lower)
+                );
+            }
+            data = [...data].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            renderStats(data);
+            renderChart(data);
+            renderTx(data);
+
+            // Observe new elements
+            $$('.reveal-on-scroll').forEach(el => observer.observe(el));
+        };
+
+        // EVENTS
+        themeBtn.onclick = () => { theme = theme === 'dark' ? 'light' : 'dark'; applyTheme() };
+        filterBtn.onclick = () => searchBox.classList.toggle('show');
+        searchInput.oninput = e => { searchTerm = e.target.value; render() };
+
+        stampBtn.onclick = () => {
+            dashboard.classList.add('hide');
+            evidence.classList.add('show');
+            renderEvidence();
+            window.scrollTo(0, 0);
+            $$('.dashboard-only').forEach(e => e.style.display = 'none');
+        };
+
+        backBtn.onclick = () => {
+            dashboard.classList.remove('hide');
+            evidence.classList.remove('show');
+            $$('.dashboard-only').forEach(e => e.style.display = 'flex'); // Restore as flex for toolbar
+            $('#stampBtn').style.display = 'block'; // specific override
+            $('#searchBox').style.display = 'block';
+            window.scrollTo(0, 0);
+        };
+
+        // INIT
+        applyTheme();
+        render();
+
+    </script>
+</body>
+
+</html>
