@@ -1,0 +1,5 @@
+# HTTrack Website Copier Cookie File
+# This file format is compatible with Netscape cookies
+www.dcata.gov.au	TRUE	/	FALSE	1999999999	ckan	vrwhN3NpU3FWNAtQtDAyAajocJsO9U4F4qxzodBuqSI
+www.dcata.gov.au	TRUE	/	FALSE	1999999999	SameSite	Lax
+
