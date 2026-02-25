@@ -446,7 +446,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <ul class="nav">
                     
                         <li class="nav-item">
-                            <a class="nav-link" href="https://docs.ckan.org/en/2.11/api/index.html">
+                            <a class="nav-link" href="https://docs.ckan.org/en/2.11/api/index/>
                                 CKAN Documentation
                             </a>
                         </li>
