@@ -1,0 +1,1731 @@
+<!DOCTYPE html>
+
+<!-- Mirrored from solr.apache.org/guide/6_6/transforming-result-documents.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 26 Feb 2026 00:40:00 GMT -->
+<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="keywords" content=" ">
+
+<title>Transforming Result Documents | Apache Solr Reference Guide 6.6</title>
+<link rel="canonical" href="https://solr.apache.org/guide/solr/latest/query-guide/document-transformers.html">
+<meta name="robots" content="noindex">
+<link href="https://solr.apache.org/guide/6_6/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+<!--<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">-->
+<link rel="stylesheet" href="https://solr.apache.org/guide/6_6/css/lavish-bootstrap.css">
+<link rel="stylesheet" href="https://solr.apache.org/guide/6_6/css/customstyles.css">
+<link rel="stylesheet" href="https://solr.apache.org/guide/6_6/css/theme-solr.css">
+<link rel="stylesheet" href="https://solr.apache.org/guide/6_6/css/ref-guide.css">
+<link rel="stylesheet" href="https://solr.apache.org/guide/6_6/css/comments.css">
+
+<script src="https://solr.apache.org/guide/6_6/js/jquery-2.1.4.min.js"></script>
+<script src="https://solr.apache.org/guide/6_6/js/jquery.cookie-1.4.1.min.js"></script>
+<script src="https://solr.apache.org/guide/6_6/js/jquery.navgoco.min.js"></script>
+
+<script src="https://solr.apache.org/guide/6_6/js/bootstrap-3.3.4.min.js"></script>
+<script src="https://solr.apache.org/guide/6_6/js/anchor-2.0.0.min.js"></script>
+<script src="https://solr.apache.org/guide/6_6/js/toc.js"></script>
+<script src="https://solr.apache.org/guide/6_6/js/customscripts.js"></script>
+
+<link rel="shortcut icon" href="https://solr.apache.org/guide/6_6/images/icons/favicon.ico">
+
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="js/html5shiv-3.7.0.js"></script>
+<script src="js/respond-1.4.2.min.js"></script>
+<![endif]-->
+
+<link rel="alternate" type="application/rss+xml" title="Apache Solr Reference Guide" href="https://home.apache.org/~ctargett/RefGuidePOC/jekyll-full/feed.xml">
+
+    <script>
+        $(document).ready(function() {
+            // Initialize navgoco with default options
+            $("#mysidebar").navgoco({
+                caretHtml: '',
+                accordion: true,
+                openClass: 'active', // open
+                save: false, // we do *NOT* want cookies used to save the current stage of the sidebar
+                             // instead the code in sidebar.html will ensure that the current page
+                             // (and it's ancestors) are "active" on page load
+                slide: {
+                    duration: 400,
+                    easing: 'swing'
+                }
+            });
+
+            $("#collapseAll").click(function(e) {
+                e.preventDefault();
+                $("#mysidebar").navgoco('toggle', false);
+            });
+
+            $("#expandAll").click(function(e) {
+                e.preventDefault();
+                $("#mysidebar").navgoco('toggle', true);
+            });
+
+        });
+
+    </script>
+</head>
+<body class="" id="transforming-result-documents">
+<!-- Navigation -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container topnavlinks">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            
+            <a class="fa fa-home fa-lg navbar-brand" href="https://solr.apache.org/guide/6_6/index.html">&nbsp;<span class="projectTitle"> Solr Ref Guide 6.6</span></a>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <!-- Link to Solr website -->
+                <li><a href="https://lucene.apache.org/solr/" target="_blank">Solr Website</a></li>
+                <!-- Other Guide Formats dropdown -->
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Other Formats<b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                       <li><a href="https://www.apache.org/dyn/closer.cgi/lucene/solr/ref-guide" target="_blank">PDF for Latest Release</a></li>
+                       <li><a href="https://archive.apache.org/dist/lucene/solr/ref-guide/" target="_blank">Archived PDFs</a></li>
+                       <li><a href="https://lucene.apache.org/solr/guide/" target="_blank">Other Versions Online</a></li>
+                    </ul>
+                </li>
+                <!-- Solr Resources dropdown -->
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Solr Resources<b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                       <li><a href="https://lucene.apache.org/solr/6_6_0//solr-core/index.html" target="_blank">Solr Javadocs</a></li>
+                       <li><a href="https://lucene.apache.org/solr/community.html#version-control" target="_blank">Lucene/Solr Source Code</a></li>
+                       <li><a href="https://lucene.apache.org/solr/community.html" target="_blank">Solr Community Links</a></li>
+                    </ul>
+                </li>
+                <!--comment out this block if you want to hide search-->
+                <li>
+                    <!--start search-->
+                    <div id="search-demo-container">
+                        <input type="text" id="search-input" placeholder="search...">
+                        <ul id="results-container"></ul>
+                    </div>
+                    <script src="https://solr.apache.org/guide/6_6/js/jekyll-search.js" type="text/javascript"></script>
+                    <script type="text/javascript">
+                            SimpleJekyllSearch.init({
+                                searchInput: document.getElementById('search-input'),
+                                resultsContainer: document.getElementById('results-container'),
+                                dataSource: 'search.json',
+                                searchResultTemplate: '<li><a href="{url}" title="Transforming Result Documents">{title}</a></li>',
+                    noResultsText: 'No results found.',
+                            limit: 10,
+                            fuzzy: true,
+                    })
+                    </script>
+                    <!--end search-->
+                </li>
+            </ul>
+        </div>
+        </div>
+        <!-- /.container -->
+</nav>
+
+<!-- Page Content -->
+<div class="container">
+  <div class="col-lg-12">&nbsp;</div>
+  <!-- Content Row -->
+  <div class="row">
+    <!-- Sidebar Column -->
+    <div class="col-md-3">
+      
+
+<ul id="mysidebar" class="nav">
+  <li class="sidebarTitle">Apache Solr Reference Guide</li>
+  
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/about-this-guide.html">About This Guide</a>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/getting-started.html">Getting Started</a>
+    
+    <ul>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/installing-solr.html">Installing Solr</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/running-solr.html">Running Solr</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/a-quick-overview.html">A Quick Overview</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/a-step-closer.html">A Step Closer</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/solr-control-script-reference.html">Solr Control Script Reference</a>
+        
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/upgrading-solr.html">Upgrading Solr</a>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/using-the-solr-administration-user-interface.html">Using the Solr Administration User Interface</a>
+    
+    <ul>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/overview-of-the-solr-admin-ui.html">Overview of the Solr Admin UI</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/getting-assistance.html">Getting Assistance</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/logging.html">Logging</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/cloud-screens.html">Cloud Screens</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/collections-core-admin.html">Collections / Core Admin</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/java-properties.html">Java Properties</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/thread-dump.html">Thread Dump</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/collection-specific-tools.html">Collection-Specific Tools</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/analysis-screen.html">Analysis Screen</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/dataimport-screen.html">Dataimport Screen</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/documents-screen.html">Documents Screen</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/files-screen.html">Files Screen</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/query-screen.html">Query Screen</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/stream-screen.html">Stream Screen</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/schema-browser-screen.html">Schema Browser Screen</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/core-specific-tools.html">Core-Specific Tools</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/ping.html">Ping</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/plugins-stats-screen.html">Plugins &amp; Stats Screen</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/replication-screen.html">Replication Screen</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/segments-info.html">Segments Info</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/documents-fields-and-schema-design.html">Documents, Fields, and Schema Design</a>
+    
+    <ul>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/overview-of-documents-fields-and-schema-design.html">Overview of Documents, Fields, and Schema Design</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/solr-field-types.html">Solr Field Types</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/field-type-definitions-and-properties.html">Field Type Definitions and Properties</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/field-types-included-with-solr.html">Field Types Included with Solr</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/working-with-currencies-and-exchange-rates.html">Working with Currencies and Exchange Rates</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/working-with-dates.html">Working with Dates</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/working-with-enum-fields.html">Working with Enum Fields</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/working-with-external-files-and-processes.html">Working with External Files and Processes</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/field-properties-by-use-case.html">Field Properties by Use Case</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/defining-fields.html">Defining Fields</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/copying-fields.html">Copying Fields</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/dynamic-fields.html">Dynamic Fields</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/other-schema-elements.html">Other Schema Elements</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/schema-api.html">Schema API</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/putting-the-pieces-together.html">Putting the Pieces Together</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/docvalues.html">DocValues</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/schemaless-mode.html">Schemaless Mode</a>
+        
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/understanding-analyzers-tokenizers-and-filters.html">Understanding Analyzers, Tokenizers, and Filters</a>
+    
+    <ul>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/analyzers.html">Analyzers</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/about-tokenizers.html">About Tokenizers</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/about-filters.html">About Filters</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/tokenizers.html">Tokenizers</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/filter-descriptions.html">Filter Descriptions</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/charfilterfactories.html">CharFilterFactories</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/language-analysis.html">Language Analysis</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/phonetic-matching.html">Phonetic Matching</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/running-your-analyzer.html">Running Your Analyzer</a>
+        
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/indexing-and-basic-data-operations.html">Indexing and Basic Data Operations</a>
+    
+    <ul>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/introduction-to-solr-indexing.html">Introduction to Solr Indexing</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/post-tool.html">Post Tool</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/uploading-data-with-index-handlers.html">Uploading Data with Index Handlers</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/transforming-and-indexing-custom-json.html">Transforming and Indexing Custom JSON</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/uploading-data-with-solr-cell-using-apache-tika.html">Uploading Data with Solr Cell using Apache Tika</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/uploading-structured-data-store-data-with-the-data-import-handler.html">Uploading Structured Data Store Data with the Data Import Handler</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/updating-parts-of-documents.html">Updating Parts of Documents</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/detecting-languages-during-indexing.html">Detecting Languages During Indexing</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/de-duplication.html">De-Duplication</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/content-streams.html">Content Streams</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/uima-integration.html">UIMA Integration</a>
+        
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/searching.html">Searching</a>
+    
+    <ul>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/overview-of-searching-in-solr.html">Overview of Searching in Solr</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/velocity-search-ui.html">Velocity Search UI</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/relevance.html">Relevance</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/query-syntax-and-parsing.html">Query Syntax and Parsing</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/common-query-parameters.html">Common Query Parameters</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/the-standard-query-parser.html">The Standard Query Parser</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/the-dismax-query-parser.html">The DisMax Query Parser</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/the-extended-dismax-query-parser.html">The Extended DisMax Query Parser</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/function-queries.html">Function Queries</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/local-parameters-in-queries.html">Local Parameters in Queries</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/other-parsers.html">Other Parsers</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/faceting.html">Faceting</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/blockjoin-faceting.html">BlockJoin Faceting</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/highlighting.html">Highlighting</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/spell-checking.html">Spell Checking</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/query-re-ranking.html">Query Re-Ranking</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/learning-to-rank.html">Learning To Rank</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/transforming-result-documents.html">Transforming Result Documents</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/suggester.html">Suggester</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/morelikethis.html">MoreLikeThis</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/pagination-of-results.html">Pagination of Results</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/collapse-and-expand-results.html">Collapse and Expand Results</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/result-grouping.html">Result Grouping</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/result-clustering.html">Result Clustering</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/spatial-search.html">Spatial Search</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/the-terms-component.html">The Terms Component</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/the-term-vector-component.html">The Term Vector Component</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/the-stats-component.html">The Stats Component</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/the-query-elevation-component.html">The Query Elevation Component</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/response-writers.html">Response Writers</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/velocity-response-writer.html">Velocity Response Writer</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/near-real-time-searching.html">Near Real Time Searching</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/realtime-get.html">RealTime Get</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/exporting-result-sets.html">Exporting Result Sets</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/streaming-expressions.html">Streaming Expressions</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/stream-sources.html">Stream Source Reference</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/stream-decorators.html">Stream Decorator Reference</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/stream-evaluators.html">Stream Evaluator Reference</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/graph-traversal.html">Graph Traversal</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/parallel-sql-interface.html">Parallel SQL Interface</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/solr-jdbc-dbvisualizer.html">Solr JDBC - DbVisualizer</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/solr-jdbc-squirrel-sql.html">Solr JDBC - SQuirreL SQL</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/solr-jdbc-apache-zeppelin.html">Solr JDBC - Apache Zeppelin</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/solr-jdbc-python-jython.html">Solr JDBC - Python/Jython</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/solr-jdbc-r.html">Solr JDBC - R</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/the-well-configured-solr-instance.html">The Well-Configured Solr Instance</a>
+    
+    <ul>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/configuring-solrconfig-xml.html">Configuring solrconfig.xml</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/datadir-and-directoryfactory-in-solrconfig.html">DataDir and DirectoryFactory in SolrConfig</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/lib-directives-in-solrconfig.html">Lib Directives in SolrConfig</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/schema-factory-definition-in-solrconfig.html">Schema Factory Definition in SolrConfig</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/indexconfig-in-solrconfig.html">IndexConfig in SolrConfig</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/requesthandlers-and-searchcomponents-in-solrconfig.html">RequestHandlers and SearchComponents in SolrConfig</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/initparams-in-solrconfig.html">InitParams in SolrConfig</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/updatehandlers-in-solrconfig.html">UpdateHandlers in SolrConfig</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/query-settings-in-solrconfig.html">Query Settings in SolrConfig</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/requestdispatcher-in-solrconfig.html">RequestDispatcher in SolrConfig</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/update-request-processors.html">Update Request Processors</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/codec-factory.html">Codec Factory</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/solr-cores-and-solr-xml.html">Solr Cores and solr.xml</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/format-of-solr-xml.html">Format of solr.xml</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/defining-core-properties.html">Defining core.properties</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/coreadmin-api.html">CoreAdmin API</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/config-sets.html">Config Sets</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/configuration-apis.html">Configuration APIs</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/blob-store-api.html">Blob Store API</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/config-api.html">Config API</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/request-parameters-api.html">Request Parameters API</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/managed-resources.html">Managed Resources</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/implicit-requesthandlers.html">Implicit RequestHandlers</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/solr-plugins.html">Solr Plugins</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/adding-custom-plugins-in-solrcloud-mode.html">Adding Custom Plugins in SolrCloud Mode</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/jvm-settings.html">JVM Settings</a>
+        
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/managing-solr.html">Managing Solr</a>
+    
+    <ul>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/taking-solr-to-production.html">Taking Solr to Production</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/securing-solr.html">Securing Solr</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/authentication-and-authorization-plugins.html">Authentication and Authorization Plugins</a>
+            
+            <ul>
+              
+              <li class="sb-level4">
+                <a href="https://solr.apache.org/guide/6_6/basic-authentication-plugin.html">Basic Authentication Plugin</a>
+                
+              </li>
+              
+              <li class="sb-level4">
+                <a href="https://solr.apache.org/guide/6_6/hadoop-authentication-plugin.html">Hadoop Authentication Plugin</a>
+                
+              </li>
+              
+              <li class="sb-level4">
+                <a href="https://solr.apache.org/guide/6_6/kerberos-authentication-plugin.html">Kerberos Authentication Plugin</a>
+                
+              </li>
+              
+              <li class="sb-level4">
+                <a href="https://solr.apache.org/guide/6_6/rule-based-authorization-plugin.html">Rule-Based Authorization Plugin</a>
+                
+              </li>
+              
+            </ul>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/enabling-ssl.html">Enabling SSL</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/running-solr-on-hdfs.html">Running Solr on HDFS</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/making-and-restoring-backups.html">Making and Restoring Backups</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/configuring-logging.html">Configuring Logging</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/using-jmx-with-solr.html">Using JMX with Solr</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/mbean-request-handler.html">MBean Request Handler</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/performance-statistics-reference.html">Performance Statistics Reference</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/metrics-reporting.html">Metrics Reporting</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/v2-api.html">v2 API</a>
+        
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/solrcloud.html">SolrCloud</a>
+    
+    <ul>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/getting-started-with-solrcloud.html">Getting Started with SolrCloud</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/how-solrcloud-works.html">How SolrCloud Works</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/shards-and-indexing-data-in-solrcloud.html">Shards and Indexing Data in SolrCloud</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/distributed-requests.html">Distributed Requests</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/read-and-write-side-fault-tolerance.html">Read and Write Side Fault Tolerance</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/solrcloud-configuration-and-parameters.html">SolrCloud Configuration and Parameters</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/setting-up-an-external-zookeeper-ensemble.html">Setting Up an External ZooKeeper Ensemble</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/using-zookeeper-to-manage-configuration-files.html">Using ZooKeeper to Manage Configuration Files</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/zookeeper-access-control.html">ZooKeeper Access Control</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/collections-api.html">Collections API</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/parameter-reference.html">Parameter Reference</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/command-line-utilities.html">Command Line Utilities</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/solrcloud-with-legacy-configuration-files.html">SolrCloud with Legacy Configuration Files</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/configsets-api.html">ConfigSets API</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/rule-based-replica-placement.html">Rule-based Replica Placement</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/cross-data-center-replication-cdcr.html">Cross Data Center Replication (CDCR)</a>
+        
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/legacy-scaling-and-distribution.html">Legacy Scaling and Distribution</a>
+    
+    <ul>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/introduction-to-scaling-and-distribution.html">Introduction to Scaling and Distribution</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/distributed-search-with-index-sharding.html">Distributed Search with Index Sharding</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/index-replication.html">Index Replication</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/combining-distribution-and-replication.html">Combining Distribution and Replication</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/merging-indexes.html">Merging Indexes</a>
+        
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/client-apis.html">Client APIs</a>
+    
+    <ul>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/introduction-to-client-apis.html">Introduction to Client APIs</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/choosing-an-output-format.html">Choosing an Output Format</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/client-api-lineup.html">Client API Lineup</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/using-javascript.html">Using JavaScript</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/using-python.html">Using Python</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/using-solrj.html">Using SolrJ</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/using-solr-from-ruby.html">Using Solr From Ruby</a>
+        
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/major-changes-from-solr-5-to-solr-6.html">Major Changes from Solr 5 to Solr 6</a>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/upgrading-a-solr-cluster.html">Upgrading a Solr Cluster</a>
+    
+    <ul>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/indexupgrader-tool.html">IndexUpgrader Tool</a>
+        
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/further-assistance.html">Further Assistance</a>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/solr-glossary.html">Solr Glossary</a>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/errata.html">Errata</a>
+    
+  </li>
+  
+</ul>
+
+
+<!-- set the 'active' class on the current page and ancestors -->
+<!-- this highlights the active parent class in the navgoco sidebar. this is critical so that the parent expands when you're viewing a page. This must appear below the sidebar code above. Otherwise, if placed inside customscripts.js, the script runs before the sidebar code runs and the class never gets inserted.-->
+<script>$("#mysidebar a[href='transforming-result-documents.html']").parents('li').toggleClass("active", true);</script>
+<!-- set the 'current' class on the current page and 'current-tree' on the current page + it's ancestors -->
+<!-- this can let us do css highlighting of the current page in the sidebar even if/when the user clicks around in the sidebar causing other sidebar elements to be 'active' -->
+<script>
+  $("#mysidebar a[href='transforming-result-documents.html']").parent('li').toggleClass("current", true);
+  $("#mysidebar a[href='transforming-result-documents.html']").parents('li').toggleClass("current-tree", true);
+</script>
+
+    </div>
+    <!-- Content Column -->
+    <div class="col-md-9">
+      <div class="post-header">
+   <h1 class="post-title-main">Transforming Result Documents</h1>
+</div>
+
+<!-- This adds a workflow map, to a page
+     See http://idratherbewriting.com/documentation-theme-jekyll/mydoc_workflow_maps.html
+     Leaving it here commented out in case we want to implement this in the future
+ -->
+
+<div class="post-content">
+
+   
+
+    
+    
+<!-- this handles the automatic toc. use ## for subheads to auto-generate the on-page minitoc. if you use html tags, you must supply an ID for the heading element in order for it to appear in the minitoc. -->
+
+<script src="https://solr.apache.org/guide/6_6/js/ref-guide-toc.js" type="text/javascript"></script>
+<script type="text/javascript">
+  // based on page variables, build up the list of headers for the top level toc (and any sub-section tocs)
+  do_tocs(2)
+</script>
+<div id="toc" class="toc toc-normal"></div>
+
+    
+
+<div class="main-content">
+  <div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Document Transformers can be used to modify the information returned about each documents in the results of a query.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="TransformingResultDocuments-UsingDocumentTransformers">Using Document Transformers</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>When executing a request, a document transformer can be used by including it in the <code>fl</code> parameter using square brackets, for example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="plain">fl=id,name,score,[shard]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Some transformers allow, or require, local parameters which can be specified as key value pairs inside the brackets:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="plain">fl=id,name,score,[explain style=nl]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As with regular fields, you can change the key used when a Transformer adds a field to a document via a prefix:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="plain">fl=id,name,score,my_val_a:[value v=42 t=int],my_val_b:[value v=7 t=float]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The sections below discuss exactly what these various transformers do.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="TransformingResultDocuments-AvailableTransformers">Available Transformers</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="TransformingResultDocuments-_value_-ValueAugmenterFactory"><code>[value]</code> - ValueAugmenterFactory</h3>
+<div class="paragraph">
+<p>Modifies every document to include the exact same value, as if it were a stored field in every document:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="plain">q=*:*&amp;fl=id,greeting:[value v=&#39;hello&#39;]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The above query would produce results like the following:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="xml"><span style="color: #008000; font-weight: bold">&lt;result</span> <span style="color: #7D9029">name=</span><span style="color: #BA2121">&quot;response&quot;</span> <span style="color: #7D9029">numFound=</span><span style="color: #BA2121">&quot;32&quot;</span> <span style="color: #7D9029">start=</span><span style="color: #BA2121">&quot;0&quot;</span><span style="color: #008000; font-weight: bold">&gt;</span>
+  <span style="color: #008000; font-weight: bold">&lt;doc&gt;</span>
+    <span style="color: #008000; font-weight: bold">&lt;str</span> <span style="color: #7D9029">name=</span><span style="color: #BA2121">&quot;id&quot;</span><span style="color: #008000; font-weight: bold">&gt;</span>1<span style="color: #008000; font-weight: bold">&lt;/str&gt;</span>
+    <span style="color: #008000; font-weight: bold">&lt;str</span> <span style="color: #7D9029">name=</span><span style="color: #BA2121">&quot;greeting&quot;</span><span style="color: #008000; font-weight: bold">&gt;</span>hello<span style="color: #008000; font-weight: bold">&lt;/str&gt;&lt;/doc&gt;</span>
+  <span style="color: #008000; font-weight: bold">&lt;/doc&gt;</span>
+  ...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>By default, values are returned as a String, but a &#8220;<code>t</code>&#8221; parameter can be specified using a value of int, float, double, or date to force a specific return type:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="plain">q=*:*&amp;fl=id,my_number:[value v=42 t=int],my_string:[value v=42]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In addition to using these request parameters, you can configure additional named instances of ValueAugmenterFactory, or override the default behavior of the existing <code>[value]</code> transformer in your solrconfig.xml file:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="xml"><span style="color: #008000; font-weight: bold">&lt;transformer</span> <span style="color: #7D9029">name=</span><span style="color: #BA2121">&quot;mytrans2&quot;</span> <span style="color: #7D9029">class=</span><span style="color: #BA2121">&quot;org.apache.solr.response.transform.ValueAugmenterFactory&quot;</span> <span style="color: #008000; font-weight: bold">&gt;</span>
+  <span style="color: #008000; font-weight: bold">&lt;int</span> <span style="color: #7D9029">name=</span><span style="color: #BA2121">&quot;value&quot;</span><span style="color: #008000; font-weight: bold">&gt;</span>5<span style="color: #008000; font-weight: bold">&lt;/int&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;/transformer&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;transformer</span> <span style="color: #7D9029">name=</span><span style="color: #BA2121">&quot;value&quot;</span> <span style="color: #7D9029">class=</span><span style="color: #BA2121">&quot;org.apache.solr.response.transform.ValueAugmenterFactory&quot;</span> <span style="color: #008000; font-weight: bold">&gt;</span>
+  <span style="color: #008000; font-weight: bold">&lt;double</span> <span style="color: #7D9029">name=</span><span style="color: #BA2121">&quot;defaultValue&quot;</span><span style="color: #008000; font-weight: bold">&gt;</span>5<span style="color: #008000; font-weight: bold">&lt;/double&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;/transformer&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The &#8220;<code>value</code>&#8221; option forces an explicit value to always be used, while the &#8220;<code>defaultValue</code>&#8221; option provides a default that can still be overridden using the &#8220;<code>v</code>&#8221; and &#8220;<code>t</code>&#8221; local parameters.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="TransformingResultDocuments-_explain_-ExplainAugmenterFactory"><code>[explain]</code> - ExplainAugmenterFactory</h3>
+<div class="paragraph">
+<p>Augments each document with an inline explanation of its score exactly like the information available about each document in the debug section:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="plain">q=features:cache&amp;wt=json&amp;fl=id,[explain style=nl]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Supported values for &#8220;<code>style</code>&#8221; are &#8220;<code>text</code>&#8221;, and &#8220;<code>html</code>&#8221;, and "nl" which returns the information as structured data:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="json">{ <span style="color: #008000; font-weight: bold">&quot;response&quot;</span>:{<span style="color: #008000; font-weight: bold">&quot;numFound&quot;</span>:<span style="color: #666666">2</span>,<span style="color: #008000; font-weight: bold">&quot;start&quot;</span>:<span style="color: #666666">0</span>,<span style="color: #008000; font-weight: bold">&quot;docs&quot;</span>:[
+      {
+        <span style="color: #008000; font-weight: bold">&quot;id&quot;</span>:<span style="color: #BA2121">&quot;6H500F0&quot;</span>,
+        <span style="color: #008000; font-weight: bold">&quot;[explain]&quot;</span>:{
+          <span style="color: #008000; font-weight: bold">&quot;match&quot;</span>:<span style="color: #008000; font-weight: bold">true</span>,
+          <span style="color: #008000; font-weight: bold">&quot;value&quot;</span>:<span style="color: #666666">1.052226</span>,
+          <span style="color: #008000; font-weight: bold">&quot;description&quot;</span>:<span style="color: #BA2121">&quot;weight(features:cache in 2) [DefaultSimilarity], result of:&quot;</span>,
+          <span style="color: #008000; font-weight: bold">&quot;details&quot;</span>:[{
+<span style="border: 1px solid #FF0000">...</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A default style can be configured by specifying an "args" parameter in your configuration:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="xml"><span style="color: #008000; font-weight: bold">&lt;transformer</span> <span style="color: #7D9029">name=</span><span style="color: #BA2121">&quot;explain&quot;</span> <span style="color: #7D9029">class=</span><span style="color: #BA2121">&quot;org.apache.solr.response.transform.ExplainAugmenterFactory&quot;</span> <span style="color: #008000; font-weight: bold">&gt;</span>
+  <span style="color: #008000; font-weight: bold">&lt;str</span> <span style="color: #7D9029">name=</span><span style="color: #BA2121">&quot;args&quot;</span><span style="color: #008000; font-weight: bold">&gt;</span>nl<span style="color: #008000; font-weight: bold">&lt;/str&gt;</span>
+<span style="color: #008000; font-weight: bold">&lt;/transformer&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="TransformingResultDocuments-_child_-ChildDocTransformerFactory"><code>[child]</code> - ChildDocTransformerFactory</h3>
+<div class="paragraph">
+<p>This transformer returns all <a href="https://solr.apache.org/guide/6_6/uploading-data-with-index-handlers.html#UploadingDatawithIndexHandlers-NestedChildDocuments">descendant documents</a> of each parent document matching your query in a flat list nested inside the matching parent document. This is useful when you have indexed nested child documents and want to retrieve the child documents for the relevant parent documents for any type of search query.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="plain">fl=id,[child parentFilter=doc_type:book childFilter=doc_type:chapter limit=100]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note that this transformer can be used even though the query itself is not a <a href="https://solr.apache.org/guide/6_6/other-parsers.html#OtherParsers-BlockJoinQueryParsers">Block Join query</a>.</p>
+</div>
+<div class="paragraph">
+<p>When using this transformer, the <code>parentFilter</code> parameter must be specified, and works the same as in all Block Join Queries, additional optional parameters are:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>childFilter</code> - query to filter which child documents should be included, this can be particularly useful when you have multiple levels of hierarchical documents (default: all children)</p>
+</li>
+<li>
+<p><code>limit</code> - the maximum number of child documents to be returned per parent document (default: 10)</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="TransformingResultDocuments-_shard_-ShardAugmenterFactory"><code>[shard]</code> - ShardAugmenterFactory</h3>
+<div class="paragraph">
+<p>This transformer adds information about what shard each individual document came from in a distributed request.</p>
+</div>
+<div class="paragraph">
+<p>ShardAugmenterFactory does not support any request parameters, or configuration options.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="TransformingResultDocuments-_docid_-DocIdAugmenterFactory"><code>[docid]</code> - DocIdAugmenterFactory</h3>
+<div class="paragraph">
+<p>This transformer adds the internal Lucene document id to each document – this is primarily only useful for debugging purposes.</p>
+</div>
+<div class="paragraph">
+<p>DocIdAugmenterFactory does not support any request parameters, or configuration options.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="TransformingResultDocuments-_elevated_and_excluded_"><code>[elevated]</code> and <code>[excluded]</code></h3>
+<div class="paragraph">
+<p>These transformers are available only when using the <a href="https://solr.apache.org/guide/6_6/the-query-elevation-component.html#the-query-elevation-component">Query Elevation Component</a>.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>[elevated]</code> annotates each document to indicate if it was elevated or not.</p>
+</li>
+<li>
+<p><code>[excluded]</code> annotates each document to indicate if it would have been excluded - this is only supported if you also use the <code>markExcludes</code> parameter.</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="plain">fl=id,[elevated],[excluded]&amp;excludeIds=GB18030TEST&amp;elevateIds=6H500F0&amp;markExcludes=true</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="json">{ <span style="color: #008000; font-weight: bold">&quot;response&quot;</span>:{<span style="color: #008000; font-weight: bold">&quot;numFound&quot;</span>:<span style="color: #666666">32</span>,<span style="color: #008000; font-weight: bold">&quot;start&quot;</span>:<span style="color: #666666">0</span>,<span style="color: #008000; font-weight: bold">&quot;docs&quot;</span>:[
+      {
+        <span style="color: #008000; font-weight: bold">&quot;id&quot;</span>:<span style="color: #BA2121">&quot;6H500F0&quot;</span>,
+        <span style="color: #008000; font-weight: bold">&quot;[elevated]&quot;</span>:<span style="color: #008000; font-weight: bold">true</span>,
+        <span style="color: #008000; font-weight: bold">&quot;[excluded]&quot;</span>:<span style="color: #008000; font-weight: bold">false</span>},
+      {
+        <span style="color: #008000; font-weight: bold">&quot;id&quot;</span>:<span style="color: #BA2121">&quot;GB18030TEST&quot;</span>,
+        <span style="color: #008000; font-weight: bold">&quot;[elevated]&quot;</span>:<span style="color: #008000; font-weight: bold">false</span>,
+        <span style="color: #008000; font-weight: bold">&quot;[excluded]&quot;</span>:<span style="color: #008000; font-weight: bold">true</span>},
+      {
+        <span style="color: #008000; font-weight: bold">&quot;id&quot;</span>:<span style="color: #BA2121">&quot;SP2514N&quot;</span>,
+        <span style="color: #008000; font-weight: bold">&quot;[elevated]&quot;</span>:<span style="color: #008000; font-weight: bold">false</span>,
+        <span style="color: #008000; font-weight: bold">&quot;[excluded]&quot;</span>:<span style="color: #008000; font-weight: bold">false</span>},
+<span style="border: 1px solid #FF0000">...</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="TransformingResultDocuments-_json_xml_"><code>[json]</code> / <code>[xml]</code></h3>
+<div class="paragraph">
+<p>These transformers replace field value containing a string representation of a valid XML or JSON structure with the actual raw XML or JSON structure rather than just the string value. Each applies only to the specific writer, such that <code>[json]</code> only applies to <code>wt=json</code> and <code>[xml]</code> only applies to <code>wt=xml</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="plain">fl=id,source_s:[json]&amp;wt=json</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="TransformingResultDocuments-_subquery_"><code>[subquery]</code></h3>
+<div class="paragraph">
+<p>This transformer executes a separate query per transforming document passing document fields as an input for subquery parameters. It&#8217;s usually used with <code>{!join}</code> and <code>{!parent}</code> query parsers, and is intended to be an improvement for <code>[child]</code>.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>It must be given an unique name: <code>fl=*,children:[subquery]</code></p>
+</li>
+<li>
+<p>There might be a few of them, eg <code>fl=*,sons:[subquery],daughters:[subquery]</code>.</p>
+</li>
+<li>
+<p>Every <code>[subquery]</code> occurrence adds a field into a result document with the given name, the value of this field is a document list, which is a result of executing subquery using document fields as an input.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Here is how it looks like in various formats:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="xml">  <span style="color: #008000; font-weight: bold">&lt;result</span> <span style="color: #7D9029">name=</span><span style="color: #BA2121">&quot;response&quot;</span> <span style="color: #7D9029">numFound=</span><span style="color: #BA2121">&quot;2&quot;</span> <span style="color: #7D9029">start=</span><span style="color: #BA2121">&quot;0&quot;</span><span style="color: #008000; font-weight: bold">&gt;</span>
+      <span style="color: #008000; font-weight: bold">&lt;doc&gt;</span>
+         <span style="color: #008000; font-weight: bold">&lt;int</span> <span style="color: #7D9029">name=</span><span style="color: #BA2121">&quot;id&quot;</span><span style="color: #008000; font-weight: bold">&gt;</span>1<span style="color: #008000; font-weight: bold">&lt;/int&gt;</span>
+         <span style="color: #008000; font-weight: bold">&lt;arr</span> <span style="color: #7D9029">name=</span><span style="color: #BA2121">&quot;title&quot;</span><span style="color: #008000; font-weight: bold">&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;str&gt;</span>vdczoypirs<span style="color: #008000; font-weight: bold">&lt;/str&gt;</span>
+         <span style="color: #008000; font-weight: bold">&lt;/arr&gt;</span>
+         <span style="color: #008000; font-weight: bold">&lt;result</span> <span style="color: #7D9029">name=</span><span style="color: #BA2121">&quot;children&quot;</span> <span style="color: #7D9029">numFound=</span><span style="color: #BA2121">&quot;1&quot;</span> <span style="color: #7D9029">start=</span><span style="color: #BA2121">&quot;0&quot;</span><span style="color: #008000; font-weight: bold">&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;doc&gt;</span>
+               <span style="color: #008000; font-weight: bold">&lt;int</span> <span style="color: #7D9029">name=</span><span style="color: #BA2121">&quot;id&quot;</span><span style="color: #008000; font-weight: bold">&gt;</span>2<span style="color: #008000; font-weight: bold">&lt;/int&gt;</span>
+               <span style="color: #008000; font-weight: bold">&lt;arr</span> <span style="color: #7D9029">name=</span><span style="color: #BA2121">&quot;title&quot;</span><span style="color: #008000; font-weight: bold">&gt;</span>
+                  <span style="color: #008000; font-weight: bold">&lt;str&gt;</span>vdczoypirs<span style="color: #008000; font-weight: bold">&lt;/str&gt;</span>
+               <span style="color: #008000; font-weight: bold">&lt;/arr&gt;</span>
+            <span style="color: #008000; font-weight: bold">&lt;/doc&gt;</span>
+         <span style="color: #008000; font-weight: bold">&lt;/result&gt;</span>
+      <span style="color: #008000; font-weight: bold">&lt;/doc&gt;</span>
+  ...</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="json">{ <span style="color: #008000; font-weight: bold">&quot;response&quot;</span>:{
+    <span style="color: #008000; font-weight: bold">&quot;numFound&quot;</span>:<span style="color: #666666">2</span>, <span style="color: #008000; font-weight: bold">&quot;start&quot;</span>:<span style="color: #666666">0</span>,
+    <span style="color: #008000; font-weight: bold">&quot;docs&quot;</span>:[
+      {
+        <span style="color: #008000; font-weight: bold">&quot;id&quot;</span>:<span style="color: #666666">1</span>,
+        <span style="color: #008000; font-weight: bold">&quot;subject&quot;</span>:[<span style="color: #BA2121">&quot;parentDocument&quot;</span>],
+        <span style="color: #008000; font-weight: bold">&quot;title&quot;</span>:[<span style="color: #BA2121">&quot;xrxvomgu&quot;</span>],
+        <span style="color: #008000; font-weight: bold">&quot;children&quot;</span>:{
+           <span style="color: #008000; font-weight: bold">&quot;numFound&quot;</span>:<span style="color: #666666">1</span>, <span style="color: #008000; font-weight: bold">&quot;start&quot;</span>:<span style="color: #666666">0</span>,
+           <span style="color: #008000; font-weight: bold">&quot;docs&quot;</span>:[
+              { <span style="color: #008000; font-weight: bold">&quot;id&quot;</span>:<span style="color: #666666">2</span>,
+                <span style="color: #008000; font-weight: bold">&quot;cat&quot;</span>:[<span style="color: #BA2121">&quot;childDocument&quot;</span>]
+              }
+            ]
+      }},
+      {
+         <span style="color: #008000; font-weight: bold">&quot;id&quot;</span>:<span style="color: #666666">4</span>,
+      <span style="border: 1px solid #FF0000">...</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java"> SolrDocumentList subResults <span style="color: #666666">=</span> <span style="color: #666666">(</span>SolrDocumentList<span style="color: #666666">)</span>doc<span style="color: #666666">.</span><span style="color: #7D9029">getFieldValue</span><span style="color: #666666">(</span><span style="color: #BA2121">&quot;children&quot;</span><span style="color: #666666">);</span></code></pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="TransformingResultDocuments-Subqueryresultfields">Subquery result fields</h4>
+<div class="paragraph">
+<p>To appear in subquery document list, a field should be specified both fl parameters, in main one fl (despite the main result documents have no this field) and in subquery&#8217;s one eg <code>foo.fl</code>. Of course, you can use wildcard in any or both of these parameters. For example, if field title should appear in categories subquery, it can be done via one of these ways.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="plain">fl=...title,categories:[subquery]&amp;categories.fl=title&amp;categories.q=...
+fl=...title,categories:[subquery]&amp;categories.fl=*&amp;categories.q=...
+fl=...*,categories:[subquery]&amp;categories.fl=*&amp;categories.q=...
+fl=...*,categories:[subquery]&amp;categories.fl=*&amp;categories.q=...</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="TransformingResultDocuments-SubqueryParametersShift">Subquery Parameters Shift</h4>
+<div class="paragraph">
+<p>If subquery is declared as <code>fl=*,foo:[subquery]</code>, subquery parameters are prefixed with the given name and period. eg</p>
+</div>
+<div class="paragraph">
+<p><code>q=<strong>:</strong>&amp;fl=*,<strong>foo</strong>:[subquery]&amp;<strong>foo.</strong>q=to be continued&amp;<strong>foo.</strong>rows=10&amp;<strong>foo.</strong>sort=id desc</code></p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="TransformingResultDocuments-DocumentFieldasanInputforSubqueryParameters">Document Field as an Input for Subquery Parameters</h4>
+<div class="paragraph">
+<p>It&#8217;s necessary to pass some document field values as a parameter for subquery. It&#8217;s supported via implicit <strong><code>row.<em>fieldname</em></code></strong> parameter, and can be (but might not only) referred via Local Parameters syntax: <code>q=namne:john&amp;fl=name,id,depts:[subquery]&amp;depts.q={!terms f=id <strong>v=$row.dept_id</strong>}&amp;depts.rows=10</code></p>
+</div>
+<div class="paragraph">
+<p>Here departmens are retrieved per every employee in search result. We can say that it&#8217;s like SQL <code>join ON emp.dept_id=dept.id</code>.</p>
+</div>
+<div class="paragraph">
+<p>Note, when document field has multiple values they are concatenated with comma by default, it can be changed by local parameter <code>foo:[subquery separator=' ']</code> , this mimics <strong><code>{!terms}</code></strong> to work smoothly with it.</p>
+</div>
+<div class="paragraph">
+<p>To log substituted subquery request parameters, add the corresponding parameter names, as in <code>depts.logParamsList=q,fl,rows,<strong>row.dept_id</strong></code></p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="TransformingResultDocuments-CoresandCollectionsinSolrCloud">Cores and Collections in SolrCloud</h4>
+<div class="paragraph">
+<p>Use <code>foo:[subquery fromIndex=departments]</code> to invoke subquery on another core on the same node, it&#8217;s what <strong><code>{!join}</code></strong> does for non-SolrCloud mode. But in case of SolrCloud just (and only) explicitly specify its' native parameters like <code>collection, shards</code> for subquery, eg:</p>
+</div>
+<div class="paragraph">
+<p><code>q=<strong>:</strong>&amp;fl=*,foo:[subquery]&amp;foo.q=cloud&amp;<strong>foo.collection</strong>=departments</code></p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>If subquery collection has a different unique key field name (let&#8217;s say <code>foo_id</code> at contrast to <code>id</code> in primary collection), add the following parameters to accommodate this difference: <code>foo.fl=id:foo_id&amp;foo.distrib.singlePass=true</code>. Otherwise you&#8217;ll get <code>NullPoniterException</code> from <code>QueryComponent.mergeIds</code>.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="TransformingResultDocuments-_geo_-Geospatialformatter"><code>[geo]</code> - Geospatial formatter</h3>
+<div class="paragraph">
+<p>Formats spatial data from a spatial field using a designated format type name. Two inner parameters are required: <code>f</code> for the field name, and <code>w</code> for the format name. Example: <code>geojson:[geo f=mySpatialField w=GeoJSON]</code>.</p>
+</div>
+<div class="paragraph">
+<p>Normally you&#8217;ll simply be consistent in choosing the format type you want by setting the <code>format</code> attribute on the spatial field type to <code>WKT</code> or <code>GeoJSON</code> – see the section <a href="https://solr.apache.org/guide/6_6/spatial-search.html#spatial-search">Spatial Search</a> for more information. If you are consistent, it&#8217;ll come out the way you stored it. This transformer offers a convenience to transform the spatial format to something different on retrieval.</p>
+</div>
+<div class="paragraph">
+<p>In addition, this feature is very useful with the <code>RptWithGeometrySpatialField</code> to avoid double-storage of the potentially large vector geometry. This transformer will detect that field type and fetch the geometry from an internal compact binary representation on disk (in docValues), and then format it as desired. As such, you needn&#8217;t mark the field as stored, which would be redundant. In a sense this double-storage between docValues and stored-value storage isn&#8217;t unique to spatial but with polygonal geometry it can be a lot of data, and furthermore you&#8217;d like to avoid storing it in a verbose format (like GeoJSON or WKT).</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="TransformingResultDocuments-_features_-LTRFeatureLoggerTransformerFactory"><code>[features]</code> - LTRFeatureLoggerTransformerFactory</h3>
+<div class="paragraph">
+<p>The "LTR" prefix stands for <a href="https://solr.apache.org/guide/6_6/learning-to-rank.html#learning-to-rank">Learning To Rank</a>. This transformer returns the values of features and it can be used for feature extraction and feature logging.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="plain">fl=id,[features store=yourFeatureStore]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This will return the values of the features in the <code>yourFeatureStore</code> store.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="plain">fl=id,[features]&amp;rq={!ltr model=yourModel}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you use <code>[features]</code> together with an Learning-To-Rank reranking query then the values of the features in the reranking model (<code>yourModel</code>) will be returned.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Adds tags, if any -->
+    <div class="tags">
+        
+    </div>
+
+<!-- Adds nav links on each page -->
+    
+    
+    <div class="scrollnav">
+      
+      <a class="btn btn-primary prev" href="https://solr.apache.org/guide/6_6/learning-to-rank.html">Learning To Rank</a>
+      
+      
+      <a class="btn btn-primary next" href="https://solr.apache.org/guide/6_6/suggester.html">Suggester</a>
+      
+    </div>
+    
+
+</div>
+
+<!-- Adds comments from Apache's Comment system -->
+
+<div id="comments_thread">
+</div>
+<script type="text/javascript" src="https://comments.apache.org/show_comments.lua?site=solr-refguide&amp;style=css/comments.css&amp;page=transforming-result-documents" async="true">
+</script>
+<noscript>
+<iframe width="100%" height="500" src="https://comments.apache.org/iframe.lua?site=solr-refguide&amp;style=css/comments.css&amp;page=transforming-result-documents"></iframe>
+</noscript>
+
+<footer>
+            <div class="row">
+                <div class="col-lg-12 footer">
+               &copy;2017 Apache Software Foundation. All rights reserved. <br />
+ Site Version: 6.6 <br />Site last generated: 2017-06-09 <br />
+<p><img src="https://solr.apache.org/guide/6_6/images/solr-sunOnly-small.png" alt="Apache Solr"/></p>
+                </div>
+            </div>
+</footer>
+
+
+    </div>
+    <!-- /.row -->
+  </div>
+  <!-- /.container -->
+</div>
+
+</body>
+
+<!-- Mirrored from solr.apache.org/guide/6_6/transforming-result-documents.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 26 Feb 2026 00:40:00 GMT -->
+</html>

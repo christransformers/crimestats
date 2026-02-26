@@ -1,0 +1,1896 @@
+<!DOCTYPE html>
+
+<!-- Mirrored from solr.apache.org/guide/6_6/metrics-reporting.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 26 Feb 2026 00:40:01 GMT -->
+<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="keywords" content=" ">
+
+<title>Metrics Reporting | Apache Solr Reference Guide 6.6</title>
+<link rel="canonical" href="https://solr.apache.org/guide/solr/latest/deployment-guide/metrics-reporting.html">
+<meta name="robots" content="noindex">
+<link href="https://solr.apache.org/guide/6_6/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+<!--<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">-->
+<link rel="stylesheet" href="https://solr.apache.org/guide/6_6/css/lavish-bootstrap.css">
+<link rel="stylesheet" href="https://solr.apache.org/guide/6_6/css/customstyles.css">
+<link rel="stylesheet" href="https://solr.apache.org/guide/6_6/css/theme-solr.css">
+<link rel="stylesheet" href="https://solr.apache.org/guide/6_6/css/ref-guide.css">
+<link rel="stylesheet" href="https://solr.apache.org/guide/6_6/css/comments.css">
+
+<script src="https://solr.apache.org/guide/6_6/js/jquery-2.1.4.min.js"></script>
+<script src="https://solr.apache.org/guide/6_6/js/jquery.cookie-1.4.1.min.js"></script>
+<script src="https://solr.apache.org/guide/6_6/js/jquery.navgoco.min.js"></script>
+
+<script src="https://solr.apache.org/guide/6_6/js/bootstrap-3.3.4.min.js"></script>
+<script src="https://solr.apache.org/guide/6_6/js/anchor-2.0.0.min.js"></script>
+<script src="https://solr.apache.org/guide/6_6/js/toc.js"></script>
+<script src="https://solr.apache.org/guide/6_6/js/customscripts.js"></script>
+
+<link rel="shortcut icon" href="https://solr.apache.org/guide/6_6/images/icons/favicon.ico">
+
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="js/html5shiv-3.7.0.js"></script>
+<script src="js/respond-1.4.2.min.js"></script>
+<![endif]-->
+
+<link rel="alternate" type="application/rss+xml" title="Apache Solr Reference Guide" href="https://home.apache.org/~ctargett/RefGuidePOC/jekyll-full/feed.xml">
+
+    <script>
+        $(document).ready(function() {
+            // Initialize navgoco with default options
+            $("#mysidebar").navgoco({
+                caretHtml: '',
+                accordion: true,
+                openClass: 'active', // open
+                save: false, // we do *NOT* want cookies used to save the current stage of the sidebar
+                             // instead the code in sidebar.html will ensure that the current page
+                             // (and it's ancestors) are "active" on page load
+                slide: {
+                    duration: 400,
+                    easing: 'swing'
+                }
+            });
+
+            $("#collapseAll").click(function(e) {
+                e.preventDefault();
+                $("#mysidebar").navgoco('toggle', false);
+            });
+
+            $("#expandAll").click(function(e) {
+                e.preventDefault();
+                $("#mysidebar").navgoco('toggle', true);
+            });
+
+        });
+
+    </script>
+</head>
+<body class="" id="metrics-reporting">
+<!-- Navigation -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container topnavlinks">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            
+            <a class="fa fa-home fa-lg navbar-brand" href="https://solr.apache.org/guide/6_6/index.html">&nbsp;<span class="projectTitle"> Solr Ref Guide 6.6</span></a>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <!-- Link to Solr website -->
+                <li><a href="https://lucene.apache.org/solr/" target="_blank">Solr Website</a></li>
+                <!-- Other Guide Formats dropdown -->
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Other Formats<b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                       <li><a href="https://www.apache.org/dyn/closer.cgi/lucene/solr/ref-guide" target="_blank">PDF for Latest Release</a></li>
+                       <li><a href="https://archive.apache.org/dist/lucene/solr/ref-guide/" target="_blank">Archived PDFs</a></li>
+                       <li><a href="https://lucene.apache.org/solr/guide/" target="_blank">Other Versions Online</a></li>
+                    </ul>
+                </li>
+                <!-- Solr Resources dropdown -->
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Solr Resources<b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                       <li><a href="https://lucene.apache.org/solr/6_6_0//solr-core/index.html" target="_blank">Solr Javadocs</a></li>
+                       <li><a href="https://lucene.apache.org/solr/community.html#version-control" target="_blank">Lucene/Solr Source Code</a></li>
+                       <li><a href="https://lucene.apache.org/solr/community.html" target="_blank">Solr Community Links</a></li>
+                    </ul>
+                </li>
+                <!--comment out this block if you want to hide search-->
+                <li>
+                    <!--start search-->
+                    <div id="search-demo-container">
+                        <input type="text" id="search-input" placeholder="search...">
+                        <ul id="results-container"></ul>
+                    </div>
+                    <script src="https://solr.apache.org/guide/6_6/js/jekyll-search.js" type="text/javascript"></script>
+                    <script type="text/javascript">
+                            SimpleJekyllSearch.init({
+                                searchInput: document.getElementById('search-input'),
+                                resultsContainer: document.getElementById('results-container'),
+                                dataSource: 'search.json',
+                                searchResultTemplate: '<li><a href="{url}" title="Metrics Reporting">{title}</a></li>',
+                    noResultsText: 'No results found.',
+                            limit: 10,
+                            fuzzy: true,
+                    })
+                    </script>
+                    <!--end search-->
+                </li>
+            </ul>
+        </div>
+        </div>
+        <!-- /.container -->
+</nav>
+
+<!-- Page Content -->
+<div class="container">
+  <div class="col-lg-12">&nbsp;</div>
+  <!-- Content Row -->
+  <div class="row">
+    <!-- Sidebar Column -->
+    <div class="col-md-3">
+      
+
+<ul id="mysidebar" class="nav">
+  <li class="sidebarTitle">Apache Solr Reference Guide</li>
+  
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/about-this-guide.html">About This Guide</a>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/getting-started.html">Getting Started</a>
+    
+    <ul>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/installing-solr.html">Installing Solr</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/running-solr.html">Running Solr</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/a-quick-overview.html">A Quick Overview</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/a-step-closer.html">A Step Closer</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/solr-control-script-reference.html">Solr Control Script Reference</a>
+        
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/upgrading-solr.html">Upgrading Solr</a>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/using-the-solr-administration-user-interface.html">Using the Solr Administration User Interface</a>
+    
+    <ul>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/overview-of-the-solr-admin-ui.html">Overview of the Solr Admin UI</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/getting-assistance.html">Getting Assistance</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/logging.html">Logging</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/cloud-screens.html">Cloud Screens</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/collections-core-admin.html">Collections / Core Admin</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/java-properties.html">Java Properties</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/thread-dump.html">Thread Dump</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/collection-specific-tools.html">Collection-Specific Tools</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/analysis-screen.html">Analysis Screen</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/dataimport-screen.html">Dataimport Screen</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/documents-screen.html">Documents Screen</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/files-screen.html">Files Screen</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/query-screen.html">Query Screen</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/stream-screen.html">Stream Screen</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/schema-browser-screen.html">Schema Browser Screen</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/core-specific-tools.html">Core-Specific Tools</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/ping.html">Ping</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/plugins-stats-screen.html">Plugins &amp; Stats Screen</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/replication-screen.html">Replication Screen</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/segments-info.html">Segments Info</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/documents-fields-and-schema-design.html">Documents, Fields, and Schema Design</a>
+    
+    <ul>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/overview-of-documents-fields-and-schema-design.html">Overview of Documents, Fields, and Schema Design</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/solr-field-types.html">Solr Field Types</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/field-type-definitions-and-properties.html">Field Type Definitions and Properties</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/field-types-included-with-solr.html">Field Types Included with Solr</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/working-with-currencies-and-exchange-rates.html">Working with Currencies and Exchange Rates</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/working-with-dates.html">Working with Dates</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/working-with-enum-fields.html">Working with Enum Fields</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/working-with-external-files-and-processes.html">Working with External Files and Processes</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/field-properties-by-use-case.html">Field Properties by Use Case</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/defining-fields.html">Defining Fields</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/copying-fields.html">Copying Fields</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/dynamic-fields.html">Dynamic Fields</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/other-schema-elements.html">Other Schema Elements</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/schema-api.html">Schema API</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/putting-the-pieces-together.html">Putting the Pieces Together</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/docvalues.html">DocValues</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/schemaless-mode.html">Schemaless Mode</a>
+        
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/understanding-analyzers-tokenizers-and-filters.html">Understanding Analyzers, Tokenizers, and Filters</a>
+    
+    <ul>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/analyzers.html">Analyzers</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/about-tokenizers.html">About Tokenizers</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/about-filters.html">About Filters</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/tokenizers.html">Tokenizers</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/filter-descriptions.html">Filter Descriptions</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/charfilterfactories.html">CharFilterFactories</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/language-analysis.html">Language Analysis</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/phonetic-matching.html">Phonetic Matching</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/running-your-analyzer.html">Running Your Analyzer</a>
+        
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/indexing-and-basic-data-operations.html">Indexing and Basic Data Operations</a>
+    
+    <ul>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/introduction-to-solr-indexing.html">Introduction to Solr Indexing</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/post-tool.html">Post Tool</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/uploading-data-with-index-handlers.html">Uploading Data with Index Handlers</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/transforming-and-indexing-custom-json.html">Transforming and Indexing Custom JSON</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/uploading-data-with-solr-cell-using-apache-tika.html">Uploading Data with Solr Cell using Apache Tika</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/uploading-structured-data-store-data-with-the-data-import-handler.html">Uploading Structured Data Store Data with the Data Import Handler</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/updating-parts-of-documents.html">Updating Parts of Documents</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/detecting-languages-during-indexing.html">Detecting Languages During Indexing</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/de-duplication.html">De-Duplication</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/content-streams.html">Content Streams</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/uima-integration.html">UIMA Integration</a>
+        
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/searching.html">Searching</a>
+    
+    <ul>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/overview-of-searching-in-solr.html">Overview of Searching in Solr</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/velocity-search-ui.html">Velocity Search UI</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/relevance.html">Relevance</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/query-syntax-and-parsing.html">Query Syntax and Parsing</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/common-query-parameters.html">Common Query Parameters</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/the-standard-query-parser.html">The Standard Query Parser</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/the-dismax-query-parser.html">The DisMax Query Parser</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/the-extended-dismax-query-parser.html">The Extended DisMax Query Parser</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/function-queries.html">Function Queries</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/local-parameters-in-queries.html">Local Parameters in Queries</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/other-parsers.html">Other Parsers</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/faceting.html">Faceting</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/blockjoin-faceting.html">BlockJoin Faceting</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/highlighting.html">Highlighting</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/spell-checking.html">Spell Checking</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/query-re-ranking.html">Query Re-Ranking</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/learning-to-rank.html">Learning To Rank</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/transforming-result-documents.html">Transforming Result Documents</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/suggester.html">Suggester</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/morelikethis.html">MoreLikeThis</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/pagination-of-results.html">Pagination of Results</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/collapse-and-expand-results.html">Collapse and Expand Results</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/result-grouping.html">Result Grouping</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/result-clustering.html">Result Clustering</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/spatial-search.html">Spatial Search</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/the-terms-component.html">The Terms Component</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/the-term-vector-component.html">The Term Vector Component</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/the-stats-component.html">The Stats Component</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/the-query-elevation-component.html">The Query Elevation Component</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/response-writers.html">Response Writers</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/velocity-response-writer.html">Velocity Response Writer</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/near-real-time-searching.html">Near Real Time Searching</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/realtime-get.html">RealTime Get</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/exporting-result-sets.html">Exporting Result Sets</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/streaming-expressions.html">Streaming Expressions</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/stream-sources.html">Stream Source Reference</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/stream-decorators.html">Stream Decorator Reference</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/stream-evaluators.html">Stream Evaluator Reference</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/graph-traversal.html">Graph Traversal</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/parallel-sql-interface.html">Parallel SQL Interface</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/solr-jdbc-dbvisualizer.html">Solr JDBC - DbVisualizer</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/solr-jdbc-squirrel-sql.html">Solr JDBC - SQuirreL SQL</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/solr-jdbc-apache-zeppelin.html">Solr JDBC - Apache Zeppelin</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/solr-jdbc-python-jython.html">Solr JDBC - Python/Jython</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/solr-jdbc-r.html">Solr JDBC - R</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/the-well-configured-solr-instance.html">The Well-Configured Solr Instance</a>
+    
+    <ul>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/configuring-solrconfig-xml.html">Configuring solrconfig.xml</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/datadir-and-directoryfactory-in-solrconfig.html">DataDir and DirectoryFactory in SolrConfig</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/lib-directives-in-solrconfig.html">Lib Directives in SolrConfig</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/schema-factory-definition-in-solrconfig.html">Schema Factory Definition in SolrConfig</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/indexconfig-in-solrconfig.html">IndexConfig in SolrConfig</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/requesthandlers-and-searchcomponents-in-solrconfig.html">RequestHandlers and SearchComponents in SolrConfig</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/initparams-in-solrconfig.html">InitParams in SolrConfig</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/updatehandlers-in-solrconfig.html">UpdateHandlers in SolrConfig</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/query-settings-in-solrconfig.html">Query Settings in SolrConfig</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/requestdispatcher-in-solrconfig.html">RequestDispatcher in SolrConfig</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/update-request-processors.html">Update Request Processors</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/codec-factory.html">Codec Factory</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/solr-cores-and-solr-xml.html">Solr Cores and solr.xml</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/format-of-solr-xml.html">Format of solr.xml</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/defining-core-properties.html">Defining core.properties</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/coreadmin-api.html">CoreAdmin API</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/config-sets.html">Config Sets</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/configuration-apis.html">Configuration APIs</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/blob-store-api.html">Blob Store API</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/config-api.html">Config API</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/request-parameters-api.html">Request Parameters API</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/managed-resources.html">Managed Resources</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/implicit-requesthandlers.html">Implicit RequestHandlers</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/solr-plugins.html">Solr Plugins</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/adding-custom-plugins-in-solrcloud-mode.html">Adding Custom Plugins in SolrCloud Mode</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/jvm-settings.html">JVM Settings</a>
+        
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/managing-solr.html">Managing Solr</a>
+    
+    <ul>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/taking-solr-to-production.html">Taking Solr to Production</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/securing-solr.html">Securing Solr</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/authentication-and-authorization-plugins.html">Authentication and Authorization Plugins</a>
+            
+            <ul>
+              
+              <li class="sb-level4">
+                <a href="https://solr.apache.org/guide/6_6/basic-authentication-plugin.html">Basic Authentication Plugin</a>
+                
+              </li>
+              
+              <li class="sb-level4">
+                <a href="https://solr.apache.org/guide/6_6/hadoop-authentication-plugin.html">Hadoop Authentication Plugin</a>
+                
+              </li>
+              
+              <li class="sb-level4">
+                <a href="https://solr.apache.org/guide/6_6/kerberos-authentication-plugin.html">Kerberos Authentication Plugin</a>
+                
+              </li>
+              
+              <li class="sb-level4">
+                <a href="https://solr.apache.org/guide/6_6/rule-based-authorization-plugin.html">Rule-Based Authorization Plugin</a>
+                
+              </li>
+              
+            </ul>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/enabling-ssl.html">Enabling SSL</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/running-solr-on-hdfs.html">Running Solr on HDFS</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/making-and-restoring-backups.html">Making and Restoring Backups</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/configuring-logging.html">Configuring Logging</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/using-jmx-with-solr.html">Using JMX with Solr</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/mbean-request-handler.html">MBean Request Handler</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/performance-statistics-reference.html">Performance Statistics Reference</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/metrics-reporting.html">Metrics Reporting</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/v2-api.html">v2 API</a>
+        
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/solrcloud.html">SolrCloud</a>
+    
+    <ul>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/getting-started-with-solrcloud.html">Getting Started with SolrCloud</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/how-solrcloud-works.html">How SolrCloud Works</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/shards-and-indexing-data-in-solrcloud.html">Shards and Indexing Data in SolrCloud</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/distributed-requests.html">Distributed Requests</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/read-and-write-side-fault-tolerance.html">Read and Write Side Fault Tolerance</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/solrcloud-configuration-and-parameters.html">SolrCloud Configuration and Parameters</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/setting-up-an-external-zookeeper-ensemble.html">Setting Up an External ZooKeeper Ensemble</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/using-zookeeper-to-manage-configuration-files.html">Using ZooKeeper to Manage Configuration Files</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/zookeeper-access-control.html">ZooKeeper Access Control</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/collections-api.html">Collections API</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/parameter-reference.html">Parameter Reference</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/command-line-utilities.html">Command Line Utilities</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/solrcloud-with-legacy-configuration-files.html">SolrCloud with Legacy Configuration Files</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/configsets-api.html">ConfigSets API</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/rule-based-replica-placement.html">Rule-based Replica Placement</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/cross-data-center-replication-cdcr.html">Cross Data Center Replication (CDCR)</a>
+        
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/legacy-scaling-and-distribution.html">Legacy Scaling and Distribution</a>
+    
+    <ul>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/introduction-to-scaling-and-distribution.html">Introduction to Scaling and Distribution</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/distributed-search-with-index-sharding.html">Distributed Search with Index Sharding</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/index-replication.html">Index Replication</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/combining-distribution-and-replication.html">Combining Distribution and Replication</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/merging-indexes.html">Merging Indexes</a>
+        
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/client-apis.html">Client APIs</a>
+    
+    <ul>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/introduction-to-client-apis.html">Introduction to Client APIs</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/choosing-an-output-format.html">Choosing an Output Format</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/client-api-lineup.html">Client API Lineup</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/using-javascript.html">Using JavaScript</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/using-python.html">Using Python</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/using-solrj.html">Using SolrJ</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/using-solr-from-ruby.html">Using Solr From Ruby</a>
+        
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/major-changes-from-solr-5-to-solr-6.html">Major Changes from Solr 5 to Solr 6</a>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/upgrading-a-solr-cluster.html">Upgrading a Solr Cluster</a>
+    
+    <ul>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/indexupgrader-tool.html">IndexUpgrader Tool</a>
+        
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/further-assistance.html">Further Assistance</a>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/solr-glossary.html">Solr Glossary</a>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/errata.html">Errata</a>
+    
+  </li>
+  
+</ul>
+
+
+<!-- set the 'active' class on the current page and ancestors -->
+<!-- this highlights the active parent class in the navgoco sidebar. this is critical so that the parent expands when you're viewing a page. This must appear below the sidebar code above. Otherwise, if placed inside customscripts.js, the script runs before the sidebar code runs and the class never gets inserted.-->
+<script>$("#mysidebar a[href='metrics-reporting.html']").parents('li').toggleClass("active", true);</script>
+<!-- set the 'current' class on the current page and 'current-tree' on the current page + it's ancestors -->
+<!-- this can let us do css highlighting of the current page in the sidebar even if/when the user clicks around in the sidebar causing other sidebar elements to be 'active' -->
+<script>
+  $("#mysidebar a[href='metrics-reporting.html']").parent('li').toggleClass("current", true);
+  $("#mysidebar a[href='metrics-reporting.html']").parents('li').toggleClass("current-tree", true);
+</script>
+
+    </div>
+    <!-- Content Column -->
+    <div class="col-md-9">
+      <div class="post-header">
+   <h1 class="post-title-main">Metrics Reporting</h1>
+</div>
+
+<!-- This adds a workflow map, to a page
+     See http://idratherbewriting.com/documentation-theme-jekyll/mydoc_workflow_maps.html
+     Leaving it here commented out in case we want to implement this in the future
+ -->
+
+<div class="post-content">
+
+   
+
+    
+    
+<!-- this handles the automatic toc. use ## for subheads to auto-generate the on-page minitoc. if you use html tags, you must supply an ID for the heading element in order for it to appear in the minitoc. -->
+
+<script src="https://solr.apache.org/guide/6_6/js/ref-guide-toc.js" type="text/javascript"></script>
+<script type="text/javascript">
+  // based on page variables, build up the list of headers for the top level toc (and any sub-section tocs)
+  do_tocs(2)
+</script>
+<div id="toc" class="toc toc-normal"></div>
+
+    
+
+<div class="main-content">
+  <div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Solr includes a developer API and instrumentation for the collection of detailed performance-oriented metrics throughout the life-cycle of Solr service and its various components.</p>
+</div>
+<div class="paragraph">
+<p>Internally this feature uses the <a href="http://metrics.dropwizard.io/">Dropwizard Metrics API</a>, which uses the following classes of meters to measure events:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>counters</strong> - simply count events. They provide a single long value, e.g., the number of requests.</p>
+</li>
+<li>
+<p><strong>meters</strong> - additionally compute rates of events. Provide a count (as above) and 1-, 5-, and 15-minute exponentially decaying rates, similar to the Unix system load average.</p>
+</li>
+<li>
+<p><strong>histograms</strong> - calculate approximate distribution of events according to their values. Provide the following approximate statistics, with a similar exponential decay as above: mean (arithmetic average), median, maximum, minimum, standard deviation, and 75<sup>th</sup>, 95<sup>th</sup>, 98<sup>th</sup>, 99<sup>th</sup> and 999<sup>th</sup> percentiles.</p>
+</li>
+<li>
+<p><strong>timers</strong> - measure the number and duration of events. They provide a count and histogram of timings.</p>
+</li>
+<li>
+<p><strong>gauges</strong> - offer instantaneous reading of a current value, e.g., current queue depth, current number of active connections, free heap size.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Each group of related metrics with unique names is managed in a <strong>metric registry</strong>. Solr maintains several such registries, each corresponding to a high-level group such as: <code>jvm</code>, <code>jetty</code>, <code>http</code>, <code>node</code>, and <code>core</code> (see <a href="#metric-registries">Metric Registries</a> below).</p>
+</div>
+<div class="paragraph">
+<p>For each group (and/or for each registry) there can be several <strong>reporters</strong>, which are components responsible for communication of metrics from selected registries to external systems. Currently implemented reporters support emitting metrics via JMX, Ganglia, Graphite and SLF4J.</p>
+</div>
+<div class="paragraph">
+<p>There is also a dedicated <code>/admin/metrics</code> handler that can be queried to report all or a subset of the current metrics from multiple registries.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="metric-registries">Metric Registries</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Solr includes multiple metric registries, which group related metrics.</p>
+</div>
+<div class="paragraph">
+<p>Metrics are maintained and accumulated through all lifecycles of components from the start of the process until its shutdown - e.g., metrics for a particular SolrCore are tracked through possibly several load, unload and/or rename operations, and are deleted only when a core is explicitly deleted. However, metrics are not persisted across process restarts; restarting Solr will discard all collected metrics.</p>
+</div>
+<div class="paragraph">
+<p>These are the major groups of metrics that are collected:</p>
+</div>
+<div class="sect2">
+<h3 id="jvm-registry-code-solr-jvm-code">JVM Registry (<code>solr.jvm</code>):</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>direct and mapped buffer pools</p>
+</li>
+<li>
+<p>class loading / unloading</p>
+</li>
+<li>
+<p>OS memory, CPU time, file descriptors, swap, system load</p>
+</li>
+<li>
+<p>GC count and time</p>
+</li>
+<li>
+<p>heap, non-heap memory and GC pools</p>
+</li>
+<li>
+<p>number of threads, their states and deadlocks</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="node-corecontainer-registry-code-solr-node-code">Node / CoreContainer Registry (<code>solr.node</code>):</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>handler requests (count, timing): collections, info, admin, configSets, etc.</p>
+</li>
+<li>
+<p>number of cores (loaded, lazy, unloaded)</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="core-solrcore-registry">Core (SolrCore) Registry:</h3>
+<div class="paragraph">
+<p>The <a href="#core-level-metrics">Core (SolrCore) Registry</a> includes <code>solr.core.&lt;collection&gt;</code>, one for each core.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>all common RequestHandler-s report: request timers / counters, timeouts, errors.</p>
+</li>
+<li>
+<p><a href="#index-merge-metrics">index-level events</a>: meters for minor / major merges, number of merged docs, number of deleted docs, gauges for currently running merges and their size.</p>
+</li>
+<li>
+<p>shard replication and transaction log replay on replicas (TBD, SOLR-9856)</p>
+</li>
+<li>
+<p>TBD: caches, update handler details, and other relevant SolrInfoMBean-s</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="http-registry-code-solr-http-code">HTTP Registry (<code>solr.http</code>):</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>open / available / pending connections for shard handler and update handler</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="jetty-registry-code-solr-jetty-code">Jetty Registry (<code>solr.jetty</code>):</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>threads and pools,</p>
+</li>
+<li>
+<p>connection and request timers,</p>
+</li>
+<li>
+<p>meters for responses by HTTP class (1xx, 2xx, etc)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>In the future, metrics will be added for shard leaders and cluster nodes, including aggregations from per-core metrics.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="reporters">Reporters</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Reporter configurations are specified in <code>solr.xml</code> file in <code>&lt;metrics&gt;&lt;reporter&gt;</code> sections, for example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="xml"><span style="color: #008000; font-weight: bold">&lt;solr&gt;</span>
+ <span style="color: #008000; font-weight: bold">&lt;metrics&gt;</span>
+  <span style="color: #008000; font-weight: bold">&lt;reporter</span> <span style="color: #7D9029">name=</span><span style="color: #BA2121">&quot;graphite&quot;</span> <span style="color: #7D9029">group=</span><span style="color: #BA2121">&quot;node, jvm&quot;</span> <span style="color: #7D9029">class=</span><span style="color: #BA2121">&quot;org.apache.solr.metrics.reporters.SolrGraphiteReporter&quot;</span><span style="color: #008000; font-weight: bold">&gt;</span>
+    <span style="color: #008000; font-weight: bold">&lt;str</span> <span style="color: #7D9029">name=</span><span style="color: #BA2121">&quot;host&quot;</span><span style="color: #008000; font-weight: bold">&gt;</span>graphite-server<span style="color: #008000; font-weight: bold">&lt;/str&gt;</span>
+    <span style="color: #008000; font-weight: bold">&lt;int</span> <span style="color: #7D9029">name=</span><span style="color: #BA2121">&quot;port&quot;</span><span style="color: #008000; font-weight: bold">&gt;</span>9999<span style="color: #008000; font-weight: bold">&lt;/int&gt;</span>
+    <span style="color: #008000; font-weight: bold">&lt;int</span> <span style="color: #7D9029">name=</span><span style="color: #BA2121">&quot;period&quot;</span><span style="color: #008000; font-weight: bold">&gt;</span>60<span style="color: #008000; font-weight: bold">&lt;/int&gt;</span>
+  <span style="color: #008000; font-weight: bold">&lt;/reporter&gt;</span>
+  <span style="color: #008000; font-weight: bold">&lt;reporter</span> <span style="color: #7D9029">name=</span><span style="color: #BA2121">&quot;collection1Updates&quot;</span> <span style="color: #7D9029">registry=</span><span style="color: #BA2121">&quot;solr.core.collection1&quot;</span> <span style="color: #7D9029">class=</span><span style="color: #BA2121">&quot;org.apache.solr.metrics.reporters.SolrSlf4jReporter&quot;</span><span style="color: #008000; font-weight: bold">&gt;</span>
+    <span style="color: #008000; font-weight: bold">&lt;int</span> <span style="color: #7D9029">name=</span><span style="color: #BA2121">&quot;period&quot;</span><span style="color: #008000; font-weight: bold">&gt;</span>300<span style="color: #008000; font-weight: bold">&lt;/int&gt;</span>
+    <span style="color: #008000; font-weight: bold">&lt;str</span> <span style="color: #7D9029">name=</span><span style="color: #BA2121">&quot;prefix&quot;</span><span style="color: #008000; font-weight: bold">&gt;</span>example<span style="color: #008000; font-weight: bold">&lt;/str&gt;</span>
+    <span style="color: #008000; font-weight: bold">&lt;str</span> <span style="color: #7D9029">name=</span><span style="color: #BA2121">&quot;logger&quot;</span><span style="color: #008000; font-weight: bold">&gt;</span>updatesLogger<span style="color: #008000; font-weight: bold">&lt;/str&gt;</span>
+    <span style="color: #008000; font-weight: bold">&lt;str</span> <span style="color: #7D9029">name=</span><span style="color: #BA2121">&quot;filter&quot;</span><span style="color: #008000; font-weight: bold">&gt;</span>QUERYHANDLER./update<span style="color: #008000; font-weight: bold">&lt;/str&gt;</span>
+  <span style="color: #008000; font-weight: bold">&lt;/reporter&gt;</span>
+ <span style="color: #008000; font-weight: bold">&lt;/metrics&gt;</span>
+...
+<span style="color: #008000; font-weight: bold">&lt;/solr&gt;</span></code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="reporter-arguments">Reporter Arguments</h3>
+<div class="paragraph">
+<p>Reporter plugins use the following arguments:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>name</strong> - (required) unique name of the reporter plugin</p>
+</li>
+<li>
+<p><strong>class</strong> - (required) fully-qualified implementation class of the plugin, must extend <code>SolrMetricReporter</code></p>
+</li>
+<li>
+<p><strong>group</strong> - (optional) one or more of the predefined groups (see above)</p>
+</li>
+<li>
+<p><strong>registry</strong> - (optional) one or more of valid fully-qualified registry names</p>
+</li>
+<li>
+<p>If both <code>group</code> and <code>registry</code> attributes are specified only the <code>group</code> attribute is considered. If neither attribute is specified then the plugin will be used for all groups and registries. Multiple group or registry names can be specified, separated by comma and/or space.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Additionally, several implementation-specific initialization arguments can be specified in nested elements. There are some arguments that are common to SLF4J, Ganglia and Graphite reporters:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>period</strong> - (optional int) period in seconds between reports. Default value is 60.</p>
+</li>
+<li>
+<p><strong>prefix</strong> - (optional str) prefix to be added to metric names, may be helpful in logical grouping of related Solr instances, e.g., machine name or cluster name. Default is empty string, ie. just the registry name and metric name will be used to form a fully-qualified metric name.</p>
+</li>
+<li>
+<p><strong>filter</strong> - (optional str) if not empty then only metric names that start with this value will be reported. Default is no filtering, ie. all metrics from selected registry will be reported.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Reporters are instantiated for every group and registry that they were configured for, at the time when the respective components are initialized (e.g., on JVM startup or SolrCore load).</p>
+</div>
+<div class="paragraph">
+<p>When reporters are created their configuration is validated (and e.g., necessary connections are established). Uncaught errors at this initialization stage cause the reporter to be discarded from the running configuration.</p>
+</div>
+<div class="paragraph">
+<p>Reporters are closed when the corresponding component is being closed (e.g., on SolrCore close, or JVM shutdown) but metrics that they reported are still maintained in respective registries, as explained in the previous section.</p>
+</div>
+<div class="paragraph">
+<p>The following sections provide information on implementation-specific arguments. All implementation classes provided with Solr can be found under <code>org.apache.solr.metrics.reporters</code>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="jmx-reporter">JMX Reporter</h3>
+<div class="paragraph">
+<p>The JMX Reporter uses the <code>org.apache.solr.metrics.reporters.SolrJmxReporter</code> class.</p>
+</div>
+<div class="paragraph">
+<p>It takes the following arguments:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>domain</strong> - (optional str) JMX domain name. If not specified then registry name will be used.</p>
+</li>
+<li>
+<p><strong>serviceUrl</strong> - (optional str) service URL for a JMX server. If not specified then the default platform MBean server will be used.</p>
+</li>
+<li>
+<p><strong>agentId</strong> - (optional str) agent ID for a JMX server. Note: either <code>serviceUrl</code> or <code>agentId</code> can be specified but not both - if both are specified then the default MBean server will be used.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Object names created by this reporter are hierarchical, dot-separated but also properly structured to form corresponding hierarchies in e.g., JConsole. This hierarchy consists of the following elements in the top-down order:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>registry name (e.g., <code>solr.core.collection1.shard1.replica1</code>. Dot-separated registry names are also split into ObjectName hierarchy levels, so that metrics for this registry will be shown under <code>/solr/core/collection1/shard1/replica1</code> in JConsole, with each domain part being assigned to <code>dom1, dom2, &#8230;&#8203; domN</code> property.</p>
+</li>
+<li>
+<p>reporter name (the value of reporter&#8217;s <code>name</code> attribute)</p>
+</li>
+<li>
+<p>category, scope and name for request handlers</p>
+</li>
+<li>
+<p>or additional <code>name1, name2, &#8230;&#8203; nameN</code> elements for metrics from other components.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="slf4j-reporter">SLF4J Reporter</h3>
+<div class="paragraph">
+<p>The SLF4J Reporter uses the <code>org.apache.solr.metrics.reporters.SolrSlf4jReporter</code> class.</p>
+</div>
+<div class="paragraph">
+<p>It takes the following arguments, in addition to the common arguments <a href="#reporter-arguments">above</a>.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>logger</strong> - (optional str) name of the logger to use. Default is empty, in which case the group or registry name will be used if specified in the plugin configuration.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Users can specify logger name (and the corresponding logger configuration in e.g., Log4j configuration) to output metrics-related logging to separate file(s), which can then be processed by external applications.</p>
+</div>
+<div class="paragraph">
+<p>Each log line produced by this reporter consists of configuration-specific fields, and a message that follows this format:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="text">type=COUNTER, name={}, count={}
+
+type=GAUGE, name={}, value={}
+
+type=TIMER, name={}, count={}, min={}, max={}, mean={}, stddev={}, median={}, p75={}, p95={}, p98={}, p99={}, p999={}, mean_rate={}, m1={}, m5={}, m15={}, rate_unit={}, duration_unit={}
+
+type=METER, name={}, count={}, mean_rate={}, m1={}, m5={}, m15={}, rate_unit={}
+
+type=HISTOGRAM, name={}, count={}, min={}, max={}, mean={}, stddev={}, median={}, p75={}, p95={}, p98={}, p99={}, p999={}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>(curly braces added only as placeholders for actual values).</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="graphite-reporter">Graphite Reporter</h3>
+<div class="paragraph">
+<p>The <a href="http://graphiteapp.org/">Graphite</a> Reporter uses the <code>org.apache.solr.metrics.reporters.SolrGraphiteReporter</code>) class.</p>
+</div>
+<div class="paragraph">
+<p>It takes the following attributes, in addition to the common attributes <a href="#reporter-arguments">above</a>.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>host</strong> - (required str) host name where Graphite server is running.</p>
+</li>
+<li>
+<p><strong>port</strong> - (required int) port number for the server</p>
+</li>
+<li>
+<p><strong>pickled</strong> - (optional bool) use "pickled" Graphite protocol which may be more efficient. Default is false (use plain-text protocol).</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>When plain-text protocol is used (<code>pickled==false</code>) it&#8217;s possible to use this reporter to integrate with systems other than Graphite, if they can accept space-separated and line-oriented input over network in the following format:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="text">dot.separated.metric.name[.and.attribute] value epochTimestamp</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="plain">example.solr.node.cores.lazy 0 1482932097
+example.solr.node.cores.loaded 1 1482932097
+example.solr.jetty.org.eclipse.jetty.server.handler.DefaultHandler.2xx-responses.count 21 1482932097
+example.solr.jetty.org.eclipse.jetty.server.handler.DefaultHandler.2xx-responses.m1_rate 2.5474287707930614 1482932097
+example.solr.jetty.org.eclipse.jetty.server.handler.DefaultHandler.2xx-responses.m5_rate 3.8003171557510305 1482932097
+example.solr.jetty.org.eclipse.jetty.server.handler.DefaultHandler.2xx-responses.m15_rate 4.0623076220244245 1482932097
+example.solr.jetty.org.eclipse.jetty.server.handler.DefaultHandler.2xx-responses.mean_rate 0.5698031798408144 1482932097</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="ganglia-reporter">Ganglia Reporter</h3>
+<div class="paragraph">
+<p>The <a href="http://ganglia.info/">Ganglia</a> reporter uses the <code>org.apache.solr.metrics.reporters.SolrGangliaReporter</code> class.</p>
+</div>
+<div class="paragraph">
+<p>It take the following arguments, in addition to the common arguments <a href="#reporter-arguments">above</a>.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>host</strong> - (required str) host name where Ganglia server is running.</p>
+</li>
+<li>
+<p><strong>port</strong> - (required int) port number for the server</p>
+</li>
+<li>
+<p><strong>multicast</strong> - (optional bool) when true use multicast UDP communication, otherwise use UDP unicast. Default is false.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="core-level-metrics">Core Level Metrics</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>These metrics are available only on a per-core basis. Metrics that are aggregated across cores are not yet available.</p>
+</div>
+<div class="sect2">
+<h3 id="index-merge-metrics">Index Merge Metrics</h3>
+<div class="paragraph">
+<p>These metrics are collected in respective registries for each core (e.g., <code>solr.core.collection1&#8230;&#8203;.</code>), under the <code>INDEX</code> category.</p>
+</div>
+<div class="paragraph">
+<p>Basic metrics are always collected - collection of additional metrics can be turned on using boolean parameters in the <code>/config/indexConfig/metrics</code> section of <code>solrconfig.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="xml"><span style="color: #008000; font-weight: bold">&lt;config&gt;</span>
+  ...
+  <span style="color: #008000; font-weight: bold">&lt;indexConfig&gt;</span>
+    <span style="color: #008000; font-weight: bold">&lt;metrics&gt;</span>
+      <span style="color: #008000; font-weight: bold">&lt;majorMergeDocs&gt;</span>524288<span style="color: #008000; font-weight: bold">&lt;/majorMergeDocs&gt;</span>
+      <span style="color: #008000; font-weight: bold">&lt;bool</span> <span style="color: #7D9029">name=</span><span style="color: #BA2121">&quot;mergeDetails&quot;</span><span style="color: #008000; font-weight: bold">&gt;</span>true<span style="color: #008000; font-weight: bold">&lt;/bool&gt;</span>
+      <span style="color: #008000; font-weight: bold">&lt;bool</span> <span style="color: #7D9029">name=</span><span style="color: #BA2121">&quot;directoryDetails&quot;</span><span style="color: #008000; font-weight: bold">&gt;</span>true<span style="color: #008000; font-weight: bold">&lt;/bool&gt;</span>
+    <span style="color: #008000; font-weight: bold">&lt;/metrics&gt;</span>
+    ...
+  <span style="color: #008000; font-weight: bold">&lt;/indexConfig&gt;</span>
+...
+<span style="color: #008000; font-weight: bold">&lt;/config&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The following metrics are collected:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>INDEX.merge.major</code> - timer for merge operations that include at least "majorMergeDocs" (default value for this parameter is 512k documents).</p>
+</li>
+<li>
+<p><code>INDEX.merge.minor</code> - timer for merge operations that include less than "majorMergeDocs".</p>
+</li>
+<li>
+<p><code>INDEX.merge.errors</code> - counter for merge errors.</p>
+</li>
+<li>
+<p><code>INDEX.flush</code> - meter for index flush operations.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Additionally, the following gauges are reported, which help to monitor the momentary state of index merge operations:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>INDEX.merge.major.running</code> - number of running major merge operations (depending on the implementation of <code>MergeScheduler</code> that is used there can be several concurrently running merge operations).</p>
+</li>
+<li>
+<p><code>INDEX.merge.minor.running</code> - as above, for minor merge operations.</p>
+</li>
+<li>
+<p><code>INDEX.merge.major.running.docs</code> - total number of documents in the segments being currently merged in major merge operations.</p>
+</li>
+<li>
+<p><code>INDEX.merge.minor.running.docs</code> - as above, for minor merge operations.</p>
+</li>
+<li>
+<p><code>INDEX.merge.major.running.segments</code> - number of segments being currently merged in major merge operations.</p>
+</li>
+<li>
+<p><code>INDEX.merge.minor.running.segments</code> - as above, for minor merge operations.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>If the boolean flag <code>mergeDetails</code> is true then the following additional metrics are collected:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>INDEX.merge.major.docs</code> - meter for the number of documents merged in major merge operations</p>
+</li>
+<li>
+<p><code>INDEX.merge.major.deletedDocs</code> - meter for the number of deleted documents expunged in major merge operations</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="metrics-api">Metrics API</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>admin/metrics</code> endpoint provides access to all the metrics for all metric groups.</p>
+</div>
+<div class="paragraph">
+<p>A few query parameters are available to limit the request:</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">group</dt>
+<dd>
+<p>The metric group to retrieve. The default is <code>all</code> to retrieve all metrics for all groups. Other possible values are: <code>jvm</code>, <code>jetty</code>, <code>node</code>, and <code>core</code>. More than one group can be specified in a request; multiple group names should be separated by a comma.</p>
+</dd>
+<dt class="hdlist1">type</dt>
+<dd>
+<p>The type of metric to retrieve. The default is <code>all</code> to retrieve all metric types. Other possible values are <code>counter</code>, <code>gauge</code>, <code>histogram</code>, <code>meter</code>, and <code>timer</code>. More than one type can be specified in a request; multiple types should be separated by a comma.</p>
+</dd>
+<dt class="hdlist1">prefix</dt>
+<dd>
+<p>The first characters of metric name that will filter the metrics returned to those starting with the provided string. It can be combined with group and/or type parameters. More than one prefix can be specified in a request; multiple prefixes should be separated by a comma. Prefix matching is also case-sensitive.</p>
+</dd>
+<dt class="hdlist1">compact</dt>
+<dd>
+<p>When true, a more compact format of the response will be returned. Instead of a response like this:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="json">  <span style="color: #BA2121">&quot;metrics&quot;</span><span style="border: 1px solid #FF0000">:</span> [
+    <span style="color: #BA2121">&quot;solr.core.gettingstarted&quot;</span>,
+    {
+      <span style="color: #008000; font-weight: bold">&quot;CORE.aliases&quot;</span>: {
+        <span style="color: #008000; font-weight: bold">&quot;value&quot;</span>: [<span style="color: #BA2121">&quot;gettingstarted&quot;</span>]
+      },
+      <span style="color: #008000; font-weight: bold">&quot;CORE.coreName&quot;</span>: {
+        <span style="color: #008000; font-weight: bold">&quot;value&quot;</span>: <span style="color: #BA2121">&quot;gettingstarted&quot;</span>
+      },
+      <span style="color: #008000; font-weight: bold">&quot;CORE.indexDir&quot;</span>: {
+        <span style="color: #008000; font-weight: bold">&quot;value&quot;</span>: <span style="color: #BA2121">&quot;/solr/example/schemaless/solr/gettingstarted/data/index/&quot;</span>
+      },
+      <span style="color: #008000; font-weight: bold">&quot;CORE.instanceDir&quot;</span>: {
+        <span style="color: #008000; font-weight: bold">&quot;value&quot;</span>: <span style="color: #BA2121">&quot;/solr/example/schemaless/solr/gettingstarted&quot;</span>
+      },
+      <span style="color: #008000; font-weight: bold">&quot;CORE.refCount&quot;</span>: {
+        <span style="color: #008000; font-weight: bold">&quot;value&quot;</span>: <span style="color: #666666">1</span>
+      },
+      <span style="color: #008000; font-weight: bold">&quot;CORE.startTime&quot;</span>: {
+        <span style="color: #008000; font-weight: bold">&quot;value&quot;</span>: <span style="color: #BA2121">&quot;2017-03-14T11:43:23.822Z&quot;</span>
+      }
+    }
+  ]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The response will look like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="json">  <span style="color: #BA2121">&quot;metrics&quot;</span><span style="border: 1px solid #FF0000">:</span> [
+    <span style="color: #BA2121">&quot;solr.core.gettingstarted&quot;</span>,
+    {
+      <span style="color: #008000; font-weight: bold">&quot;CORE.aliases&quot;</span>: [
+        <span style="color: #BA2121">&quot;gettingstarted&quot;</span>
+      ],
+      <span style="color: #008000; font-weight: bold">&quot;CORE.coreName&quot;</span>: <span style="color: #BA2121">&quot;gettingstarted&quot;</span>,
+      <span style="color: #008000; font-weight: bold">&quot;CORE.indexDir&quot;</span>: <span style="color: #BA2121">&quot;/solr/example/schemaless/solr/gettingstarted/data/index/&quot;</span>,
+      <span style="color: #008000; font-weight: bold">&quot;CORE.instanceDir&quot;</span>: <span style="color: #BA2121">&quot;/solr/example/schemaless/solr/gettingstarted&quot;</span>,
+      <span style="color: #008000; font-weight: bold">&quot;CORE.refCount&quot;</span>: <span style="color: #666666">1</span>,
+      <span style="color: #008000; font-weight: bold">&quot;CORE.startTime&quot;</span>: <span style="color: #BA2121">&quot;2017-03-14T11:43:23.822Z&quot;</span>
+    }
+  ]</code></pre>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p>Like other request handlers, the Metrics API can also take the <code>wt</code> parameter to define the output format.</p>
+</div>
+<div class="sect2">
+<h3 id="metrics_examples">Examples</h3>
+<div class="paragraph">
+<p>Request only "counter" type metrics in the "core" group, returned in JSON:</p>
+</div>
+<div class="paragraph">
+<p><code>http://localhost:8983/solr/admin/metrics?wt=json&amp;type=counter&amp;group=core</code></p>
+</div>
+<div class="paragraph">
+<p>Request only "core" group metrics that start with "INDEX", returned in JSON:</p>
+</div>
+<div class="paragraph">
+<p><code>http://localhost:8983/solr/admin/metrics?wt=json&amp;prefix=INDEX&amp;group=core</code></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Adds tags, if any -->
+    <div class="tags">
+        
+    </div>
+
+<!-- Adds nav links on each page -->
+    
+    
+    <div class="scrollnav">
+      
+      <a class="btn btn-primary prev" href="https://solr.apache.org/guide/6_6/performance-statistics-reference.html">Performance Statistics Reference</a>
+      
+      
+      <a class="btn btn-primary next" href="https://solr.apache.org/guide/6_6/v2-api.html">v2 API</a>
+      
+    </div>
+    
+
+</div>
+
+<!-- Adds comments from Apache's Comment system -->
+
+<div id="comments_thread">
+</div>
+<script type="text/javascript" src="https://comments.apache.org/show_comments.lua?site=solr-refguide&amp;style=css/comments.css&amp;page=metrics-reporting" async="true">
+</script>
+<noscript>
+<iframe width="100%" height="500" src="https://comments.apache.org/iframe.lua?site=solr-refguide&amp;style=css/comments.css&amp;page=metrics-reporting"></iframe>
+</noscript>
+
+<footer>
+            <div class="row">
+                <div class="col-lg-12 footer">
+               &copy;2017 Apache Software Foundation. All rights reserved. <br />
+ Site Version: 6.6 <br />Site last generated: 2017-06-09 <br />
+<p><img src="https://solr.apache.org/guide/6_6/images/solr-sunOnly-small.png" alt="Apache Solr"/></p>
+                </div>
+            </div>
+</footer>
+
+
+    </div>
+    <!-- /.row -->
+  </div>
+  <!-- /.container -->
+</div>
+
+</body>
+
+<!-- Mirrored from solr.apache.org/guide/6_6/metrics-reporting.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 26 Feb 2026 00:40:01 GMT -->
+</html>

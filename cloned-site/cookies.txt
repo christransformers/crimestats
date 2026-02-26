@@ -1,0 +1,8 @@
+# HTTrack Website Copier Cookie File
+# This file format is compatible with Netscape cookies
+.docs.ckan.org	TRUE	/	FALSE	1999999999	__cf_bm	B1s8y8B.ZFc7sHvDAi9Axrwu2tdUh62wnFihCtbhzi8-1772066043-1.0.1.1-Cv1QoIYvFD1o5eh_c8f_ziLRQ9GJenQPSZ_KIUPMcL_avu2g5MEDlQ6BWj_jK7.RcgGCrr8j.nvGVEtQN2EJddVkZtFkA13JBAmDPisbguk
+.docs.ckan.org	TRUE	/	FALSE	1999999999	_cfuvid	gLEJAHTGKJlG9fKOLabNHRP5izRRlA1au0lhf3iaStM-1772066043520-0.0.1.1-604800000
+docs.ckan.org	TRUE	/	FALSE	1999999999	SameSite	None
+www.data.gov.au	TRUE	/	FALSE	1999999999	ckan	EsyFDR795Yxjsg4a5Z6uBawKO1QzJ5nTCKMbY_PftYw
+www.data.gov.au	TRUE	/	FALSE	1999999999	SameSite	Lax
+

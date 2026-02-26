@@ -1,0 +1,15 @@
+HTTrack3.49-5 launched on Thu, 26 Feb 2026 00:20:07 at https://www.crimestats.co.nz/ +*.html +*.php -*.jpg -*.png -*.svg -*.css -*.js
+(httrack https://www.crimestats.co.nz/ -O ./crime-stats-clone +*.html +*.php -*.jpg -*.png -*.svg -*.css -*.js )
+
+Information, Warnings and Errors reported for this mirror:
+note:	the hts-log.txt file, and hts-cache folder, may contain sensitive information,
+	such as username/password authentication for websites mirrored in this project
+	do not share these files/folders if you want these information to remain private
+
+00:20:09	Warning: 	Moved Permanently for https://www.crimestats.co.nz/robots.txt
+00:20:09	Warning: 	Redirected link is identical because of 'URL Hack' option: https://www.crimestats.co.nz/robots.txt and https://crimestats.co.nz/robots.txt
+00:20:09	Warning: 	Warning moved treated for https://www.crimestats.co.nz/robots.txt (real one is https://crimestats.co.nz/robots.txt)
+00:20:09	Warning: 	Moved Permanently for https://www.crimestats.co.nz/
+00:20:09	Warning: 	Redirected link is identical because of 'URL Hack' option: https://www.crimestats.co.nz/ and https://crimestats.co.nz/
+00:20:09	Warning: 	File has moved from https://www.crimestats.co.nz/ to https://crimestats.co.nz/
+00:20:09	Warning: 	No data seems to have been transferred during this session! : restoring previous one!

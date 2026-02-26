@@ -1,0 +1,2192 @@
+<!DOCTYPE html>
+
+<!-- Mirrored from solr.apache.org/guide/6_6/coreadmin-api.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 26 Feb 2026 00:40:01 GMT -->
+<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="keywords" content=" ">
+
+<title>CoreAdmin API | Apache Solr Reference Guide 6.6</title>
+<link rel="canonical" href="https://solr.apache.org/guide/solr/latest/configuration-guide/coreadmin-api.html">
+<meta name="robots" content="noindex">
+<link href="https://solr.apache.org/guide/6_6/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+<!--<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">-->
+<link rel="stylesheet" href="https://solr.apache.org/guide/6_6/css/lavish-bootstrap.css">
+<link rel="stylesheet" href="https://solr.apache.org/guide/6_6/css/customstyles.css">
+<link rel="stylesheet" href="https://solr.apache.org/guide/6_6/css/theme-solr.css">
+<link rel="stylesheet" href="https://solr.apache.org/guide/6_6/css/ref-guide.css">
+<link rel="stylesheet" href="https://solr.apache.org/guide/6_6/css/comments.css">
+
+<script src="https://solr.apache.org/guide/6_6/js/jquery-2.1.4.min.js"></script>
+<script src="https://solr.apache.org/guide/6_6/js/jquery.cookie-1.4.1.min.js"></script>
+<script src="https://solr.apache.org/guide/6_6/js/jquery.navgoco.min.js"></script>
+
+<script src="https://solr.apache.org/guide/6_6/js/bootstrap-3.3.4.min.js"></script>
+<script src="https://solr.apache.org/guide/6_6/js/anchor-2.0.0.min.js"></script>
+<script src="https://solr.apache.org/guide/6_6/js/toc.js"></script>
+<script src="https://solr.apache.org/guide/6_6/js/customscripts.js"></script>
+
+<link rel="shortcut icon" href="https://solr.apache.org/guide/6_6/images/icons/favicon.ico">
+
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="js/html5shiv-3.7.0.js"></script>
+<script src="js/respond-1.4.2.min.js"></script>
+<![endif]-->
+
+<link rel="alternate" type="application/rss+xml" title="Apache Solr Reference Guide" href="https://home.apache.org/~ctargett/RefGuidePOC/jekyll-full/feed.xml">
+
+    <script>
+        $(document).ready(function() {
+            // Initialize navgoco with default options
+            $("#mysidebar").navgoco({
+                caretHtml: '',
+                accordion: true,
+                openClass: 'active', // open
+                save: false, // we do *NOT* want cookies used to save the current stage of the sidebar
+                             // instead the code in sidebar.html will ensure that the current page
+                             // (and it's ancestors) are "active" on page load
+                slide: {
+                    duration: 400,
+                    easing: 'swing'
+                }
+            });
+
+            $("#collapseAll").click(function(e) {
+                e.preventDefault();
+                $("#mysidebar").navgoco('toggle', false);
+            });
+
+            $("#expandAll").click(function(e) {
+                e.preventDefault();
+                $("#mysidebar").navgoco('toggle', true);
+            });
+
+        });
+
+    </script>
+</head>
+<body class="" id="coreadmin-api">
+<!-- Navigation -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container topnavlinks">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            
+            <a class="fa fa-home fa-lg navbar-brand" href="https://solr.apache.org/guide/6_6/index.html">&nbsp;<span class="projectTitle"> Solr Ref Guide 6.6</span></a>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <!-- Link to Solr website -->
+                <li><a href="https://lucene.apache.org/solr/" target="_blank">Solr Website</a></li>
+                <!-- Other Guide Formats dropdown -->
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Other Formats<b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                       <li><a href="https://www.apache.org/dyn/closer.cgi/lucene/solr/ref-guide" target="_blank">PDF for Latest Release</a></li>
+                       <li><a href="https://archive.apache.org/dist/lucene/solr/ref-guide/" target="_blank">Archived PDFs</a></li>
+                       <li><a href="https://lucene.apache.org/solr/guide/" target="_blank">Other Versions Online</a></li>
+                    </ul>
+                </li>
+                <!-- Solr Resources dropdown -->
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Solr Resources<b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                       <li><a href="https://lucene.apache.org/solr/6_6_0//solr-core/index.html" target="_blank">Solr Javadocs</a></li>
+                       <li><a href="https://lucene.apache.org/solr/community.html#version-control" target="_blank">Lucene/Solr Source Code</a></li>
+                       <li><a href="https://lucene.apache.org/solr/community.html" target="_blank">Solr Community Links</a></li>
+                    </ul>
+                </li>
+                <!--comment out this block if you want to hide search-->
+                <li>
+                    <!--start search-->
+                    <div id="search-demo-container">
+                        <input type="text" id="search-input" placeholder="search...">
+                        <ul id="results-container"></ul>
+                    </div>
+                    <script src="https://solr.apache.org/guide/6_6/js/jekyll-search.js" type="text/javascript"></script>
+                    <script type="text/javascript">
+                            SimpleJekyllSearch.init({
+                                searchInput: document.getElementById('search-input'),
+                                resultsContainer: document.getElementById('results-container'),
+                                dataSource: 'search.json',
+                                searchResultTemplate: '<li><a href="{url}" title="CoreAdmin API">{title}</a></li>',
+                    noResultsText: 'No results found.',
+                            limit: 10,
+                            fuzzy: true,
+                    })
+                    </script>
+                    <!--end search-->
+                </li>
+            </ul>
+        </div>
+        </div>
+        <!-- /.container -->
+</nav>
+
+<!-- Page Content -->
+<div class="container">
+  <div class="col-lg-12">&nbsp;</div>
+  <!-- Content Row -->
+  <div class="row">
+    <!-- Sidebar Column -->
+    <div class="col-md-3">
+      
+
+<ul id="mysidebar" class="nav">
+  <li class="sidebarTitle">Apache Solr Reference Guide</li>
+  
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/about-this-guide.html">About This Guide</a>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/getting-started.html">Getting Started</a>
+    
+    <ul>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/installing-solr.html">Installing Solr</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/running-solr.html">Running Solr</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/a-quick-overview.html">A Quick Overview</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/a-step-closer.html">A Step Closer</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/solr-control-script-reference.html">Solr Control Script Reference</a>
+        
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/upgrading-solr.html">Upgrading Solr</a>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/using-the-solr-administration-user-interface.html">Using the Solr Administration User Interface</a>
+    
+    <ul>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/overview-of-the-solr-admin-ui.html">Overview of the Solr Admin UI</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/getting-assistance.html">Getting Assistance</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/logging.html">Logging</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/cloud-screens.html">Cloud Screens</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/collections-core-admin.html">Collections / Core Admin</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/java-properties.html">Java Properties</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/thread-dump.html">Thread Dump</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/collection-specific-tools.html">Collection-Specific Tools</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/analysis-screen.html">Analysis Screen</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/dataimport-screen.html">Dataimport Screen</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/documents-screen.html">Documents Screen</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/files-screen.html">Files Screen</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/query-screen.html">Query Screen</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/stream-screen.html">Stream Screen</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/schema-browser-screen.html">Schema Browser Screen</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/core-specific-tools.html">Core-Specific Tools</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/ping.html">Ping</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/plugins-stats-screen.html">Plugins &amp; Stats Screen</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/replication-screen.html">Replication Screen</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/segments-info.html">Segments Info</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/documents-fields-and-schema-design.html">Documents, Fields, and Schema Design</a>
+    
+    <ul>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/overview-of-documents-fields-and-schema-design.html">Overview of Documents, Fields, and Schema Design</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/solr-field-types.html">Solr Field Types</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/field-type-definitions-and-properties.html">Field Type Definitions and Properties</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/field-types-included-with-solr.html">Field Types Included with Solr</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/working-with-currencies-and-exchange-rates.html">Working with Currencies and Exchange Rates</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/working-with-dates.html">Working with Dates</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/working-with-enum-fields.html">Working with Enum Fields</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/working-with-external-files-and-processes.html">Working with External Files and Processes</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/field-properties-by-use-case.html">Field Properties by Use Case</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/defining-fields.html">Defining Fields</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/copying-fields.html">Copying Fields</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/dynamic-fields.html">Dynamic Fields</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/other-schema-elements.html">Other Schema Elements</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/schema-api.html">Schema API</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/putting-the-pieces-together.html">Putting the Pieces Together</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/docvalues.html">DocValues</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/schemaless-mode.html">Schemaless Mode</a>
+        
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/understanding-analyzers-tokenizers-and-filters.html">Understanding Analyzers, Tokenizers, and Filters</a>
+    
+    <ul>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/analyzers.html">Analyzers</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/about-tokenizers.html">About Tokenizers</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/about-filters.html">About Filters</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/tokenizers.html">Tokenizers</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/filter-descriptions.html">Filter Descriptions</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/charfilterfactories.html">CharFilterFactories</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/language-analysis.html">Language Analysis</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/phonetic-matching.html">Phonetic Matching</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/running-your-analyzer.html">Running Your Analyzer</a>
+        
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/indexing-and-basic-data-operations.html">Indexing and Basic Data Operations</a>
+    
+    <ul>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/introduction-to-solr-indexing.html">Introduction to Solr Indexing</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/post-tool.html">Post Tool</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/uploading-data-with-index-handlers.html">Uploading Data with Index Handlers</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/transforming-and-indexing-custom-json.html">Transforming and Indexing Custom JSON</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/uploading-data-with-solr-cell-using-apache-tika.html">Uploading Data with Solr Cell using Apache Tika</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/uploading-structured-data-store-data-with-the-data-import-handler.html">Uploading Structured Data Store Data with the Data Import Handler</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/updating-parts-of-documents.html">Updating Parts of Documents</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/detecting-languages-during-indexing.html">Detecting Languages During Indexing</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/de-duplication.html">De-Duplication</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/content-streams.html">Content Streams</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/uima-integration.html">UIMA Integration</a>
+        
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/searching.html">Searching</a>
+    
+    <ul>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/overview-of-searching-in-solr.html">Overview of Searching in Solr</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/velocity-search-ui.html">Velocity Search UI</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/relevance.html">Relevance</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/query-syntax-and-parsing.html">Query Syntax and Parsing</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/common-query-parameters.html">Common Query Parameters</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/the-standard-query-parser.html">The Standard Query Parser</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/the-dismax-query-parser.html">The DisMax Query Parser</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/the-extended-dismax-query-parser.html">The Extended DisMax Query Parser</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/function-queries.html">Function Queries</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/local-parameters-in-queries.html">Local Parameters in Queries</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/other-parsers.html">Other Parsers</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/faceting.html">Faceting</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/blockjoin-faceting.html">BlockJoin Faceting</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/highlighting.html">Highlighting</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/spell-checking.html">Spell Checking</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/query-re-ranking.html">Query Re-Ranking</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/learning-to-rank.html">Learning To Rank</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/transforming-result-documents.html">Transforming Result Documents</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/suggester.html">Suggester</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/morelikethis.html">MoreLikeThis</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/pagination-of-results.html">Pagination of Results</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/collapse-and-expand-results.html">Collapse and Expand Results</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/result-grouping.html">Result Grouping</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/result-clustering.html">Result Clustering</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/spatial-search.html">Spatial Search</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/the-terms-component.html">The Terms Component</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/the-term-vector-component.html">The Term Vector Component</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/the-stats-component.html">The Stats Component</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/the-query-elevation-component.html">The Query Elevation Component</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/response-writers.html">Response Writers</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/velocity-response-writer.html">Velocity Response Writer</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/near-real-time-searching.html">Near Real Time Searching</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/realtime-get.html">RealTime Get</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/exporting-result-sets.html">Exporting Result Sets</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/streaming-expressions.html">Streaming Expressions</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/stream-sources.html">Stream Source Reference</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/stream-decorators.html">Stream Decorator Reference</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/stream-evaluators.html">Stream Evaluator Reference</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/graph-traversal.html">Graph Traversal</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/parallel-sql-interface.html">Parallel SQL Interface</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/solr-jdbc-dbvisualizer.html">Solr JDBC - DbVisualizer</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/solr-jdbc-squirrel-sql.html">Solr JDBC - SQuirreL SQL</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/solr-jdbc-apache-zeppelin.html">Solr JDBC - Apache Zeppelin</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/solr-jdbc-python-jython.html">Solr JDBC - Python/Jython</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/solr-jdbc-r.html">Solr JDBC - R</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/the-well-configured-solr-instance.html">The Well-Configured Solr Instance</a>
+    
+    <ul>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/configuring-solrconfig-xml.html">Configuring solrconfig.xml</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/datadir-and-directoryfactory-in-solrconfig.html">DataDir and DirectoryFactory in SolrConfig</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/lib-directives-in-solrconfig.html">Lib Directives in SolrConfig</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/schema-factory-definition-in-solrconfig.html">Schema Factory Definition in SolrConfig</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/indexconfig-in-solrconfig.html">IndexConfig in SolrConfig</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/requesthandlers-and-searchcomponents-in-solrconfig.html">RequestHandlers and SearchComponents in SolrConfig</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/initparams-in-solrconfig.html">InitParams in SolrConfig</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/updatehandlers-in-solrconfig.html">UpdateHandlers in SolrConfig</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/query-settings-in-solrconfig.html">Query Settings in SolrConfig</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/requestdispatcher-in-solrconfig.html">RequestDispatcher in SolrConfig</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/update-request-processors.html">Update Request Processors</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/codec-factory.html">Codec Factory</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/solr-cores-and-solr-xml.html">Solr Cores and solr.xml</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/format-of-solr-xml.html">Format of solr.xml</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/defining-core-properties.html">Defining core.properties</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/coreadmin-api.html">CoreAdmin API</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/config-sets.html">Config Sets</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/configuration-apis.html">Configuration APIs</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/blob-store-api.html">Blob Store API</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/config-api.html">Config API</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/request-parameters-api.html">Request Parameters API</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/managed-resources.html">Managed Resources</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/implicit-requesthandlers.html">Implicit RequestHandlers</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/solr-plugins.html">Solr Plugins</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/adding-custom-plugins-in-solrcloud-mode.html">Adding Custom Plugins in SolrCloud Mode</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/jvm-settings.html">JVM Settings</a>
+        
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/managing-solr.html">Managing Solr</a>
+    
+    <ul>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/taking-solr-to-production.html">Taking Solr to Production</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/securing-solr.html">Securing Solr</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/authentication-and-authorization-plugins.html">Authentication and Authorization Plugins</a>
+            
+            <ul>
+              
+              <li class="sb-level4">
+                <a href="https://solr.apache.org/guide/6_6/basic-authentication-plugin.html">Basic Authentication Plugin</a>
+                
+              </li>
+              
+              <li class="sb-level4">
+                <a href="https://solr.apache.org/guide/6_6/hadoop-authentication-plugin.html">Hadoop Authentication Plugin</a>
+                
+              </li>
+              
+              <li class="sb-level4">
+                <a href="https://solr.apache.org/guide/6_6/kerberos-authentication-plugin.html">Kerberos Authentication Plugin</a>
+                
+              </li>
+              
+              <li class="sb-level4">
+                <a href="https://solr.apache.org/guide/6_6/rule-based-authorization-plugin.html">Rule-Based Authorization Plugin</a>
+                
+              </li>
+              
+            </ul>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/enabling-ssl.html">Enabling SSL</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/running-solr-on-hdfs.html">Running Solr on HDFS</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/making-and-restoring-backups.html">Making and Restoring Backups</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/configuring-logging.html">Configuring Logging</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/using-jmx-with-solr.html">Using JMX with Solr</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/mbean-request-handler.html">MBean Request Handler</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/performance-statistics-reference.html">Performance Statistics Reference</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/metrics-reporting.html">Metrics Reporting</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/v2-api.html">v2 API</a>
+        
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/solrcloud.html">SolrCloud</a>
+    
+    <ul>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/getting-started-with-solrcloud.html">Getting Started with SolrCloud</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/how-solrcloud-works.html">How SolrCloud Works</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/shards-and-indexing-data-in-solrcloud.html">Shards and Indexing Data in SolrCloud</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/distributed-requests.html">Distributed Requests</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/read-and-write-side-fault-tolerance.html">Read and Write Side Fault Tolerance</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/solrcloud-configuration-and-parameters.html">SolrCloud Configuration and Parameters</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/setting-up-an-external-zookeeper-ensemble.html">Setting Up an External ZooKeeper Ensemble</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/using-zookeeper-to-manage-configuration-files.html">Using ZooKeeper to Manage Configuration Files</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/zookeeper-access-control.html">ZooKeeper Access Control</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/collections-api.html">Collections API</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/parameter-reference.html">Parameter Reference</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/command-line-utilities.html">Command Line Utilities</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/solrcloud-with-legacy-configuration-files.html">SolrCloud with Legacy Configuration Files</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/configsets-api.html">ConfigSets API</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/rule-based-replica-placement.html">Rule-based Replica Placement</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/cross-data-center-replication-cdcr.html">Cross Data Center Replication (CDCR)</a>
+        
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/legacy-scaling-and-distribution.html">Legacy Scaling and Distribution</a>
+    
+    <ul>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/introduction-to-scaling-and-distribution.html">Introduction to Scaling and Distribution</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/distributed-search-with-index-sharding.html">Distributed Search with Index Sharding</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/index-replication.html">Index Replication</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/combining-distribution-and-replication.html">Combining Distribution and Replication</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/merging-indexes.html">Merging Indexes</a>
+        
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/client-apis.html">Client APIs</a>
+    
+    <ul>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/introduction-to-client-apis.html">Introduction to Client APIs</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/choosing-an-output-format.html">Choosing an Output Format</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/client-api-lineup.html">Client API Lineup</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/using-javascript.html">Using JavaScript</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/using-python.html">Using Python</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/using-solrj.html">Using SolrJ</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/using-solr-from-ruby.html">Using Solr From Ruby</a>
+        
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/major-changes-from-solr-5-to-solr-6.html">Major Changes from Solr 5 to Solr 6</a>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/upgrading-a-solr-cluster.html">Upgrading a Solr Cluster</a>
+    
+    <ul>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/indexupgrader-tool.html">IndexUpgrader Tool</a>
+        
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/further-assistance.html">Further Assistance</a>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/solr-glossary.html">Solr Glossary</a>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/errata.html">Errata</a>
+    
+  </li>
+  
+</ul>
+
+
+<!-- set the 'active' class on the current page and ancestors -->
+<!-- this highlights the active parent class in the navgoco sidebar. this is critical so that the parent expands when you're viewing a page. This must appear below the sidebar code above. Otherwise, if placed inside customscripts.js, the script runs before the sidebar code runs and the class never gets inserted.-->
+<script>$("#mysidebar a[href='coreadmin-api.html']").parents('li').toggleClass("active", true);</script>
+<!-- set the 'current' class on the current page and 'current-tree' on the current page + it's ancestors -->
+<!-- this can let us do css highlighting of the current page in the sidebar even if/when the user clicks around in the sidebar causing other sidebar elements to be 'active' -->
+<script>
+  $("#mysidebar a[href='coreadmin-api.html']").parent('li').toggleClass("current", true);
+  $("#mysidebar a[href='coreadmin-api.html']").parents('li').toggleClass("current-tree", true);
+</script>
+
+    </div>
+    <!-- Content Column -->
+    <div class="col-md-9">
+      <div class="post-header">
+   <h1 class="post-title-main">CoreAdmin API</h1>
+</div>
+
+<!-- This adds a workflow map, to a page
+     See http://idratherbewriting.com/documentation-theme-jekyll/mydoc_workflow_maps.html
+     Leaving it here commented out in case we want to implement this in the future
+ -->
+
+<div class="post-content">
+
+   
+
+    
+    
+<!-- this handles the automatic toc. use ## for subheads to auto-generate the on-page minitoc. if you use html tags, you must supply an ID for the heading element in order for it to appear in the minitoc. -->
+
+<script src="https://solr.apache.org/guide/6_6/js/ref-guide-toc.js" type="text/javascript"></script>
+<script type="text/javascript">
+  // based on page variables, build up the list of headers for the top level toc (and any sub-section tocs)
+  do_tocs(2)
+</script>
+<div id="toc" class="toc toc-normal"></div>
+
+    
+
+<div class="main-content">
+  <div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>The Core Admin API is primarily used under the covers by the <a href="https://solr.apache.org/guide/6_6/collections-api.html#collections-api">Collections API</a> when running a <a href="https://solr.apache.org/guide/6_6/solrcloud.html#solrcloud">SolrCloud</a> cluster.</p>
+</div>
+<div class="paragraph">
+<p>SolrCloud users should not typically use the CoreAdmin API directly, but the API may be useful for users of single-node or master/slave Solr installations for core maintenance operations.</p>
+</div>
+<div class="paragraph">
+<p>The CoreAdmin API is implemented by the CoreAdminHandler, which is a special purpose <a href="https://solr.apache.org/guide/6_6/requesthandlers-and-searchcomponents-in-solrconfig.html#requesthandlers-and-searchcomponents-in-solrconfig">request handler</a> that is used to manage Solr cores. Unlike other request handlers, the CoreAdminHandler is not attached to a single core. Instead, there is a single instance of the CoreAdminHandler in each Solr node that manages all the cores running in that node and is accessible at the <code>/solr/admin/cores</code> path.</p>
+</div>
+<div class="paragraph">
+<p>CoreAdmin actions can be executed by via HTTP requests that specify an <code>action</code> request parameter, with additional action specific arguments provided as additional parameters.</p>
+</div>
+<div class="paragraph">
+<p>All action names are uppercase, and are defined in depth in the sections below.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="CoreAdminAPI-STATUS">STATUS</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>STATUS</code> action returns the status of all running Solr cores, or status for only the named core.</p>
+</div>
+<div class="paragraph">
+<p><code>admin/cores?action=STATUS&amp;core=<em>core-name</em></code></p>
+</div>
+<div class="sect2">
+<h3 id="CoreAdminAPI-Input"><strong>Input</strong></h3>
+<div class="paragraph">
+<p><strong>Query Parameters</strong></p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 15%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
+<col style="width: 55%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Required</th>
+<th class="tableblock halign-left valign-top">Default</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">core</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The name of a core, as listed in the "name" attribute of a <code>&lt;core&gt;</code> element in <code>solr.xml</code>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">indexInfo</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If <strong>false</strong>, information about the index will not be returned with a core STATUS request. In Solr implementations with a large number of cores (i.e., more than hundreds), retrieving the index information for each core can take a lot of time and isn&#8217;t always required.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="CoreAdminAPI-CREATE">CREATE</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>CREATE</code> action creates a new core and registers it.</p>
+</div>
+<div class="paragraph">
+<p>If a Solr core with the given name already exists, it will continue to handle requests while the new core is initializing. When the new core is ready, it will take new requests and the old core will be unloaded.</p>
+</div>
+<div class="paragraph">
+<p><code>admin/cores?action=CREATE&amp;name=<em>core-name</em>&amp;instanceDir=<em>path/to/dir</em>&amp;config=solrconfig.xml&amp;dataDir=data</code></p>
+</div>
+<div class="paragraph">
+<p>Note that this command is the only one of the Core Admin API commands that <strong>does not</strong> support the <code>core</code> parameter. Instead, the <code>name</code> parameter is required, as shown below.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+<div class="title">CREATE must be able to find a configuration!</div>
+<div class="paragraph">
+<p>Your CREATE call must be able to find a configuration, or it will not succeed.</p>
+</div>
+<div class="paragraph">
+<p>When you are running SolrCloud and create a new core for a collection, the configuration will be inherited from the collection. Each collection is linked to a configName, which is stored in the ZooKeeper database. This satisfies the config requirement. There is something to note, though – if you&#8217;re running SolrCloud, you should <strong>NOT</strong> be using the CoreAdmin API at all. Use the Collections API.</p>
+</div>
+<div class="paragraph">
+<p>When you are not running SolrCloud, if you have <a href="https://solr.apache.org/guide/6_6/config-sets.html#config-sets">Config Sets</a> defined, you can use the configSet parameter as documented below. If there are no config sets, then the instanceDir specified in the CREATE call must already exist, and it must contain a <code>conf</code> directory which in turn must contain <code>solrconfig.xml</code>, your schema, which is usually named either <code>managed-schema</code> or <code>schema.xml</code>, and any files referenced by those configs.</p>
+</div>
+<div class="paragraph">
+<p>The config and schema filenames can be specified with the config and schema parameters, but these are expert options. One thing you could do to avoid creating the conf directory is use config and schema parameters that point at absolute paths, but this can lead to confusing configurations unless you fully understand what you are doing.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<div class="title">CREATE and the core.properties file</div>
+<div class="paragraph">
+<p>The core.properties file is built as part of the CREATE command. If you create a core.properties file yourself in a core directory and then try to use CREATE to add that core to Solr, you will get an error telling you that another core is already defined there. The core.properties file must NOT exist before calling the CoreAdmin API with the CREATE command.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="CoreAdminAPI-Input.1"><strong>Input</strong></h3>
+<div class="paragraph">
+<p><strong>Query Parameters</strong></p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 15%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
+<col style="width: 55%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Required</th>
+<th class="tableblock halign-left valign-top">Default</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">N/A</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The name of the new core. Same as "name" on the <code>&lt;core&gt;</code> element.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">instanceDir</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The value specified for "name" parameter</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The directory where files for this SolrCore should be stored. Same as <code>instanceDir</code> on the <code>&lt;core&gt;</code> element.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">config</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Name of the config file (i.e., <code>solrconfig.xml</code>) relative to <code>instanceDir</code>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">schema</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Name of the schema file to use for the core. Please note that if you are using a "managed schema" (the default behavior) then any value for this property which does not match the effective <code>managedSchemaResourceName</code> will be read once, backed up, and converted for managed schema use. See <a href="https://solr.apache.org/guide/6_6/schema-factory-definition-in-solrconfig.html#schema-factory-definition-in-solrconfig">Schema Factory Definition in SolrConfig</a> for details.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">dataDir</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Name of the data directory relative to <code>instanceDir</code>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">configSet</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Name of the configset to use for this core. For more information, see the section <a href="https://solr.apache.org/guide/6_6/config-sets.html#config-sets">Config Sets</a>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">collection</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The name of the collection to which this core belongs. The default is the name of the core. <code>collection.&lt;param&gt;=&lt;value&gt;</code> causes a property of <code>&lt;param&gt;=&lt;value&gt;</code> to be set if a new collection is being created. Use <code>collection.configName=&lt;configname&gt;</code> to point to the configuration for a new collection.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">shard</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The shard id this core represents. Normally you want to be auto-assigned a shard id.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">property.<em>name</em>=<em>value</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sets the core property <em>name</em> to <em>value</em>. See the section on defining <a href="https://solr.apache.org/guide/6_6/defining-core-properties.html#Definingcore.properties-core.properties_files">core.properties file contents</a>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">async</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Request ID to track this action which will be processed asynchronously</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Use <code>collection.configName=&lt;configname&gt;</code> to point to the config for a new collection.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="CoreAdminAPI-Example">Example</h3>
+<div class="paragraph">
+<p><code>http://localhost:8983/solr/admin/cores?action=CREATE&amp;name=my_core&amp;collection=my_collection&amp;shard=shard2</code></p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>While it&#8217;s possible to create a core for a non-existent collection, this approach is not supported and not recommended. Always create a collection using the <a href="https://solr.apache.org/guide/6_6/collections-api.html#collections-api">Collections API</a> before creating a core directly for it.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="CoreAdminAPI-RELOAD">RELOAD</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The RELOAD action loads a new core from the configuration of an existing, registered Solr core. While the new core is initializing, the existing one will continue to handle requests. When the new Solr core is ready, it takes over and the old core is unloaded.</p>
+</div>
+<div class="paragraph">
+<p><code>admin/cores?action=RELOAD&amp;core=<em>core-name</em></code></p>
+</div>
+<div class="paragraph">
+<p>This is useful when you&#8217;ve made changes to a Solr core&#8217;s configuration on disk, such as adding new field definitions. Calling the RELOAD action lets you apply the new configuration without having to restart the Web container.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>RELOAD performs "live" reloads of SolrCore, reusing some existing objects. Some configuration options, such as the <code>dataDir</code> location and <code>IndexWriter</code>-related settings in <code>solrconfig.xml</code> can not be changed and made active with a simple RELOAD action.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="CoreAdminAPI-Input.2">Input</h3>
+<div class="paragraph">
+<p><strong>Query Parameters</strong></p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 15%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
+<col style="width: 55%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Required</th>
+<th class="tableblock halign-left valign-top">Default</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">core</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">N/A</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The name of the core, as listed in the "name" attribute of a <code>&lt;core&gt;</code> element in <code>solr.xml</code>.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="CoreAdminAPI-RENAME">RENAME</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>RENAME</code> action changes the name of a Solr core.</p>
+</div>
+<div class="paragraph">
+<p><code>admin/cores?action=RENAME&amp;core=<em>core-name</em>&amp;other=<em>other-core-name</em></code></p>
+</div>
+<div class="sect2">
+<h3 id="CoreAdminAPI-Input.3">Input</h3>
+<div class="paragraph">
+<p><strong>Query Parameters</strong></p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 15%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
+<col style="width: 55%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Required</th>
+<th class="tableblock halign-left valign-top">Default</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">core</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The name of the Solr core to be renamed.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">other</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The new name for the Solr core. If the persistent attribute of <code>&lt;solr&gt;</code> is <code>true</code>, the new name will be written to <code>solr.xml</code> as the <code>name</code> attribute of the <code>&lt;core&gt;</code> attribute.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">async</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Request ID to track this action which will be processed asynchronously</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="CoreAdminAPI-SWAP">SWAP</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><code>SWAP</code> atomically swaps the names used to access two existing Solr cores. This can be used to swap new content into production. The prior core remains available and can be swapped back, if necessary. Each core will be known by the name of the other, after the swap.</p>
+</div>
+<div class="paragraph">
+<p><code>admin/cores?action=SWAP&amp;core=<em>core-name</em>&amp;other=<em>other-core-name</em></code></p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Do not use <code>SWAP</code> with a SolrCloud node. It is not supported and can result in the core being unusable.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="CoreAdminAPI-Input.4">Input</h3>
+<div class="paragraph">
+<p><strong>Query Parameters</strong></p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 15%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
+<col style="width: 55%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Required</th>
+<th class="tableblock halign-left valign-top">Default</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">core</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The name of one of the cores to be swapped.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">other</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The name of one of the cores to be swapped.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">async</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Request ID to track this action which will be processed asynchronously</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="CoreAdminAPI-UNLOAD">UNLOAD</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>UNLOAD</code> action removes a core from Solr. Active requests will continue to be processed, but no new requests will be sent to the named core. If a core is registered under more than one name, only the given name is removed.</p>
+</div>
+<div class="paragraph">
+<p><code>admin/cores?action=UNLOAD&amp;core=<em>core-name</em></code></p>
+</div>
+<div class="paragraph">
+<p>The <code>UNLOAD</code> action requires a parameter (<code>core</code>) identifying the core to be removed. If the persistent attribute of <code>&lt;solr&gt;</code> is set to <code>true</code>, the <code>&lt;core&gt;</code> element with this <code>name</code> attribute will be removed from <code>solr.xml</code>.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Unloading all cores in a SolrCloud collection causes the removal of that collection&#8217;s metadata from ZooKeeper.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="CoreAdminAPI-Input.5">Input</h3>
+<div class="paragraph">
+<p><strong>Query Parameters</strong></p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 15%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
+<col style="width: 55%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Required</th>
+<th class="tableblock halign-left valign-top">Default</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">core</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The name of one of the cores to be removed.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">deleteIndex</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If true, will remove the index when unloading the core.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">deleteDataDir</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If true, removes the <code>data</code> directory and all sub-directories.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">deleteInstanceDir</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If true, removes everything related to the core, including the index directory, configuration files and other related files.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">async</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Request ID to track this action which will be processed asynchronously</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="CoreAdminAPI-MERGEINDEXES">MERGEINDEXES</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>MERGEINDEXES</code> action merges one or more indexes to another index. The indexes must have completed commits, and should be locked against writes until the merge is complete or the resulting merged index may become corrupted. The target core index must already exist and have a compatible schema with the one or more indexes that will be merged to it. Another commit on the target core should also be performed after the merge is complete.</p>
+</div>
+<div class="paragraph">
+<p><code>admin/cores?action=MERGEINDEXES&amp;core=<em>new-core-name</em>&amp;indexDir=<em>path/to/core1/data/index</em>&amp;indexDir=<em>path/to/core2/data/index</em></code></p>
+</div>
+<div class="paragraph">
+<p>In this example, we use the <code>indexDir</code> parameter to define the index locations of the source cores. The <code>core</code> parameter defines the target index. A benefit of this approach is that we can merge any Lucene-based index that may not be associated with a Solr core.</p>
+</div>
+<div class="paragraph">
+<p>Alternatively, we can instead use a <code>srcCore</code> parameter, as in this example:</p>
+</div>
+<div class="paragraph">
+<p><code>admin/cores?action=mergeindexes&amp;core=<em>new-core-name</em>&amp;srcCore=<em>core1-name</em>&amp;srcCore=<em>core2-name</em></code></p>
+</div>
+<div class="paragraph">
+<p>This approach allows us to define cores that may not have an index path that is on the same physical server as the target core. However, we can only use Solr cores as the source indexes. Another benefit of this approach is that we don&#8217;t have as high a risk for corruption if writes occur in parallel with the source index.</p>
+</div>
+<div class="paragraph">
+<p>We can make this call run asynchronously by specifying the <code>async</code> parameter and passing a request-id. This id can then be used to check the status of the already submitted task using the REQUESTSTATUS API.</p>
+</div>
+<div class="sect2">
+<h3 id="CoreAdminAPI-Input.6">Input</h3>
+<div class="paragraph">
+<p><strong>Query Parameters</strong></p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 15%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
+<col style="width: 55%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Required</th>
+<th class="tableblock halign-left valign-top">Default</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">core</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The name of the target core/index.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">indexDir</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Multi-valued, directories that would be merged.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">srcCore</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Multi-valued, source cores that would be merged.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">async</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Request ID to track this action which will be processed asynchronously</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="CoreAdminAPI-SPLIT">SPLIT</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>SPLIT</code> action splits an index into two or more indexes. The index being split can continue to handle requests. The split pieces can be placed into a specified directory on the server&#8217;s filesystem or it can be merged into running Solr cores.</p>
+</div>
+<div class="paragraph">
+<p>The <code>SPLIT</code> action supports five parameters, which are described in the table below.</p>
+</div>
+<div class="sect2">
+<h3 id="CoreAdminAPI-Input.7">Input</h3>
+<div class="paragraph">
+<p><strong>Query Parameters</strong></p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 15%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
+<col style="width: 55%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Required</th>
+<th class="tableblock halign-left valign-top">Default</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">core</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The name of the core to be split.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">path</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Multi-valued, the directory path in which a piece of the index will be written.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">targetCore</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Multi-valued, the target Solr core to which a piece of the index will be merged</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ranges</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A comma-separated list of hash ranges in hexadecimal format</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">split.key</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The key to be used for splitting the index</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">async</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Request ID to track this action which will be processed asynchronously</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Either <code>path</code> or <code>targetCore</code> parameter must be specified but not both. The ranges and split.key parameters are optional and only one of the two should be specified, if at all required.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="CoreAdminAPI-Examples">Examples</h3>
+<div class="paragraph">
+<p>The <code>core</code> index will be split into as many pieces as the number of <code>path</code> or <code>targetCore</code> parameters.</p>
+</div>
+<div class="sect3">
+<h4 id="usage-with-two-code-targetcore-code-parameters">Usage with two <code>targetCore</code> parameters:</h4>
+<div class="paragraph">
+<p><code>http://localhost:8983/solr/admin/cores?action=SPLIT&amp;core=core0&amp;targetCore=core1&amp;targetCore=core2</code></p>
+</div>
+<div class="paragraph">
+<p>Here the <code>core</code> index will be split into two pieces and merged into the two <code>targetCore</code> indexes.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="usage-with-two-code-path-code-parameters">Usage with two <code>path</code> parameters:</h4>
+<div class="paragraph">
+<p><code>http://localhost:8983/solr/admin/cores?action=SPLIT&amp;core=core0&amp;path=/path/to/index/1&amp;path=/path/to/index/2</code></p>
+</div>
+<div class="paragraph">
+<p>The <code>core</code> index will be split into two pieces and written into the two directory paths specified.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="usage-with-the-code-split-key-code-parameter">Usage with the <code>split.key</code> parameter:</h4>
+<div class="paragraph">
+<p><code>http://localhost:8983/solr/admin/cores?action=SPLIT&amp;core=core0&amp;targetCore=core1&amp;split.key=A!</code></p>
+</div>
+<div class="paragraph">
+<p>Here all documents having the same route key as the <code>split.key</code> i.e. 'A!' will be split from the <code>core</code> index and written to the <code>targetCore</code>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="usage-with-code-ranges-code-parameter">Usage with <code>ranges</code> parameter:</h4>
+<div class="paragraph">
+<p><code>http://localhost:8983/solr/admin/cores?action=SPLIT&amp;core=core0&amp;targetCore=core1&amp;targetCore=core2&amp;targetCore=core3&amp;ranges=0-1f4,1f5-3e8,3e9-5dc</code></p>
+</div>
+<div class="paragraph">
+<p>This example uses the <code>ranges</code> parameter with hash ranges 0-500, 501-1000 and 1001-1500 specified in hexadecimal. Here the index will be split into three pieces with each targetCore receiving documents matching the hash ranges specified i.e. core1 will get documents with hash range 0-500, core2 will receive documents with hash range 501-1000 and finally, core3 will receive documents with hash range 1001-1500. At least one hash range must be specified. Please note that using a single hash range equal to a route key&#8217;s hash range is NOT equivalent to using the <code>split.key</code> parameter because multiple route keys can hash to the same range.</p>
+</div>
+<div class="paragraph">
+<p>The <code>targetCore</code> must already exist and must have a compatible schema with the <code>core</code> index. A commit is automatically called on the <code>core</code> index before it is split.</p>
+</div>
+<div class="paragraph">
+<p>This command is used as part of the <a href="https://solr.apache.org/guide/6_6/collections-api.html#CollectionsAPI-splitshard">SPLITSHARD</a> command but it can be used for non-cloud Solr cores as well. When used against a non-cloud core without <code>split.key</code> parameter, this action will split the source index and distribute its documents alternately so that each split piece contains an equal number of documents. If the <code>split.key</code> parameter is specified then only documents having the same route key will be split from the source index.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="CoreAdminAPI-REQUESTSTATUS">REQUESTSTATUS</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Request the status of an already submitted asynchronous CoreAdmin API call.</p>
+</div>
+<div class="paragraph">
+<p><code>admin/cores?action=REQUESTSTATUS&amp;requestid=<em>id</em></code></p>
+</div>
+<div class="sect2">
+<h3 id="CoreAdminAPI-Input.8">Input</h3>
+<div class="paragraph">
+<p><strong>Query Parameters</strong></p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 15%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
+<col style="width: 55%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Required</th>
+<th class="tableblock halign-left valign-top">Default</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">requestid</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The user defined request-id for the Asynchronous request.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>The call below will return the status of an already submitted Asynchronous CoreAdmin call.</p>
+</div>
+<div class="paragraph">
+<p><code>http://localhost:8983/solr/admin/cores?action=REQUESTSTATUS&amp;requestid=1</code></p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="CoreAdminAPI-REQUESTRECOVERY">REQUESTRECOVERY</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>REQUESTRECOVERY</code> action manually asks a core to recover by synching with the leader. This should be considered an "expert" level command and should be used in situations where the node (SorlCloud replica) is unable to become active automatically.</p>
+</div>
+<div class="paragraph">
+<p><code>admin/cores?action=REQUESTRECOVERY&amp;core=<em>core-name</em></code></p>
+</div>
+<div class="sect2">
+<h3 id="CoreAdminAPI-Input.9">Input</h3>
+<div class="paragraph">
+<p><strong>Query Parameters</strong></p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 15%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
+<col style="width: 55%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Required</th>
+<th class="tableblock halign-left valign-top">Default</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">core</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The name of the core to re-sync.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="CoreAdminAPI-Examples.1">Examples</h3>
+<div class="paragraph">
+<p><code>http://localhost:8981/solr/admin/cores?action=REQUESTRECOVERY&amp;core=gettingstarted_shard1_replica1</code></p>
+</div>
+<div class="paragraph">
+<p>The core to specify can be found by expanding the appropriate ZooKeeper node via the admin UI.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Adds tags, if any -->
+    <div class="tags">
+        
+    </div>
+
+<!-- Adds nav links on each page -->
+    
+    
+    <div class="scrollnav">
+      
+      <a class="btn btn-primary prev" href="https://solr.apache.org/guide/6_6/defining-core-properties.html">Defining core.properties</a>
+      
+      
+      <a class="btn btn-primary next" href="https://solr.apache.org/guide/6_6/config-sets.html">Config Sets</a>
+      
+    </div>
+    
+
+</div>
+
+<!-- Adds comments from Apache's Comment system -->
+
+<div id="comments_thread">
+</div>
+<script type="text/javascript" src="https://comments.apache.org/show_comments.lua?site=solr-refguide&amp;style=css/comments.css&amp;page=coreadmin-api" async="true">
+</script>
+<noscript>
+<iframe width="100%" height="500" src="https://comments.apache.org/iframe.lua?site=solr-refguide&amp;style=css/comments.css&amp;page=coreadmin-api"></iframe>
+</noscript>
+
+<footer>
+            <div class="row">
+                <div class="col-lg-12 footer">
+               &copy;2017 Apache Software Foundation. All rights reserved. <br />
+ Site Version: 6.6 <br />Site last generated: 2017-06-09 <br />
+<p><img src="https://solr.apache.org/guide/6_6/images/solr-sunOnly-small.png" alt="Apache Solr"/></p>
+                </div>
+            </div>
+</footer>
+
+
+    </div>
+    <!-- /.row -->
+  </div>
+  <!-- /.container -->
+</div>
+
+</body>
+
+<!-- Mirrored from solr.apache.org/guide/6_6/coreadmin-api.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 26 Feb 2026 00:40:01 GMT -->
+</html>

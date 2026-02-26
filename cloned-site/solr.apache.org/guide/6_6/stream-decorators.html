@@ -1,0 +1,2604 @@
+<!DOCTYPE html>
+
+<!-- Mirrored from solr.apache.org/guide/6_6/stream-decorators.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 26 Feb 2026 00:40:00 GMT -->
+<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="keywords" content=" ">
+
+<title>Stream Decorator Reference | Apache Solr Reference Guide 6.6</title>
+<link rel="canonical" href="https://solr.apache.org/guide/solr/latest/query-guide/stream-decorator-reference.html">
+<meta name="robots" content="noindex">
+<link href="https://solr.apache.org/guide/6_6/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+<!--<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">-->
+<link rel="stylesheet" href="https://solr.apache.org/guide/6_6/css/lavish-bootstrap.css">
+<link rel="stylesheet" href="https://solr.apache.org/guide/6_6/css/customstyles.css">
+<link rel="stylesheet" href="https://solr.apache.org/guide/6_6/css/theme-solr.css">
+<link rel="stylesheet" href="https://solr.apache.org/guide/6_6/css/ref-guide.css">
+<link rel="stylesheet" href="https://solr.apache.org/guide/6_6/css/comments.css">
+
+<script src="https://solr.apache.org/guide/6_6/js/jquery-2.1.4.min.js"></script>
+<script src="https://solr.apache.org/guide/6_6/js/jquery.cookie-1.4.1.min.js"></script>
+<script src="https://solr.apache.org/guide/6_6/js/jquery.navgoco.min.js"></script>
+
+<script src="https://solr.apache.org/guide/6_6/js/bootstrap-3.3.4.min.js"></script>
+<script src="https://solr.apache.org/guide/6_6/js/anchor-2.0.0.min.js"></script>
+<script src="https://solr.apache.org/guide/6_6/js/toc.js"></script>
+<script src="https://solr.apache.org/guide/6_6/js/customscripts.js"></script>
+
+<link rel="shortcut icon" href="https://solr.apache.org/guide/6_6/images/icons/favicon.ico">
+
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="js/html5shiv-3.7.0.js"></script>
+<script src="js/respond-1.4.2.min.js"></script>
+<![endif]-->
+
+<link rel="alternate" type="application/rss+xml" title="Apache Solr Reference Guide" href="https://home.apache.org/~ctargett/RefGuidePOC/jekyll-full/feed.xml">
+
+    <script>
+        $(document).ready(function() {
+            // Initialize navgoco with default options
+            $("#mysidebar").navgoco({
+                caretHtml: '',
+                accordion: true,
+                openClass: 'active', // open
+                save: false, // we do *NOT* want cookies used to save the current stage of the sidebar
+                             // instead the code in sidebar.html will ensure that the current page
+                             // (and it's ancestors) are "active" on page load
+                slide: {
+                    duration: 400,
+                    easing: 'swing'
+                }
+            });
+
+            $("#collapseAll").click(function(e) {
+                e.preventDefault();
+                $("#mysidebar").navgoco('toggle', false);
+            });
+
+            $("#expandAll").click(function(e) {
+                e.preventDefault();
+                $("#mysidebar").navgoco('toggle', true);
+            });
+
+        });
+
+    </script>
+</head>
+<body class="" id="stream-decorators">
+<!-- Navigation -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container topnavlinks">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            
+            <a class="fa fa-home fa-lg navbar-brand" href="https://solr.apache.org/guide/6_6/index.html">&nbsp;<span class="projectTitle"> Solr Ref Guide 6.6</span></a>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <!-- Link to Solr website -->
+                <li><a href="https://lucene.apache.org/solr/" target="_blank">Solr Website</a></li>
+                <!-- Other Guide Formats dropdown -->
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Other Formats<b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                       <li><a href="https://www.apache.org/dyn/closer.cgi/lucene/solr/ref-guide" target="_blank">PDF for Latest Release</a></li>
+                       <li><a href="https://archive.apache.org/dist/lucene/solr/ref-guide/" target="_blank">Archived PDFs</a></li>
+                       <li><a href="https://lucene.apache.org/solr/guide/" target="_blank">Other Versions Online</a></li>
+                    </ul>
+                </li>
+                <!-- Solr Resources dropdown -->
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Solr Resources<b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                       <li><a href="https://lucene.apache.org/solr/6_6_0//solr-core/index.html" target="_blank">Solr Javadocs</a></li>
+                       <li><a href="https://lucene.apache.org/solr/community.html#version-control" target="_blank">Lucene/Solr Source Code</a></li>
+                       <li><a href="https://lucene.apache.org/solr/community.html" target="_blank">Solr Community Links</a></li>
+                    </ul>
+                </li>
+                <!--comment out this block if you want to hide search-->
+                <li>
+                    <!--start search-->
+                    <div id="search-demo-container">
+                        <input type="text" id="search-input" placeholder="search...">
+                        <ul id="results-container"></ul>
+                    </div>
+                    <script src="https://solr.apache.org/guide/6_6/js/jekyll-search.js" type="text/javascript"></script>
+                    <script type="text/javascript">
+                            SimpleJekyllSearch.init({
+                                searchInput: document.getElementById('search-input'),
+                                resultsContainer: document.getElementById('results-container'),
+                                dataSource: 'search.json',
+                                searchResultTemplate: '<li><a href="{url}" title="Stream Decorator Reference">{title}</a></li>',
+                    noResultsText: 'No results found.',
+                            limit: 10,
+                            fuzzy: true,
+                    })
+                    </script>
+                    <!--end search-->
+                </li>
+            </ul>
+        </div>
+        </div>
+        <!-- /.container -->
+</nav>
+
+<!-- Page Content -->
+<div class="container">
+  <div class="col-lg-12">&nbsp;</div>
+  <!-- Content Row -->
+  <div class="row">
+    <!-- Sidebar Column -->
+    <div class="col-md-3">
+      
+
+<ul id="mysidebar" class="nav">
+  <li class="sidebarTitle">Apache Solr Reference Guide</li>
+  
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/about-this-guide.html">About This Guide</a>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/getting-started.html">Getting Started</a>
+    
+    <ul>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/installing-solr.html">Installing Solr</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/running-solr.html">Running Solr</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/a-quick-overview.html">A Quick Overview</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/a-step-closer.html">A Step Closer</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/solr-control-script-reference.html">Solr Control Script Reference</a>
+        
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/upgrading-solr.html">Upgrading Solr</a>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/using-the-solr-administration-user-interface.html">Using the Solr Administration User Interface</a>
+    
+    <ul>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/overview-of-the-solr-admin-ui.html">Overview of the Solr Admin UI</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/getting-assistance.html">Getting Assistance</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/logging.html">Logging</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/cloud-screens.html">Cloud Screens</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/collections-core-admin.html">Collections / Core Admin</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/java-properties.html">Java Properties</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/thread-dump.html">Thread Dump</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/collection-specific-tools.html">Collection-Specific Tools</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/analysis-screen.html">Analysis Screen</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/dataimport-screen.html">Dataimport Screen</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/documents-screen.html">Documents Screen</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/files-screen.html">Files Screen</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/query-screen.html">Query Screen</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/stream-screen.html">Stream Screen</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/schema-browser-screen.html">Schema Browser Screen</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/core-specific-tools.html">Core-Specific Tools</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/ping.html">Ping</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/plugins-stats-screen.html">Plugins &amp; Stats Screen</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/replication-screen.html">Replication Screen</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/segments-info.html">Segments Info</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/documents-fields-and-schema-design.html">Documents, Fields, and Schema Design</a>
+    
+    <ul>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/overview-of-documents-fields-and-schema-design.html">Overview of Documents, Fields, and Schema Design</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/solr-field-types.html">Solr Field Types</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/field-type-definitions-and-properties.html">Field Type Definitions and Properties</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/field-types-included-with-solr.html">Field Types Included with Solr</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/working-with-currencies-and-exchange-rates.html">Working with Currencies and Exchange Rates</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/working-with-dates.html">Working with Dates</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/working-with-enum-fields.html">Working with Enum Fields</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/working-with-external-files-and-processes.html">Working with External Files and Processes</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/field-properties-by-use-case.html">Field Properties by Use Case</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/defining-fields.html">Defining Fields</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/copying-fields.html">Copying Fields</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/dynamic-fields.html">Dynamic Fields</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/other-schema-elements.html">Other Schema Elements</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/schema-api.html">Schema API</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/putting-the-pieces-together.html">Putting the Pieces Together</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/docvalues.html">DocValues</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/schemaless-mode.html">Schemaless Mode</a>
+        
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/understanding-analyzers-tokenizers-and-filters.html">Understanding Analyzers, Tokenizers, and Filters</a>
+    
+    <ul>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/analyzers.html">Analyzers</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/about-tokenizers.html">About Tokenizers</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/about-filters.html">About Filters</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/tokenizers.html">Tokenizers</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/filter-descriptions.html">Filter Descriptions</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/charfilterfactories.html">CharFilterFactories</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/language-analysis.html">Language Analysis</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/phonetic-matching.html">Phonetic Matching</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/running-your-analyzer.html">Running Your Analyzer</a>
+        
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/indexing-and-basic-data-operations.html">Indexing and Basic Data Operations</a>
+    
+    <ul>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/introduction-to-solr-indexing.html">Introduction to Solr Indexing</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/post-tool.html">Post Tool</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/uploading-data-with-index-handlers.html">Uploading Data with Index Handlers</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/transforming-and-indexing-custom-json.html">Transforming and Indexing Custom JSON</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/uploading-data-with-solr-cell-using-apache-tika.html">Uploading Data with Solr Cell using Apache Tika</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/uploading-structured-data-store-data-with-the-data-import-handler.html">Uploading Structured Data Store Data with the Data Import Handler</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/updating-parts-of-documents.html">Updating Parts of Documents</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/detecting-languages-during-indexing.html">Detecting Languages During Indexing</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/de-duplication.html">De-Duplication</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/content-streams.html">Content Streams</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/uima-integration.html">UIMA Integration</a>
+        
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/searching.html">Searching</a>
+    
+    <ul>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/overview-of-searching-in-solr.html">Overview of Searching in Solr</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/velocity-search-ui.html">Velocity Search UI</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/relevance.html">Relevance</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/query-syntax-and-parsing.html">Query Syntax and Parsing</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/common-query-parameters.html">Common Query Parameters</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/the-standard-query-parser.html">The Standard Query Parser</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/the-dismax-query-parser.html">The DisMax Query Parser</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/the-extended-dismax-query-parser.html">The Extended DisMax Query Parser</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/function-queries.html">Function Queries</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/local-parameters-in-queries.html">Local Parameters in Queries</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/other-parsers.html">Other Parsers</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/faceting.html">Faceting</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/blockjoin-faceting.html">BlockJoin Faceting</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/highlighting.html">Highlighting</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/spell-checking.html">Spell Checking</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/query-re-ranking.html">Query Re-Ranking</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/learning-to-rank.html">Learning To Rank</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/transforming-result-documents.html">Transforming Result Documents</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/suggester.html">Suggester</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/morelikethis.html">MoreLikeThis</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/pagination-of-results.html">Pagination of Results</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/collapse-and-expand-results.html">Collapse and Expand Results</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/result-grouping.html">Result Grouping</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/result-clustering.html">Result Clustering</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/spatial-search.html">Spatial Search</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/the-terms-component.html">The Terms Component</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/the-term-vector-component.html">The Term Vector Component</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/the-stats-component.html">The Stats Component</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/the-query-elevation-component.html">The Query Elevation Component</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/response-writers.html">Response Writers</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/velocity-response-writer.html">Velocity Response Writer</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/near-real-time-searching.html">Near Real Time Searching</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/realtime-get.html">RealTime Get</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/exporting-result-sets.html">Exporting Result Sets</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/streaming-expressions.html">Streaming Expressions</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/stream-sources.html">Stream Source Reference</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/stream-decorators.html">Stream Decorator Reference</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/stream-evaluators.html">Stream Evaluator Reference</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/graph-traversal.html">Graph Traversal</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/parallel-sql-interface.html">Parallel SQL Interface</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/solr-jdbc-dbvisualizer.html">Solr JDBC - DbVisualizer</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/solr-jdbc-squirrel-sql.html">Solr JDBC - SQuirreL SQL</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/solr-jdbc-apache-zeppelin.html">Solr JDBC - Apache Zeppelin</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/solr-jdbc-python-jython.html">Solr JDBC - Python/Jython</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/solr-jdbc-r.html">Solr JDBC - R</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/the-well-configured-solr-instance.html">The Well-Configured Solr Instance</a>
+    
+    <ul>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/configuring-solrconfig-xml.html">Configuring solrconfig.xml</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/datadir-and-directoryfactory-in-solrconfig.html">DataDir and DirectoryFactory in SolrConfig</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/lib-directives-in-solrconfig.html">Lib Directives in SolrConfig</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/schema-factory-definition-in-solrconfig.html">Schema Factory Definition in SolrConfig</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/indexconfig-in-solrconfig.html">IndexConfig in SolrConfig</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/requesthandlers-and-searchcomponents-in-solrconfig.html">RequestHandlers and SearchComponents in SolrConfig</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/initparams-in-solrconfig.html">InitParams in SolrConfig</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/updatehandlers-in-solrconfig.html">UpdateHandlers in SolrConfig</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/query-settings-in-solrconfig.html">Query Settings in SolrConfig</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/requestdispatcher-in-solrconfig.html">RequestDispatcher in SolrConfig</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/update-request-processors.html">Update Request Processors</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/codec-factory.html">Codec Factory</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/solr-cores-and-solr-xml.html">Solr Cores and solr.xml</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/format-of-solr-xml.html">Format of solr.xml</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/defining-core-properties.html">Defining core.properties</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/coreadmin-api.html">CoreAdmin API</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/config-sets.html">Config Sets</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/configuration-apis.html">Configuration APIs</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/blob-store-api.html">Blob Store API</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/config-api.html">Config API</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/request-parameters-api.html">Request Parameters API</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/managed-resources.html">Managed Resources</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/implicit-requesthandlers.html">Implicit RequestHandlers</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/solr-plugins.html">Solr Plugins</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/adding-custom-plugins-in-solrcloud-mode.html">Adding Custom Plugins in SolrCloud Mode</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/jvm-settings.html">JVM Settings</a>
+        
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/managing-solr.html">Managing Solr</a>
+    
+    <ul>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/taking-solr-to-production.html">Taking Solr to Production</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/securing-solr.html">Securing Solr</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/authentication-and-authorization-plugins.html">Authentication and Authorization Plugins</a>
+            
+            <ul>
+              
+              <li class="sb-level4">
+                <a href="https://solr.apache.org/guide/6_6/basic-authentication-plugin.html">Basic Authentication Plugin</a>
+                
+              </li>
+              
+              <li class="sb-level4">
+                <a href="https://solr.apache.org/guide/6_6/hadoop-authentication-plugin.html">Hadoop Authentication Plugin</a>
+                
+              </li>
+              
+              <li class="sb-level4">
+                <a href="https://solr.apache.org/guide/6_6/kerberos-authentication-plugin.html">Kerberos Authentication Plugin</a>
+                
+              </li>
+              
+              <li class="sb-level4">
+                <a href="https://solr.apache.org/guide/6_6/rule-based-authorization-plugin.html">Rule-Based Authorization Plugin</a>
+                
+              </li>
+              
+            </ul>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/enabling-ssl.html">Enabling SSL</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/running-solr-on-hdfs.html">Running Solr on HDFS</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/making-and-restoring-backups.html">Making and Restoring Backups</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/configuring-logging.html">Configuring Logging</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/using-jmx-with-solr.html">Using JMX with Solr</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/mbean-request-handler.html">MBean Request Handler</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/performance-statistics-reference.html">Performance Statistics Reference</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/metrics-reporting.html">Metrics Reporting</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/v2-api.html">v2 API</a>
+        
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/solrcloud.html">SolrCloud</a>
+    
+    <ul>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/getting-started-with-solrcloud.html">Getting Started with SolrCloud</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/how-solrcloud-works.html">How SolrCloud Works</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/shards-and-indexing-data-in-solrcloud.html">Shards and Indexing Data in SolrCloud</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/distributed-requests.html">Distributed Requests</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/read-and-write-side-fault-tolerance.html">Read and Write Side Fault Tolerance</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/solrcloud-configuration-and-parameters.html">SolrCloud Configuration and Parameters</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/setting-up-an-external-zookeeper-ensemble.html">Setting Up an External ZooKeeper Ensemble</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/using-zookeeper-to-manage-configuration-files.html">Using ZooKeeper to Manage Configuration Files</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/zookeeper-access-control.html">ZooKeeper Access Control</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/collections-api.html">Collections API</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/parameter-reference.html">Parameter Reference</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/command-line-utilities.html">Command Line Utilities</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/solrcloud-with-legacy-configuration-files.html">SolrCloud with Legacy Configuration Files</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="https://solr.apache.org/guide/6_6/configsets-api.html">ConfigSets API</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/rule-based-replica-placement.html">Rule-based Replica Placement</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/cross-data-center-replication-cdcr.html">Cross Data Center Replication (CDCR)</a>
+        
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/legacy-scaling-and-distribution.html">Legacy Scaling and Distribution</a>
+    
+    <ul>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/introduction-to-scaling-and-distribution.html">Introduction to Scaling and Distribution</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/distributed-search-with-index-sharding.html">Distributed Search with Index Sharding</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/index-replication.html">Index Replication</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/combining-distribution-and-replication.html">Combining Distribution and Replication</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/merging-indexes.html">Merging Indexes</a>
+        
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/client-apis.html">Client APIs</a>
+    
+    <ul>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/introduction-to-client-apis.html">Introduction to Client APIs</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/choosing-an-output-format.html">Choosing an Output Format</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/client-api-lineup.html">Client API Lineup</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/using-javascript.html">Using JavaScript</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/using-python.html">Using Python</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/using-solrj.html">Using SolrJ</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/using-solr-from-ruby.html">Using Solr From Ruby</a>
+        
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/major-changes-from-solr-5-to-solr-6.html">Major Changes from Solr 5 to Solr 6</a>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/upgrading-a-solr-cluster.html">Upgrading a Solr Cluster</a>
+    
+    <ul>
+      
+      <li class="sb-level2">
+        <a href="https://solr.apache.org/guide/6_6/indexupgrader-tool.html">IndexUpgrader Tool</a>
+        
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/further-assistance.html">Further Assistance</a>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/solr-glossary.html">Solr Glossary</a>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="https://solr.apache.org/guide/6_6/errata.html">Errata</a>
+    
+  </li>
+  
+</ul>
+
+
+<!-- set the 'active' class on the current page and ancestors -->
+<!-- this highlights the active parent class in the navgoco sidebar. this is critical so that the parent expands when you're viewing a page. This must appear below the sidebar code above. Otherwise, if placed inside customscripts.js, the script runs before the sidebar code runs and the class never gets inserted.-->
+<script>$("#mysidebar a[href='stream-decorators.html']").parents('li').toggleClass("active", true);</script>
+<!-- set the 'current' class on the current page and 'current-tree' on the current page + it's ancestors -->
+<!-- this can let us do css highlighting of the current page in the sidebar even if/when the user clicks around in the sidebar causing other sidebar elements to be 'active' -->
+<script>
+  $("#mysidebar a[href='stream-decorators.html']").parent('li').toggleClass("current", true);
+  $("#mysidebar a[href='stream-decorators.html']").parents('li').toggleClass("current-tree", true);
+</script>
+
+    </div>
+    <!-- Content Column -->
+    <div class="col-md-9">
+      <div class="post-header">
+   <h1 class="post-title-main">Stream Decorator Reference</h1>
+</div>
+
+<!-- This adds a workflow map, to a page
+     See http://idratherbewriting.com/documentation-theme-jekyll/mydoc_workflow_maps.html
+     Leaving it here commented out in case we want to implement this in the future
+ -->
+
+<div class="post-content">
+
+   
+
+    
+    
+<!-- this handles the automatic toc. use ## for subheads to auto-generate the on-page minitoc. if you use html tags, you must supply an ID for the heading element in order for it to appear in the minitoc. -->
+
+<script src="https://solr.apache.org/guide/6_6/js/ref-guide-toc.js" type="text/javascript"></script>
+<script type="text/javascript">
+  // based on page variables, build up the list of headers for the top level toc (and any sub-section tocs)
+  do_tocs(1)
+</script>
+<div id="toc" class="toc toc-right"></div>
+
+    
+
+<div class="main-content">
+  <div class="sect1">
+<h2 id="classify">classify</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>classify</code> function classifies tuples using a logistic regression text classification model. It was designed specifically to work with models trained using the <a href="https://solr.apache.org/guide/6_6/stream-sources.html#train">train function</a>. The <code>classify</code> function uses the <a href="https://solr.apache.org/guide/6_6/stream-sources.html#model">model function</a> to retrieve a stored model and then scores a stream of tuples using the model. The tuples read by the classifier must contain a text field that can be used for classification. The classify function uses a Lucene analyzer to extract the features from the text so the model can be applied. By default the <code>classify</code> function looks for the analyzer using the name of text field in the tuple. If the Solr schema on the worker node does not contain this field, the analyzer can be looked up in another field by specifying the <code>analyzerField</code> parameter.</p>
+</div>
+<div class="paragraph">
+<p>Each tuple that is classified is assigned two scores:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>probability_d* : A float between 0 and 1 which describes the probability that the tuple belongs to the class. This is useful in the classification use case.</p>
+</li>
+<li>
+<p>score_d* : The score of the document that has not be squashed between 0 and 1. The score may be positive or negative. The higher the score the better the document fits the class. This un-squashed score will be useful in query re-ranking and recommendation use cases. This score is particularly useful when multiple high ranking documents have a probability_d score of 1, which won&#8217;t provide a meaningful ranking between documents.</p>
+</li>
+</ul>
+</div>
+<div class="sect2">
+<h3 id="classify-parameters">classify Parameters</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><code>model expression</code>: (Mandatory) Retrieves the stored logistic regression model.</p>
+</li>
+<li>
+<p><code>field</code>: (Mandatory) The field in the tuples to apply the classifier to. By default the analyzer for this field in the schema will be used extract the features.</p>
+</li>
+<li>
+<p><code>analyzerField</code>: (Optional) Specifies a different field to find the analyzer from in the schema.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="classify-syntax">classify Syntax</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="text">classify(model(modelCollection,
+             id=&quot;model1&quot;,
+             cacheMillis=5000),
+         search(contentCollection,
+             q=&quot;id:(a b c)&quot;,
+             fl=&quot;text_t, id&quot;,
+             sort=&quot;id asc&quot;),
+             field=&quot;text_t&quot;)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In the example above the <code>classify expression</code> is retrieving the model using the <code>model</code> function. It is then classifying tuples returned by the <code>search</code> function. The <code>text_t</code> field is used for the text classification and the analyzer for the <code>text_t</code> field in the Solr schema is used to analyze the text and extract the features.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="commit">commit</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>commit</code> function wraps a single stream (A) and given a collection and batch size will send commit messages to the collection when the batch size is fulfilled or the end of stream is reached. A commit stream is used most frequently with an update stream and as such the commit will take into account possible summary tuples coming from the update stream. All tuples coming into the commit stream will be returned out of the commit stream - no tuples will be dropped and no tuples will be added.</p>
+</div>
+<div class="sect2">
+<h3 id="commit-parameters">commit Parameters</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><code>collection</code>: The collection to send commit messages to (required)</p>
+</li>
+<li>
+<p><code>batchSize</code>: The commit batch size, sends commit message when batch size is hit. If not provided (or provided as value 0) then a commit is only sent at the end of the incoming stream.</p>
+</li>
+<li>
+<p><code>waitFlush</code>: The value passed directly to the commit handler (true/false, default: false)</p>
+</li>
+<li>
+<p><code>waitSearcher</code>: The value passed directly to the commit handler (true/false, default: false)</p>
+</li>
+<li>
+<p><code>softCommit</code>: The value passed directly to the commit handler (true/false, default: false)</p>
+</li>
+<li>
+<p><code>StreamExpression for StreamA</code> (required)</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="commit-syntax">commit Syntax</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="text">commit(
+    destinationCollection,
+    batchSize=2,
+    update(
+        destinationCollection,
+        batchSize=5,
+        search(collection1, q=*:*, fl=&quot;id,a_s,a_i,a_f,s_multi,i_multi&quot;, sort=&quot;a_f asc, a_i asc&quot;)
+    )
+)</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="complement">complement</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>complement</code> function wraps two streams (A and B) and emits tuples from A which do not exist in B. The tuples are emitted in the order in which they appear in stream A. Both streams must be sorted by the fields being used to determine equality (using the <code>on</code> parameter).</p>
+</div>
+<div class="sect2">
+<h3 id="complement-parameters">complement Parameters</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><code>StreamExpression for StreamA</code></p>
+</li>
+<li>
+<p><code>StreamExpression for StreamB</code></p>
+</li>
+<li>
+<p><code>on</code>: Fields to be used for checking equality of tuples between A and B. Can be of the format <code>on="fieldName"</code>, <code>on="fieldNameInLeft=fieldNameInRight"</code>, or <code>on="fieldName, otherFieldName=rightOtherFieldName"</code>.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="complement-syntax">complement Syntax</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="text">complement(
+  search(collection1, q=a_s:(setA || setAB), fl=&quot;id,a_s,a_i&quot;, sort=&quot;a_i asc, a_s asc&quot;),
+  search(collection1, q=a_s:(setB || setAB), fl=&quot;id,a_s,a_i&quot;, sort=&quot;a_i asc&quot;),
+  on=&quot;a_i&quot;
+)
+
+complement(
+  search(collection1, q=a_s:(setA || setAB), fl=&quot;id,a_s,a_i&quot;, sort=&quot;a_i asc, a_s asc&quot;),
+  search(collection1, q=a_s:(setB || setAB), fl=&quot;id,a_s,a_i&quot;, sort=&quot;a_i asc, a_s asc&quot;),
+  on=&quot;a_i,a_s&quot;
+)</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="daemon">daemon</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>daemon</code> function wraps another function and runs it at intervals using an internal thread. The <code>daemon</code> function can be used to provide both continuous push and pull streaming.</p>
+</div>
+<div class="sect2">
+<h3 id="continuous-push-streaming">Continuous Push Streaming</h3>
+<div class="paragraph">
+<p>With continuous push streaming the <code>daemon</code> function wraps another function and is then sent to the <code>/stream</code> handler for execution. The <code>/stream</code> handler recognizes the <code>daemon</code> function and keeps it resident in memory, so it can run its internal function at intervals.</p>
+</div>
+<div class="paragraph">
+<p>In order to facilitate the pushing of tuples, the <code>daemon</code> function must wrap another stream decorator that pushes the tuples somewhere. One example of this is the <code>update</code> function, which wraps a stream and sends the tuples to another SolrCloud collection for indexing.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="daemon-syntax">daemon Syntax</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="text">daemon(id=&quot;uniqueId&quot;,
+       runInterval=&quot;1000&quot;,
+       terminate=&quot;true&quot;,
+       update(destinationCollection,
+              batchSize=100,
+              topic(checkpointCollection,
+                    topicCollection,
+                    q=&quot;topic query&quot;,
+                    fl=&quot;id, title, abstract, text&quot;,
+                    id=&quot;topicId&quot;,
+                    initialCheckpoint=0)
+               )
+        )</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The sample code above shows a <code>daemon</code> function wrapping an <code>update</code> function, which is wrapping a <code>topic</code> function. When this expression is sent to the <code>/stream</code> handler, the <code>/stream</code> hander sees the <code>daemon</code> function and keeps it in memory where it will run at intervals. In this particular example, the <code>daemon</code> function will run the <code>update</code> function every second. The <code>update</code> function is wrapping a <a href="https://solr.apache.org/guide/6_6/stream-sources.html#topic"><code>topic</code> function</a>, which will stream tuples that match the <code>topic</code> function query in batches. Each subsequent call to the topic will return the next batch of tuples for the topic. The <code>update</code> function will send all the tuples matching the topic to another collection to be indexed. The <code>terminate</code> parameter tells the daemon to terminate when the <code>topic</code> function stops sending tuples.</p>
+</div>
+<div class="paragraph">
+<p>The effect of this is to push documents that match a specific query into another collection. Custom push functions can be plugged in that push documents out of Solr and into other systems, such as Kafka or an email system.</p>
+</div>
+<div class="paragraph">
+<p>Push streaming can also be used for continuous background aggregation scenarios where aggregates are rolled up in the background at intervals and pushed to other Solr collections. Another use case is continuous background machine learning model optimization, where the optimized model is pushed to another Solr collection where it can be integrated into queries.</p>
+</div>
+<div class="paragraph">
+<p>The <code>/stream</code> handler supports a small set commands for listing and controlling daemon functions:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="text">http://localhost:8983/collection/stream?action=list</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This command will provide a listing of the current daemon&#8217;s running on the specific node along with there current state.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="text">http://localhost:8983/collection/stream?action=stop&amp;id=daemonId</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This command will stop a specific daemon function but leave it resident in memory.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="text">http://localhost:8983/collection/stream?action=start&amp;id=daemonId</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This command will start a specific daemon function that has been stopped.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="text">http://localhost:8983/collection/stream?action=kill&amp;id=daemonId</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This command will stop a specific daemon function and remove it from memory.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="continuous-pull-streaming">Continuous Pull Streaming</h3>
+<div class="paragraph">
+<p>The <a href="https://lucene.apache.org/solr/6_6_0//solr-solrj/org/apache/solr/client/solrj/io/stream/DaemonStream.html">DaemonStream</a> java class (part of the SolrJ libraries) can also be embedded in a java application to provide continuous pull streaming. Sample code:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="java">StreamContext context <span style="color: #666666">=</span> <span style="color: #008000; font-weight: bold">new</span> StreamContext<span style="color: #666666">()</span>
+SolrClientCache cache <span style="color: #666666">=</span> <span style="color: #008000; font-weight: bold">new</span> SolrClientCache<span style="color: #666666">();</span>
+context<span style="color: #666666">.</span><span style="color: #7D9029">setSolrClientCache</span><span style="color: #666666">(</span>cache<span style="color: #666666">);</span>
+
+Map topicQueryParams <span style="color: #666666">=</span> <span style="color: #008000; font-weight: bold">new</span> HashMap<span style="color: #666666">();</span>
+topicQueryParams<span style="color: #666666">.</span><span style="color: #7D9029">put</span><span style="color: #666666">(</span><span style="color: #BA2121">&quot;q&quot;</span><span style="color: #666666">,</span><span style="color: #BA2121">&quot;hello&quot;</span><span style="color: #666666">);</span>  <span style="color: #408080; font-style: italic">// The query for the topic</span>
+topicQueryparams<span style="color: #666666">.</span><span style="color: #7D9029">put</span><span style="color: #666666">(</span><span style="color: #BA2121">&quot;rows&quot;</span><span style="color: #666666">,</span> <span style="color: #BA2121">&quot;500&quot;</span><span style="color: #666666">);</span> <span style="color: #408080; font-style: italic">// How many rows to fetch during each run</span>
+topicQueryparams<span style="color: #666666">.</span><span style="color: #7D9029">put</span><span style="color: #666666">(</span><span style="color: #BA2121">&quot;fl&quot;</span><span style="color: #666666">,</span> <span style="color: #BA2121">&quot;id&quot;</span><span style="color: #666666">,</span> <span style="color: #BA2121">&quot;title&quot;</span><span style="color: #666666">);</span> <span style="color: #408080; font-style: italic">// The field list to return with the documents</span>
+
+TopicStream topicStream <span style="color: #666666">=</span> <span style="color: #008000; font-weight: bold">new</span> TopicStream<span style="color: #666666">(</span>zkHost<span style="color: #666666">,</span>        <span style="color: #408080; font-style: italic">// Host address for the zookeeper service housing the collections</span>
+                                         <span style="color: #BA2121">&quot;checkpoints&quot;</span><span style="color: #666666">,</span>  <span style="color: #408080; font-style: italic">// The collection to store the topic checkpoints</span>
+                                         <span style="color: #BA2121">&quot;topicData&quot;</span><span style="color: #666666">,</span>    <span style="color: #408080; font-style: italic">// The collection to query for the topic records</span>
+                                         <span style="color: #BA2121">&quot;topicId&quot;</span><span style="color: #666666">,</span>      <span style="color: #408080; font-style: italic">// The id of the topic</span>
+                                         <span style="color: #666666">-1,</span>             <span style="color: #408080; font-style: italic">// checkpoint every X tuples, if set -1 it will checkpoint after each run.</span>
+                                          topicQueryParams<span style="color: #666666">);</span> <span style="color: #408080; font-style: italic">// The query parameters for the TopicStream</span>
+
+DaemonStream daemonStream <span style="color: #666666">=</span> <span style="color: #008000; font-weight: bold">new</span> DaemonStream<span style="color: #666666">(</span>topicStream<span style="color: #666666">,</span>             <span style="color: #408080; font-style: italic">// The underlying stream to run.</span>
+                                             <span style="color: #BA2121">&quot;daemonId&quot;</span><span style="color: #666666">,</span>              <span style="color: #408080; font-style: italic">// The id of the daemon</span>
+                                             <span style="color: #666666">1000,</span>                    <span style="color: #408080; font-style: italic">// The interval at which to run the internal stream</span>
+                                             <span style="color: #666666">500);</span>                    <span style="color: #408080; font-style: italic">// The internal queue size for the daemon stream. Tuples will be placed in the queue</span>
+                                                                      <span style="color: #408080; font-style: italic">// as they are read by the internal internal thread.</span>
+                                                                      <span style="color: #408080; font-style: italic">// Calling read() on the daemon stream reads records from the internal queue.</span>
+
+daemonStream<span style="color: #666666">.</span><span style="color: #7D9029">setStreamContext</span><span style="color: #666666">(</span>context<span style="color: #666666">);</span>
+
+daemonStream<span style="color: #666666">.</span><span style="color: #7D9029">open</span><span style="color: #666666">();</span>
+
+<span style="color: #408080; font-style: italic">//Read until it&#39;s time to shutdown the DaemonStream. You can define the shutdown criteria.</span>
+<span style="color: #008000; font-weight: bold">while</span><span style="color: #666666">(!</span>shutdown<span style="color: #666666">())</span> <span style="color: #666666">{</span>
+    Tuple tuple <span style="color: #666666">=</span> daemonStream<span style="color: #666666">.</span><span style="color: #7D9029">read</span><span style="color: #666666">()</span> <span style="color: #408080; font-style: italic">// This will block until tuples become available from the underlying stream (TopicStream)</span>
+                                      <span style="color: #408080; font-style: italic">// The EOF tuple (signaling the end of the stream) will never occur until the DaemonStream has been shutdown.</span>
+    <span style="color: #408080; font-style: italic">//Do something with the tuples</span>
+<span style="color: #666666">}</span>
+
+<span style="color: #408080; font-style: italic">// Shutdown the DaemonStream.</span>
+daemonStream<span style="color: #666666">.</span><span style="color: #7D9029">shutdown</span><span style="color: #666666">();</span>
+
+<span style="color: #408080; font-style: italic">//Read the DaemonStream until the EOF Tuple is found.</span>
+<span style="color: #408080; font-style: italic">//This allows the underlying stream to perform an orderly shutdown.</span>
+
+<span style="color: #008000; font-weight: bold">while</span><span style="color: #666666">(</span><span style="color: #008000; font-weight: bold">true</span><span style="color: #666666">)</span> <span style="color: #666666">{</span>
+    Tuple tuple <span style="color: #666666">=</span> daemonStream<span style="color: #666666">.</span><span style="color: #7D9029">read</span><span style="color: #666666">();</span>
+    <span style="color: #008000; font-weight: bold">if</span><span style="color: #666666">(</span>tuple<span style="color: #666666">.</span><span style="color: #7D9029">EOF</span><span style="color: #666666">)</span> <span style="color: #666666">{</span>
+        <span style="color: #008000; font-weight: bold">break</span><span style="color: #666666">;</span>
+    <span style="color: #666666">}</span> <span style="color: #008000; font-weight: bold">else</span> <span style="color: #666666">{</span>
+        <span style="color: #408080; font-style: italic">//Do something with the tuples.</span>
+    <span style="color: #666666">}</span>
+<span style="color: #666666">}</span>
+<span style="color: #408080; font-style: italic">//Finally close the stream</span>
+daemonStream<span style="color: #666666">.</span><span style="color: #7D9029">close</span><span style="color: #666666">();</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="eval">eval</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>eval</code> function allows for use cases where new streaming expressions are generated on the fly and then evaluated.
+The <code>eval</code> function wraps a streaming expression and reads a single tuple from the underlying stream.
+The <code>eval</code> function then retrieves a string Streaming Expressions from the <code>expr_s</code> field of the tuple.
+The <code>eval</code> function then compiles the string Streaming Expression and emits the tuples.</p>
+</div>
+<div class="sect2">
+<h3 id="eval-parameters">eval Parameters</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><code>StreamExpression</code>: (Mandatory) The stream which provides the streaming expression to be evaluated.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="eval-syntax">eval Syntax</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="text">eval(expr)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In the example above the <code>eval</code> expression reads the first tuple from the underlying expression. It then compiles and
+executes the string Streaming Expression in the epxr_s field.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="StreamingExpressions-executor">executor</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>executor</code> function wraps a stream source that contains streaming expressions, and executes the expressions in parallel. The <code>executor</code> function looks for the expression in the <code>expr_s</code> field in each tuple. The <code>executor</code> function has an internal thread pool that runs tasks that compile and run expressions in parallel on the same worker node. This function can also be parallelized across worker nodes by wrapping it in the <a href="#parallel"><code>parallel</code></a> function to provide parallel execution of expressions across a cluster.</p>
+</div>
+<div class="paragraph">
+<p>The <code>executor</code> function does not do anything specific with the output of the expressions that it runs. Therefore the expressions that are executed must contain the logic for pushing tuples to their destination. The <a href="#update">update function</a> can be included in the expression being executed to send the tuples to a SolrCloud collection for storage.</p>
+</div>
+<div class="paragraph">
+<p>This model allows for asynchronous execution of jobs where the output is stored in a SolrCloud collection where it can be accessed as the job progresses.</p>
+</div>
+<div class="sect2">
+<h3 id="executor-parameters">executor Parameters</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><code>threads</code>: (Optional) The number of threads in the executors thread pool for executing expressions.</p>
+</li>
+<li>
+<p><code>StreamExpression</code>: (Mandatory) The stream source which contains the Streaming Expressions to execute.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="executor-syntax">executor Syntax</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="text">daemon(id=&quot;myDaemon&quot;,
+       terminate=&quot;true&quot;,
+       executor(threads=10,
+                topic(checkpointCollection
+                      storedExpressions,
+                      q=&quot;*:*&quot;,
+                      fl=&quot;id, expr_s&quot;,
+                      initialCheckPoint=0,
+                      id=&quot;myTopic&quot;)))</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In the example above a <a href="#daemon">daemon</a> wraps an executor<strong>,</strong> which wraps a <a href="https://solr.apache.org/guide/6_6/stream-sources.html#topic">topic</a> that is returning tuples with expressions to execute. When sent to the stream handler, the daemon will call the executor at intervals which will cause the executor to read from the topic and execute the expressions found in the <code>expr_s</code> field. The daemon will repeatedly call the executor until all the tuples that match the topic have been iterated, then it will terminate. This is the approach for executing batches of streaming expressions from a <code>topic</code> queue.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="fetch">fetch</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>fetch</code> function iterates a stream and fetches additional fields and adds them to the tuples. The <code>fetch</code> function fetches in batches to limit the number of calls back to Solr. Tuples streamed from the <code>fetch</code> function will contain the original fields and the additional fields that were fetched. The <code>fetch</code> function supports one-to-one fetches. Many-to-one fetches, where the stream source contains duplicate keys, will also work, but one-to-many fetches are currently not supported by this function.</p>
+</div>
+<div class="sect2">
+<h3 id="fetch-parameters">fetch Parameters</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><code>Collection</code>: (Mandatory) The collection to fetch the fields from.</p>
+</li>
+<li>
+<p><code>StreamExpression</code>: (Mandatory) The stream source for the fetch function.</p>
+</li>
+<li>
+<p><code>fl</code>: (Mandatory) The fields to be fetched.</p>
+</li>
+<li>
+<p><code>on</code>: Fields to be used for checking equality of tuples between stream source and fetched records. Formatted as <code>on="fieldNameInTuple=fieldNameInCollection"</code>.</p>
+</li>
+<li>
+<p><code>batchSize</code>: (Optional) The batch fetch size.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="fetch-syntax">fetch Syntax</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="text">fetch(addresses,
+      search(people, q=&quot;*:*&quot;, fl=&quot;username, firstName, lastName&quot;, sort=&quot;username asc&quot;),
+      fl=&quot;streetAddress, city, state, country, zip&quot;,
+      on=&quot;username=userId&quot;)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The example above fetches addresses for users by matching the username in the tuple with the userId field in the addresses collection.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="having">having</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>having</code> expression wraps a stream and applies a boolean operation to each tuple. It emits only tuples for which the boolean operation returns <strong>true</strong>.</p>
+</div>
+<div class="sect2">
+<h3 id="having-parameters">having Parameters</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><code>StreamExpression</code>: (Mandatory) The stream source for the having function.</p>
+</li>
+<li>
+<p><code>booleanEvaluator</code>: (Madatory) The following boolean operations are supported: <strong>eq</strong> (equals), <strong>gt</strong> (greater than), <strong>lt</strong> (less than), <strong>gteq</strong> (greater than or equal to), <strong>lteq</strong> (less than or equal to), <strong>and</strong>, <strong>or, eor</strong> (exclusive or), and <strong>not</strong>. Boolean evaluators can be nested with other evaluators to form complex boolean logic.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The comparison evaluators compare the value in a specific field with a value, whether a string, number, or boolean. For example: <strong>eq</strong>(field1, 10), returns true if <strong>field1</strong> is equal to 10.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="having-syntax">having Syntax</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="text">having(rollup(over=a_s,
+              sum(a_i),
+              search(collection1,
+                     q=*:*,
+                     fl=&quot;id,a_s,a_i,a_f&quot;,
+                     sort=&quot;a_s asc&quot;)),
+       and(gt(sum(a_i), 100), lt(sum(a_i), 110)))</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this example, the <code>having</code> expression iterates the aggregated tuples from the <code>rollup</code> expression and emits all tuples where the field <code>sum(a_i)</code> is greater then 100 and less then 110.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="leftouterjoin">leftOuterJoin</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>leftOuterJoin</code> function wraps two streams, Left and Right, and emits tuples from Left. If there is a tuple in Right equal (as defined by <code>on</code>) then the values in that tuple will be included in the emitted tuple. An equal tuple in Right <strong>need not</strong> exist for the Left tuple to be emitted. This supports one-to-one, one-to-many, many-to-one, and many-to-many left outer join scenarios. The tuples are emitted in the order in which they appear in the Left stream. Both streams must be sorted by the fields being used to determine equality (using the <code>on</code> parameter). If both tuples contain a field of the same name then the value from the Right stream will be used in the emitted tuple.</p>
+</div>
+<div class="paragraph">
+<p>You can wrap the incoming streams with a <code>select</code> function to be specific about which field values are included in the emitted tuple.</p>
+</div>
+<div class="sect2">
+<h3 id="leftouterjoin-parameters">leftOuterJoin Parameters</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><code>StreamExpression for StreamLeft</code></p>
+</li>
+<li>
+<p><code>StreamExpression for StreamRight</code></p>
+</li>
+<li>
+<p><code>on</code>: Fields to be used for checking equality of tuples between Left and Right. Can be of the format <code>on="fieldName"</code>, <code>on="fieldNameInLeft=fieldNameInRight"</code>, or <code>on="fieldName, otherFieldName=rightOtherFieldName"</code>.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="leftouterjoin-syntax">leftOuterJoin Syntax</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="text">leftOuterJoin(
+  search(people, q=*:*, fl=&quot;personId,name&quot;, sort=&quot;personId asc&quot;),
+  search(pets, q=type:cat, fl=&quot;personId,petName&quot;, sort=&quot;personId asc&quot;),
+  on=&quot;personId&quot;
+)
+
+leftOuterJoin(
+  search(people, q=*:*, fl=&quot;personId,name&quot;, sort=&quot;personId asc&quot;),
+  search(pets, q=type:cat, fl=&quot;ownerId,petName&quot;, sort=&quot;ownerId asc&quot;),
+  on=&quot;personId=ownerId&quot;
+)
+
+leftOuterJoin(
+  search(people, q=*:*, fl=&quot;personId,name&quot;, sort=&quot;personId asc&quot;),
+  select(
+    search(pets, q=type:cat, fl=&quot;ownerId,name&quot;, sort=&quot;ownerId asc&quot;),
+    ownerId,
+    name as petName
+  ),
+  on=&quot;personId=ownerId&quot;
+)</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="hashjoin">hashJoin</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>hashJoin</code> function wraps two streams, Left and Right, and for every tuple in Left which exists in Right will emit a tuple containing the fields of both tuples. This supports one-to-one, one-to-many, many-to-one, and many-to-many inner join scenarios. The tuples are emitted in the order in which they appear in the Left stream. The order of the streams does not matter. If both tuples contain a field of the same name then the value from the Right stream will be used in the emitted tuple.</p>
+</div>
+<div class="paragraph">
+<p>You can wrap the incoming streams with a <code>select</code> function to be specific about which field values are included in the emitted tuple.</p>
+</div>
+<div class="paragraph">
+<p>The hashJoin function can be used when the tuples of Left and Right cannot be put in the same order. Because the tuples are out of order this stream functions by reading all values from the Right stream during the open operation and will store all tuples in memory. The result of this is a memory footprint equal to the size of the Right stream.</p>
+</div>
+<div class="sect2">
+<h3 id="hashjoin-parameters">hashJoin Parameters</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><code>StreamExpression for StreamLeft</code></p>
+</li>
+<li>
+<p><code>hashed=StreamExpression for StreamRight</code></p>
+</li>
+<li>
+<p><code>on</code>: Fields to be used for checking equality of tuples between Left and Right. Can be of the format <code>on="fieldName"</code>, <code>on="fieldNameInLeft=fieldNameInRight"</code>, or <code>on="fieldName, otherFieldName=rightOtherFieldName"</code>.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="hashjoin-syntax">hashJoin Syntax</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="text">hashJoin(
+  search(people, q=*:*, fl=&quot;personId,name&quot;, sort=&quot;personId asc&quot;),
+  hashed=search(pets, q=type:cat, fl=&quot;personId,petName&quot;, sort=&quot;personId asc&quot;),
+  on=&quot;personId&quot;
+)
+
+hashJoin(
+  search(people, q=*:*, fl=&quot;personId,name&quot;, sort=&quot;personId asc&quot;),
+  hashed=search(pets, q=type:cat, fl=&quot;ownerId,petName&quot;, sort=&quot;ownerId asc&quot;),
+  on=&quot;personId=ownerId&quot;
+)
+
+hashJoin(
+  search(people, q=*:*, fl=&quot;personId,name&quot;, sort=&quot;personId asc&quot;),
+  hashed=select(
+    search(pets, q=type:cat, fl=&quot;ownerId,name&quot;, sort=&quot;ownerId asc&quot;),
+    ownerId,
+    name as petName
+  ),
+  on=&quot;personId=ownerId&quot;
+)</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="innerjoin">innerJoin</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Wraps two streams, Left and Right. For every tuple in Left which exists in Right a tuple containing the fields of both tuples will be emitted. This supports one-to-one, one-to-many, many-to-one, and many-to-many inner join scenarios. The tuples are emitted in the order in which they appear in the Left stream. Both streams must be sorted by the fields being used to determine equality (the 'on' parameter). If both tuples contain a field of the same name then the value from the Right stream will be used in the emitted tuple. You can wrap the incoming streams with a <code>select(&#8230;&#8203;)</code> expression to be specific about which field values are included in the emitted tuple.</p>
+</div>
+<div class="sect2">
+<h3 id="innerjoin-parameters">innerJoin Parameters</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><code>StreamExpression for StreamLeft</code></p>
+</li>
+<li>
+<p><code>StreamExpression for StreamRight</code></p>
+</li>
+<li>
+<p><code>on</code>: Fields to be used for checking equality of tuples between Left and Right. Can be of the format <code>on="fieldName"</code>, <code>on="fieldNameInLeft=fieldNameInRight"</code>, or <code>on="fieldName, otherFieldName=rightOtherFieldName"</code>.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="innerjoin-syntax">innerJoin Syntax</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="text">innerJoin(
+  search(people, q=*:*, fl=&quot;personId,name&quot;, sort=&quot;personId asc&quot;),
+  search(pets, q=type:cat, fl=&quot;personId,petName&quot;, sort=&quot;personId asc&quot;),
+  on=&quot;personId&quot;
+)
+
+innerJoin(
+  search(people, q=*:*, fl=&quot;personId,name&quot;, sort=&quot;personId asc&quot;),
+  search(pets, q=type:cat, fl=&quot;ownerId,petName&quot;, sort=&quot;ownerId asc&quot;),
+  on=&quot;personId=ownerId&quot;
+)
+
+innerJoin(
+  search(people, q=*:*, fl=&quot;personId,name&quot;, sort=&quot;personId asc&quot;),
+  select(
+    search(pets, q=type:cat, fl=&quot;ownerId,name&quot;, sort=&quot;ownerId asc&quot;),
+    ownerId,
+    name as petName
+  ),
+  on=&quot;personId=ownerId&quot;
+)</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="intersect">intersect</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>intersect</code> function wraps two streams, A and B, and emits tuples from A which <strong>DO</strong> exist in B. The tuples are emitted in the order in which they appear in stream A. Both streams must be sorted by the fields being used to determine equality (the <code>on</code> parameter). Only tuples from A are emitted.</p>
+</div>
+<div class="sect2">
+<h3 id="intersect-parameters">intersect Parameters</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><code>StreamExpression for StreamA</code></p>
+</li>
+<li>
+<p><code>StreamExpression for StreamB</code></p>
+</li>
+<li>
+<p><code>on</code>: Fields to be used for checking equality of tuples between A and B. Can be of the format <code>on="fieldName"</code>, <code>on="fieldNameInLeft=fieldNameInRight"</code>, or <code>on="fieldName, otherFieldName=rightOtherFieldName"</code>.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="intersect-syntax">intersect Syntax</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="text">intersect(
+  search(collection1, q=a_s:(setA || setAB), fl=&quot;id,a_s,a_i&quot;, sort=&quot;a_i asc, a_s asc&quot;),
+  search(collection1, q=a_s:(setB || setAB), fl=&quot;id,a_s,a_i&quot;, sort=&quot;a_i asc&quot;),
+  on=&quot;a_i&quot;
+)
+
+intersect(
+  search(collection1, q=a_s:(setA || setAB), fl=&quot;id,a_s,a_i&quot;, sort=&quot;a_i asc, a_s asc&quot;),
+  search(collection1, q=a_s:(setB || setAB), fl=&quot;id,a_s,a_i&quot;, sort=&quot;a_i asc, a_s asc&quot;),
+  on=&quot;a_i,a_s&quot;
+)</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="merge">merge</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>merge</code> function merges two or more streaming expressions and maintains the ordering of the underlying streams. Because the order is maintained, the sorts of the underlying streams must line up with the on parameter provided to the merge function.</p>
+</div>
+<div class="sect2">
+<h3 id="merge-parameters">merge Parameters</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><code>StreamExpression A</code></p>
+</li>
+<li>
+<p><code>StreamExpression B</code></p>
+</li>
+<li>
+<p><code>Optional StreamExpression C,D,&#8230;&#8203;.Z</code></p>
+</li>
+<li>
+<p><code>on</code>: Sort criteria for performing the merge. Of the form <code>fieldName order</code> where order is <code>asc</code> or <code>desc</code>. Multiple fields can be provided in the form <code>fieldA order, fieldB order</code>.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="merge-syntax">merge Syntax</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="text"># Merging two stream expressions together
+merge(
+      search(collection1,
+             q=&quot;id:(0 3 4)&quot;,
+             fl=&quot;id,a_s,a_i,a_f&quot;,
+             sort=&quot;a_f asc&quot;),
+      search(collection1,
+             q=&quot;id:(1)&quot;,
+             fl=&quot;id,a_s,a_i,a_f&quot;,
+             sort=&quot;a_f asc&quot;),
+      on=&quot;a_f asc&quot;)</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="text"># Merging four stream expressions together. Notice that while the sorts of each stream are not identical they are
+# comparable. That is to say the first N fields in each stream&#39;s sort matches the N fields in the merge&#39;s on clause.
+merge(
+      search(collection1,
+             q=&quot;id:(0 3 4)&quot;,
+             fl=&quot;id,fieldA,fieldB,fieldC&quot;,
+             sort=&quot;fieldA asc, fieldB desc&quot;),
+      search(collection1,
+             q=&quot;id:(1)&quot;,
+             fl=&quot;id,fieldA&quot;,
+             sort=&quot;fieldA asc&quot;),
+      search(collection2,
+             q=&quot;id:(10 11 13)&quot;,
+             fl=&quot;id,fieldA,fieldC&quot;,
+             sort=&quot;fieldA asc&quot;),
+      search(collection3,
+             q=&quot;id:(987)&quot;,
+             fl=&quot;id,fieldA,fieldC&quot;,
+             sort=&quot;fieldA asc&quot;),
+      on=&quot;fieldA asc&quot;)</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="null">null</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The null expression is a useful utility function for understanding bottlenecks when performing parallel relational algebra (joins, intersections, rollups etc.). The null function reads all the tuples from an underlying stream and returns a single tuple with the count and processing time. Because the null stream adds minimal overhead of it&#8217;s own, it can be used to isolate the performance of Solr&#8217;s /export handler. If the /export handlers performance is not the bottleneck, then the bottleneck is likely occurring in the workers where the stream decorators are running.</p>
+</div>
+<div class="paragraph">
+<p>The null expression can be wrapped by the parallel function and sent to worker nodes. In this scenario each worker will return one tuple with the count of tuples processed on the worker and the timing information for that worker. This gives valuable information such as:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>As more workers are added does the performance of the /export handler improve or not.</p>
+</li>
+<li>
+<p>Are tuples being evenly distributed across the workers, or is the hash partitioning sending more documents to a single worker.</p>
+</li>
+<li>
+<p>Are all workers processing data at the same speed, or is one of the workers the source of the bottleneck.</p>
+</li>
+</ol>
+</div>
+<div class="sect2">
+<h3 id="null-parameters">null Parameters</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><code>StreamExpression</code>: (Mandatory) The expression read by the null function.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="null-syntax">null Syntax</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="text"> parallel(workerCollection,
+          null(search(collection1, q=*:*, fl=&quot;id,a_s,a_i,a_f&quot;, sort=&quot;a_s desc&quot;, qt=&quot;/export&quot;, partitionKeys=&quot;a_s&quot;)),
+          workers=&quot;20&quot;,
+          zkHost=&quot;localhost:9983&quot;,
+          sort=&quot;a_s desc&quot;)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The expression above shows a parallel function wrapping a null function. This will cause the null function to be run in parallel across 20 worker nodes. Each worker will return a single tuple with number of tuples processed and time it took to iterate the tuples.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="outerhashjoin">outerHashJoin</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>outerHashJoin</code> function wraps two streams, Left and Right, and emits tuples from Left. If there is a tuple in Right equal (as defined by the <code>on</code> parameter) then the values in that tuple will be included in the emitted tuple. An equal tuple in Right <strong>need not</strong> exist for the Left tuple to be emitted. This supports one-to-one, one-to-many, many-to-one, and many-to-many left outer join scenarios. The tuples are emitted in the order in which they appear in the Left stream. The order of the streams does not matter. If both tuples contain a field of the same name then the value from the Right stream will be used in the emitted tuple.</p>
+</div>
+<div class="paragraph">
+<p>You can wrap the incoming streams with a <code>select</code> function to be specific about which field values are included in the emitted tuple.</p>
+</div>
+<div class="paragraph">
+<p>The outerHashJoin stream can be used when the tuples of Left and Right cannot be put in the same order. Because the tuples are out of order, this stream functions by reading all values from the Right stream during the open operation and will store all tuples in memory. The result of this is a memory footprint equal to the size of the Right stream.</p>
+</div>
+<div class="sect2">
+<h3 id="outerhashjoin-parameters">outerHashJoin Parameters</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><code>StreamExpression for StreamLeft</code></p>
+</li>
+<li>
+<p><code>hashed=StreamExpression for StreamRight</code></p>
+</li>
+<li>
+<p><code>on</code>: Fields to be used for checking equality of tuples between Left and Right. Can be of the format <code>on="fieldName"</code>, <code>on="fieldNameInLeft=fieldNameInRight"</code>, or <code>on="fieldName, otherFieldName=rightOtherFieldName"</code>.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="outerhashjoin-syntax">outerHashJoin Syntax</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="text">outerHashJoin(
+  search(people, q=*:*, fl=&quot;personId,name&quot;, sort=&quot;personId asc&quot;),
+  hashed=search(pets, q=type:cat, fl=&quot;personId,petName&quot;, sort=&quot;personId asc&quot;),
+  on=&quot;personId&quot;
+)
+
+outerHashJoin(
+  search(people, q=*:*, fl=&quot;personId,name&quot;, sort=&quot;personId asc&quot;),
+  hashed=search(pets, q=type:cat, fl=&quot;ownerId,petName&quot;, sort=&quot;ownerId asc&quot;),
+  on=&quot;personId=ownerId&quot;
+)
+
+outerHashJoin(
+  search(people, q=*:*, fl=&quot;personId,name&quot;, sort=&quot;personId asc&quot;),
+  hashed=select(
+    search(pets, q=type:cat, fl=&quot;ownerId,name&quot;, sort=&quot;ownerId asc&quot;),
+    ownerId,
+    name as petName
+  ),
+  on=&quot;personId=ownerId&quot;
+)</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="parallel">parallel</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>parallel</code> function wraps a streaming expression and sends it to N worker nodes to be processed in parallel.</p>
+</div>
+<div class="paragraph">
+<p>The parallel function requires that the <code>partitionKeys</code> parameter be provided to the underlying searches. The <code>partitionKeys</code> parameter will partition the search results (tuples) across the worker nodes. Tuples with the same values in the partitionKeys field will be shuffled to the same worker nodes.</p>
+</div>
+<div class="paragraph">
+<p>The parallel function maintains the sort order of the tuples returned by the worker nodes, so the sort criteria of the parallel function must match up with the sort order of the tuples returned by the workers.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="title">Worker Collections</div>
+<div class="paragraph">
+<p>The worker nodes can be from the same collection as the data, or they can be a different collection entirely, even one that only exists for parallel streaming expressions. A worker collection can be any SolrCloud collection that has the <code>/stream</code> handler configured. Unlike normal SolrCloud collections, worker collections don&#8217;t have to hold any data. Worker collections can be empty collections that exist only to execute streaming expressions.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="parallel-parameters">parallel Parameters</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><code>collection</code>: Name of the worker collection to send the StreamExpression to.</p>
+</li>
+<li>
+<p><code>StreamExpression</code>: Expression to send to the worker collection.</p>
+</li>
+<li>
+<p><code>workers</code>: Number of workers in the worker collection to send the expression to.</p>
+</li>
+<li>
+<p><code>zkHost</code>: (Optional) The ZooKeeper connect string where the worker collection resides.</p>
+</li>
+<li>
+<p><code>sort</code>: The sort criteria for ordering tuples returned by the worker nodes.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="StreamingExpressions-Syntax.25">parallel Syntax</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="text"> parallel(workerCollection,
+          reduce(search(collection1, q=*:*, fl=&quot;id,a_s,a_i,a_f&quot;, sort=&quot;a_s desc&quot;, partitionKeys=&quot;a_s&quot;),
+                 by=&quot;a_s&quot;,
+                 group(sort=&quot;a_f desc&quot;, n=&quot;4&quot;)),
+          workers=&quot;20&quot;,
+          zkHost=&quot;localhost:9983&quot;,
+          sort=&quot;a_s desc&quot;)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The expression above shows a <code>parallel</code> function wrapping a <code>reduce</code> function. This will cause the <code>reduce</code> function to be run in parallel across 20 worker nodes.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="StreamingExpressions-priority">priority</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>priority</code> function is a simple priority scheduler for the <a href="#StreamingExpressions-executor">executor</a> function. The executor function doesn&#8217;t directly have a concept of task prioritization; instead it simply executes tasks in the order that they are read from it&#8217;s underlying stream. The <code>priority</code> function provides the ability to schedule a higher priority task ahead of lower priority tasks that were submitted earlier.</p>
+</div>
+<div class="paragraph">
+<p>The <code>priority</code> function wraps two <a href="https://solr.apache.org/guide/6_6/stream-sources.html#topic">topics</a> that are both emitting tuples that contain streaming expressions to execute. The first topic is considered the higher priority task queue.</p>
+</div>
+<div class="paragraph">
+<p>Each time the <code>priority</code> function is called, it checks the higher priority task queue to see if there are any tasks to execute. If tasks are waiting in the higher priority queue then the priority function will emit the higher priority tasks. If there are no high priority tasks to run, the lower priority queue tasks are emitted.</p>
+</div>
+<div class="paragraph">
+<p>The <code>priority</code> function will only emit a batch of tasks from one of the queues each time it is called. This ensures that no lower priority tasks are executed until the higher priority queue has no tasks to run.</p>
+</div>
+<div class="sect2">
+<h3 id="StreamingExpressions-Parameters.25">Parameters</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><code>topic expression</code>: (Mandatory) the high priority task queue</p>
+</li>
+<li>
+<p><code>topic expression</code>: (Mandatory) the lower priority task queue</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="StreamingExpressions-Syntax.26">Syntax</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="text">daemon(id=&quot;myDaemon&quot;,
+       executor(threads=10,
+                priority(topic(checkpointCollection, storedExpressions, q=&quot;priority:high&quot;, fl=&quot;id, expr_s&quot;, initialCheckPoint=0,id=&quot;highPriorityTasks&quot;),
+                         topic(checkpointCollection, storedExpressions, q=&quot;priority:low&quot;, fl=&quot;id, expr_s&quot;, initialCheckPoint=0,id=&quot;lowPriorityTasks&quot;))))</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In the example above the <code>daemon</code> function is calling the executor iteratively. Each time it&#8217;s called, the <code>executor</code> function will execute the tasks emitted by the <code>priority</code> function. The <code>priority</code> function wraps two topics. The first topic is the higher priority task queue, the second topics is the lower priority topic.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="reduce">reduce</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>reduce</code> function wraps an internal stream and groups tuples by common fields.</p>
+</div>
+<div class="paragraph">
+<p>Each tuple group is operated on as a single block by a pluggable reduce operation. The group operation provided with Solr implements distributed grouping functionality. The group operation also serves as an example reduce operation that can be referred to when building custom reduce operations.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>The reduce function relies on the sort order of the underlying stream. Accordingly the sort order of the underlying stream must be aligned with the group by field.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="reduce-parameters">reduce Parameters</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><code>StreamExpression</code>: (Mandatory)</p>
+</li>
+<li>
+<p><code>by</code>: (Mandatory) A comma separated list of fields to group by.</p>
+</li>
+<li>
+<p><code>Reduce Operation</code>: (Mandatory)</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="reduce-syntax">reduce Syntax</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="text">reduce(search(collection1, q=*:*, fl=&quot;id,a_s,a_i,a_f&quot;, sort=&quot;a_s asc, a_f asc&quot;),
+       by=&quot;a_s&quot;,
+       group(sort=&quot;a_f desc&quot;, n=&quot;4&quot;)
+)</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="rollup">rollup</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>rollup</code> function wraps another stream function and rolls up aggregates over bucket fields. The rollup function relies on the sort order of the underlying stream to rollup aggregates one grouping at a time. Accordingly, the sort order of the underlying stream must match the fields in the <code>over</code> parameter of the rollup function.</p>
+</div>
+<div class="paragraph">
+<p>The rollup function also needs to process entire result sets in order to perform its aggregations. When the underlying stream is the <code>search</code> function, the <code>/export</code> handler can be used to provide full sorted result sets to the rollup function. This sorted approach allows the rollup function to perform aggregations over very high cardinality fields. The disadvantage of this approach is that the tuples must be sorted and streamed across the network to a worker node to be aggregated. For faster aggregation over low to moderate cardinality fields, the <code>facet</code> function can be used.</p>
+</div>
+<div class="sect2">
+<h3 id="rollup-parameters">rollup Parameters</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><code>StreamExpression</code> (Mandatory)</p>
+</li>
+<li>
+<p><code>over</code>: (Mandatory) A list of fields to group by.</p>
+</li>
+<li>
+<p><code>metrics</code>: (Mandatory) The list of metrics to compute. Currently supported metrics are <code>sum(col)</code>, <code>avg(col)</code>, <code>min(col)</code>, <code>max(col)</code>, <code>count(*)</code>.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="rollup-syntax">rollup Syntax</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="text">rollup(
+   search(collection1, q=*:*, fl=&quot;a_s,a_i,a_f&quot;, qt=&quot;/export&quot;, sort=&quot;a_s asc&quot;),
+   over=&quot;a_s&quot;,
+   sum(a_i),
+   sum(a_f),
+   min(a_i),
+   min(a_f),
+   max(a_i),
+   max(a_f),
+   avg(a_i),
+   avg(a_f),
+   count(*)
+)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The example about shows the rollup function wrapping the search function. Notice that search function is using the <code>/export</code> handler to provide the entire result set to the rollup stream. Also notice that the search function&#8217;s <strong>sort param</strong> matches up with the rollup&#8217;s <code>over</code> parameter. This allows the rollup function to rollup the over the <code>a_s</code> field, one group at a time.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="scorenodes">scoreNodes</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>See section in <a href="https://solr.apache.org/guide/6_6/graph-traversal.html#GraphTraversal-UsingthescoreNodesFunctiontoMakeaRecommendation">graph traversal</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="select">select</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>select</code> function wraps a streaming expression and outputs tuples containing a subset or modified set of fields from the incoming tuples. The list of fields included in the output tuple can contain aliases to effectively rename fields. The <code>select</code> stream supports both operations and evaluators. One can provide a list of operations and evaluators to perform on any fields, such as <code>replace, add, if</code>, etc&#8230;&#8203;.</p>
+</div>
+<div class="sect2">
+<h3 id="select-parameters">select Parameters</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><code>StreamExpression</code></p>
+</li>
+<li>
+<p><code>fieldName</code>: name of field to include in the output tuple (can include multiple of these), such as <code>outputTuple[fieldName] = inputTuple[fieldName]</code></p>
+</li>
+<li>
+<p><code>fieldName as aliasFieldName</code>: aliased field name to include in the output tuple (can include multiple of these), such as <code>outputTuple[aliasFieldName] = incomingTuple[fieldName]</code></p>
+</li>
+<li>
+<p><code>replace(fieldName, value, withValue=replacementValue)</code>: if <code>incomingTuple[fieldName] == value</code> then <code>outgoingTuple[fieldName]</code> will be set to <code>replacementValue</code>. <code>value</code> can be the string "null" to replace a null value with some other value.</p>
+</li>
+<li>
+<p><code>replace(fieldName, value, withField=otherFieldName)</code>: if <code>incomingTuple[fieldName] == value</code> then <code>outgoingTuple[fieldName]</code> will be set to the value of <code>incomingTuple[otherFieldName]</code>. <code>value</code> can be the string "null" to replace a null value with some other value.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="select-syntax">select Syntax</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="text">// output tuples with fields teamName, wins, losses, and winPercentages where a null value for wins or losses is translated to the value of 0
+select(
+  search(collection1, fl=&quot;id,teamName_s,wins,losses&quot;, q=&quot;*:*&quot;, sort=&quot;id asc&quot;),
+  teamName_s as teamName,
+  wins,
+  losses,
+  replace(wins,null,withValue=0),
+  replace(losses,null,withValue=0),
+  if(eq(0,wins), 0, div(add(wins,losses), wins)) as winPercentage
+)</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="sort">sort</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>sort</code> function wraps a streaming expression and re-orders the tuples. The sort function emits all incoming tuples in the new sort order. The sort function reads all tuples from the incoming stream, re-orders them using an algorithm with <code>O(nlog(n))</code> performance characteristics, where n is the total number of tuples in the incoming stream, and then outputs the tuples in the new sort order. Because all tuples are read into memory, the memory consumption of this function grows linearly with the number of tuples in the incoming stream.</p>
+</div>
+<div class="sect2">
+<h3 id="sort-parameters">sort Parameters</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><code>StreamExpression</code></p>
+</li>
+<li>
+<p><code>by</code>: Sort criteria for re-ordering the tuples</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="sort-syntax">sort Syntax</h3>
+<div class="paragraph">
+<p>The expression below finds dog owners and orders the results by owner and pet name. Notice that it uses an efficient innerJoin by first ordering by the person/owner id and then re-orders the final output by the owner and pet names.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="text">sort(
+  innerJoin(
+    search(people, q=*:*, fl=&quot;id,name&quot;, sort=&quot;id asc&quot;),
+    search(pets, q=type:dog, fl=&quot;owner,petName&quot;, sort=&quot;owner asc&quot;),
+    on=&quot;id=owner&quot;
+  ),
+  by=&quot;name asc, petName asc&quot;
+)</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="top">top</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>top</code> function wraps a streaming expression and re-orders the tuples. The top function emits only the top N tuples in the new sort order. The top function re-orders the underlying stream so the sort criteria <strong>does not</strong> have to match up with the underlying stream.</p>
+</div>
+<div class="sect2">
+<h3 id="top-parameters">top Parameters</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><code>n</code>: Number of top tuples to return.</p>
+</li>
+<li>
+<p><code>StreamExpression</code></p>
+</li>
+<li>
+<p><code>sort</code>: Sort criteria for selecting the top N tuples.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="top-syntax">top Syntax</h3>
+<div class="paragraph">
+<p>The expression below finds the top 3 results of the underlying search. Notice that it reverses the sort order. The top function re-orders the results of the underlying stream.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="text">top(n=3,
+     search(collection1,
+            q=&quot;*:*&quot;,
+            qt=&quot;/export&quot;,
+            fl=&quot;id,a_s,a_i,a_f&quot;,
+            sort=&quot;a_f desc, a_i desc&quot;),
+      sort=&quot;a_f asc, a_i asc&quot;)</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="unique">unique</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>unique</code> function wraps a streaming expression and emits a unique stream of tuples based on the <code>over</code> parameter. The unique function relies on the sort order of the underlying stream. The <code>over</code> parameter must match up with the sort order of the underlying stream.</p>
+</div>
+<div class="paragraph">
+<p>The unique function implements a non-co-located unique algorithm. This means that records with the same unique <code>over</code> field do not need to be co-located on the same shard. When executed in the parallel, the <code>partitionKeys</code> parameter must be the same as the unique <code>over</code> field so that records with the same keys will be shuffled to the same worker.</p>
+</div>
+<div class="sect2">
+<h3 id="unique-parameters">unique Parameters</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><code>StreamExpression</code></p>
+</li>
+<li>
+<p><code>over</code>: The unique criteria.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="unique-syntax">unique Syntax</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="text">unique(
+  search(collection1,
+         q=&quot;*:*&quot;,
+         qt=&quot;/export&quot;,
+         fl=&quot;id,a_s,a_i,a_f&quot;,
+         sort=&quot;a_f asc, a_i asc&quot;),
+  over=&quot;a_f&quot;)</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="update">update</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>update</code> function wraps another functions and sends the tuples to a SolrCloud collection for indexing.</p>
+</div>
+<div class="sect2">
+<h3 id="update-parameters">update Parameters</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><code>destinationCollection</code>: (Mandatory) The collection where the tuples will indexed.</p>
+</li>
+<li>
+<p><code>batchSize</code>: (Mandatory) The indexing batch size.</p>
+</li>
+<li>
+<p><code>StreamExpression</code>: (Mandatory)</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="update-syntax">update Syntax</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="text"> update(destinationCollection,
+        batchSize=500,
+        search(collection1,
+               q=*:*,
+               fl=&quot;id,a_s,a_i,a_f,s_multi,i_multi&quot;,
+               sort=&quot;a_f asc, a_i asc&quot;))</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The example above sends the tuples returned by the <code>search</code> function to the <code>destinationCollection</code> to be indexed.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Adds tags, if any -->
+    <div class="tags">
+        
+    </div>
+
+<!-- Adds nav links on each page -->
+    
+    
+    <div class="scrollnav">
+      
+      <a class="btn btn-primary prev" href="https://solr.apache.org/guide/6_6/stream-sources.html">Stream Source Reference</a>
+      
+      
+      <a class="btn btn-primary next" href="https://solr.apache.org/guide/6_6/stream-evaluators.html">Stream Evaluator Reference</a>
+      
+    </div>
+    
+
+</div>
+
+<!-- Adds comments from Apache's Comment system -->
+
+<div id="comments_thread">
+</div>
+<script type="text/javascript" src="https://comments.apache.org/show_comments.lua?site=solr-refguide&amp;style=css/comments.css&amp;page=stream-decorators" async="true">
+</script>
+<noscript>
+<iframe width="100%" height="500" src="https://comments.apache.org/iframe.lua?site=solr-refguide&amp;style=css/comments.css&amp;page=stream-decorators"></iframe>
+</noscript>
+
+<footer>
+            <div class="row">
+                <div class="col-lg-12 footer">
+               &copy;2017 Apache Software Foundation. All rights reserved. <br />
+ Site Version: 6.6 <br />Site last generated: 2017-06-09 <br />
+<p><img src="https://solr.apache.org/guide/6_6/images/solr-sunOnly-small.png" alt="Apache Solr"/></p>
+                </div>
+            </div>
+</footer>
+
+
+    </div>
+    <!-- /.row -->
+  </div>
+  <!-- /.container -->
+</div>
+
+</body>
+
+<!-- Mirrored from solr.apache.org/guide/6_6/stream-decorators.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 26 Feb 2026 00:40:00 GMT -->
+</html>

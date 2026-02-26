@@ -1,0 +1,2247 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<!-- Mirrored from solr.apache.org/guide/solr/latest/query-guide/common-query-parameters.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 26 Feb 2026 00:40:00 GMT -->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Common Query Parameters :: Apache Solr Reference Guide</title>
+    <link rel="canonical" href="https://solr.apache.org/guide/solr/latest/query-guide/common-query-parameters.html">
+    <meta name="generator" content="Antora 3.1.12">
+    <link rel="stylesheet" href="https://solr.apache.org/guide/_/css/site.css">
+    <script>var uiRootPath = '../../../_'</script>
+<!-- Solr Changes - Start -->
+    <link rel="icon" href="https://solr.apache.org/guide/_/img/favicon.ico" type="image/x-icon">
+<!-- Solr Changes - End -->
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <!-- Solr Changes - Start -->
+      <img class="navbar-item" src="https://solr.apache.org/guide/_/img/solr-sunOnly-small.png" width="30" height="30">
+      <a class="navbar-item" href="https://solr.apache.org/guide">Apache Solr Reference Guide</a>
+      <!-- Solr Changes - End -->
+        <div class="navbar-item search hide-for-print">
+          <div id="search-field" class="field">
+            <input id="search-input" type="text" placeholder="Search the docs">
+          </div>
+        </div>
+
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <!-- Solr Changes - Start -->
+        <a class="navbar-item" href="https://solr.apache.org/" target="_blank" rel="noreferrer nopener">Solr Website</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Resources</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://solr.apache.org/docs/9_10_1/index.html" target="_blank" rel="noreferrer nopener">Solr Javadocs</a>
+            <a class="navbar-item" href="https://solr.apache.org/community.html#version-control" target="_blank" rel="noreferrer nopener">Source Code</a>
+            <a class="navbar-item" href="https://solr.apache.org/community.html" target="_blank" rel="noreferrer nopener">Community Links</a>
+            <a class="navbar-item" href="https://github.com/apache/solr/tree/main/dev-docs/ref-guide" target="_blank" rel="noreferrer nopener">Contribute</a>
+          </div>
+        </div>
+        <div class="navbar-item">
+          <span class="control">
+            <a class="button is-primary" href="https://solr.apache.org/downloads.html" target="_blank" rel="noreferrer nopener">Download</a>
+          </span>
+        </div>
+        <!-- Solr Changes - End -->
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="solr" data-version="9_10">
+  <aside class="nav">
+    <div class="panels">
+<!-- Solr Changes - Start -->
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Solr Reference Guide</span>
+    <span class="version">9.10</span>
+  </div>
+<!-- Programmatically creates the component and version list -->
+  <ul class="components">
+    <li class="component is-current">
+      <a class="title" href="https://solr.apache.org/guide/solr/latest/index.html">Solr Reference Guide</a>
+      <ul class="versions">
+        <li class="version">
+          <a href="https://solr.apache.org/guide/solr/10_0/index.html">10.0-alpha</a>
+        </li>
+        <li class="version is-current is-latest">
+          <a href="https://solr.apache.org/guide/solr/latest/index.html">9.10</a>
+        </li>
+        <li class="version">
+          <a href="https://solr.apache.org/guide/solr/9_9/index.html">9.9</a>
+        </li>
+        <li class="version">
+          <a href="https://solr.apache.org/guide/solr/9_8/index.html">9.8</a>
+        </li>
+        <li class="version">
+          <a href="https://solr.apache.org/guide/solr/9_7/index.html">9.7</a>
+        </li>
+        <li class="version">
+          <a href="https://solr.apache.org/guide/solr/9_6/index.html">9.6</a>
+        </li>
+        <li class="version">
+          <a href="https://solr.apache.org/guide/solr/9_5/index.html">9.5</a>
+        </li>
+        <li class="version">
+          <a href="https://solr.apache.org/guide/solr/9_4/index.html">9.4</a>
+        </li>
+        <li class="version">
+          <a href="https://solr.apache.org/guide/solr/9_3/index.html">9.3</a>
+        </li>
+        <li class="version">
+          <a href="https://solr.apache.org/guide/solr/9_2/index.html">9.2</a>
+        </li>
+        <li class="version">
+          <a href="https://solr.apache.org/guide/solr/9_1/index.html">9.1</a>
+        </li>
+        <li class="version">
+          <a href="https://solr.apache.org/guide/solr/9_0/index.html">9.0</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+
+  <!-- Solr Additions - Start -->
+  <!-- A hard-coded list of older Ref Guides, pre-Antora -->
+  <ul class="components">
+    <li class="component"> <a class="title" href="https://solr.apache.org/guide">Pre-9.0 Reference Guides</a>
+    <ul class="versions">
+      <li class="version">
+        <a href="https://solr.apache.org/guide/8_11">8.11</a>
+      </li>
+      <li class="version">
+        <a href="https://solr.apache.org/guide/8_10">8.10</a>
+      </li>
+      <li class="version">
+        <a href="https://solr.apache.org/guide/8_9">8.9</a>
+      </li>
+      <li class="version">
+        <a href="https://solr.apache.org/guide/8_8">8.8</a>
+      </li>
+      <li class="version">
+        <a href="https://solr.apache.org/guide/8_7">8.7</a>
+      </li>
+      <li class="version">
+        <a href="https://solr.apache.org/guide/8_6">8.6</a>
+      </li>
+      <li class="version">
+        <a href="https://solr.apache.org/guide/8_5">8.5</a>
+      </li>
+      <li class="version">
+        <a href="https://solr.apache.org/guide/8_4">8.4</a>
+      </li>
+      <li class="version">
+        <a href="https://solr.apache.org/guide/8_3">8.3</a>
+      </li>
+      <li class="version">
+        <a href="https://solr.apache.org/guide/8_2">8.2</a>
+      </li>
+      <li class="version">
+        <a href="https://solr.apache.org/guide/8_1">8.1</a>
+      </li>
+      <li class="version">
+        <a href="https://solr.apache.org/guide/8_0">8.0</a>
+      </li>
+      <li class="version">
+        <a href="https://solr.apache.org/guide/7_7">7.7</a>
+      </li>
+      <li class="version">
+        <a href="https://solr.apache.org/guide/7_6">7.6</a>
+      </li>
+      <li class="version">
+        <a href="https://solr.apache.org/guide/7_5">7.5</a>
+      </li>
+      <li class="version">
+        <a href="https://solr.apache.org/guide/7_4">7.4</a>
+      </li>
+      <li class="version">
+        <a href="https://solr.apache.org/guide/7_3">7.3</a>
+      </li>
+      <li class="version">
+        <a href="https://solr.apache.org/guide/7_2">7.2</a>
+      </li>
+      <li class="version">
+        <a href="https://solr.apache.org/guide/7_1">7.1</a>
+      </li>
+      <li class="version">
+        <a href="https://solr.apache.org/guide/7_0">7.0</a>
+      </li>
+      <li class="version">
+        <a href="https://solr.apache.org/guide/6_6">6.6</a>
+      </li>
+      <li class="version">
+        <a href="http://archive.apache.org/dist/lucene/solr/ref-guide/">Older</a>
+      </li>
+    </ul>
+  </li>
+  <!-- Solr Additions - End -->
+  </ul>
+</div>
+
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <!-- Solr Removals - Start
+    <h3 class="title"><a href="../index.html">Solr Reference Guide</a></h3>
+         Solr Removals - End -->
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Getting Started</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/getting-started/introduction.html">Introduction to Solr</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Solr Concepts</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/getting-started/documents-fields-schema-design.html">Documents, Fields, and Schema Design</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/getting-started/solr-indexing.html">Solr Indexing</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/getting-started/searching-in-solr.html">Searching in Solr</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/getting-started/relevance.html">Relevance</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/getting-started/solr-glossary.html">Solr Glossary</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/getting-started/solr-tutorial.html">Solr Tutorials</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/getting-started/tutorial-five-minutes.html">Exercise 0: Five Minutes to Searching!</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/getting-started/tutorial-techproducts.html">Exercise 1: Index Techproducts Data</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/getting-started/tutorial-films.html">Exercise 2: Index Films Data</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/getting-started/tutorial-diy.html">Exercise 3: Index Your Own Data</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/getting-started/tutorial-paramsets.html">Exercise 4: Using ParamSets</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/getting-started/tutorial-vectors.html">Exercise 5: Using Vectors</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/getting-started/tutorial-solrcloud.html">Getting Started with SolrCloud</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/getting-started/tutorial-aws.html">SolrCloud on AWS EC2</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/getting-started/solr-admin-ui.html">Solr Admin UI</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/getting-started/about-this-guide.html">About This Guide</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Deployment Guide</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/deployment-guide/solr-control-script-reference.html">Solr Control Script Reference</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Installation &amp; Deployment</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/deployment-guide/system-requirements.html">System Requirements</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/deployment-guide/installing-solr.html">Installing Solr</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/deployment-guide/taking-solr-to-production.html">Taking Solr to Production</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/deployment-guide/jvm-settings.html">JVM Settings</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/deployment-guide/upgrading-a-solr-cluster.html">Upgrading a Solr Cluster</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/deployment-guide/backup-restore.html">Backup and Restore</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/deployment-guide/solr-in-docker.html">Solr in Docker</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/deployment-guide/docker-faq.html">Solr Docker FAQ</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/deployment-guide/solr-on-hdfs.html">Solr on HDFS</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Scaling Solr</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/deployment-guide/cluster-types.html">Solr Cluster Types</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">SolrCloud Clusters</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/deployment-guide/solrcloud-shards-indexing.html">SolrCloud Shards and Indexing</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/deployment-guide/solrcloud-recoveries-and-write-tolerance.html">SolrCloud Recoveries and Write Tolerance</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/deployment-guide/solrcloud-distributed-requests.html">SolrCloud Distributed Requests</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/deployment-guide/node-roles.html">Node Roles</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/deployment-guide/aliases.html">Aliases</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Collections API</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/deployment-guide/cluster-node-management.html">Cluster and Node Management Commands</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/deployment-guide/collection-management.html">Collection Management Commands</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/deployment-guide/shard-management.html">Shard Management Commands</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/deployment-guide/replica-management.html">Replica Management Commands</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/deployment-guide/alias-management.html">Alias Management</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">ZooKeeper Configuration</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/deployment-guide/zookeeper-ensemble.html">ZooKeeper Ensemble Configuration</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/deployment-guide/zookeeper-file-management.html">ZooKeeper File Management</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/deployment-guide/zookeeper-utilities.html">ZooKeeper Utilities</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/deployment-guide/solrcloud-with-legacy-configuration-files.html">SolrCloud with Legacy Configuration Files</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Admin UI</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/deployment-guide/collections-core-admin.html">Collections / Core Admin</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/deployment-guide/cloud-screens.html">Cloud Screens</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">User-Managed Clusters</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/deployment-guide/user-managed-index-replication.html">User-Managed Index Replication Index Replication</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/deployment-guide/user-managed-distributed-search.html">User-Managed Distributed Search</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Monitoring Solr</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/deployment-guide/configuring-logging.html">Configuring Logging</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/deployment-guide/ping.html">Ping</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/deployment-guide/metrics-reporting.html">Metrics Reporting</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/deployment-guide/performance-statistics-reference.html">Performance Statistics Reference</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/deployment-guide/plugins-stats-screen.html">Plugins &amp; Stats Screen</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/deployment-guide/mbean-request-handler.html">MBean Request Handler</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/deployment-guide/monitoring-with-prometheus-and-grafana.html">Monitoring with Prometheus and Grafana</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/deployment-guide/jmx-with-solr.html">JMX with Solr</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/deployment-guide/thread-dump.html">Thread Dump Screen</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/deployment-guide/distributed-tracing.html">Distributed Tracing</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/deployment-guide/circuit-breakers.html">Circuit Breakers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/deployment-guide/rate-limiters.html">Request Rate Limiters</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/deployment-guide/task-management.html">Task Management</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/deployment-guide/securing-solr.html">Securing Solr</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/deployment-guide/authentication-and-authorization-plugins.html">Configuring Authentication and Authorization</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/deployment-guide/basic-authentication-plugin.html">Basic Authentication Plugin</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/deployment-guide/kerberos-authentication-plugin.html">Kerberos Authentication Plugin</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/deployment-guide/jwt-authentication-plugin.html">JWT Authentication Plugin</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/deployment-guide/cert-authentication-plugin.html">Certificate Authentication Plugin</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/deployment-guide/hadoop-authentication-plugin.html">Hadoop Authentication Plugin</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/deployment-guide/rule-based-authorization-plugin.html">Rule-Based Authorization Plugins</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/deployment-guide/audit-logging.html">Audit Logging</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/deployment-guide/enabling-ssl.html">Enabling SSL</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/deployment-guide/zookeeper-access-control.html">ZooKeeper Access Control</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/deployment-guide/security-ui.html">Security UI</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/deployment-guide/client-apis.html">Client APIs</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/deployment-guide/solrj.html">SolrJ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/deployment-guide/javascript.html">JavaScript</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/deployment-guide/python.html">Python</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/deployment-guide/ruby.html">Ruby</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Configuration Guide</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/configuration-guide/configuration-files.html">Solr Configuration Files</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/configuration-guide/property-substitution.html">Property Substitution in Configuration Files</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/configuration-guide/core-discovery.html">Core Discovery</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/configuration-guide/configuring-solr-xml.html">Configuring solr.xml</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/configuration-guide/configuring-solrconfig-xml.html">Configuring solrconfig.xml</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/configuration-guide/index-location-format.html">Index Location and Format</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/configuration-guide/index-segments-merging.html">Index Segments and Merging</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/configuration-guide/schema-factory.html">Schema Factory Configuration</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/configuration-guide/commits-transaction-logs.html">Commits and Transaction Logs</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/configuration-guide/caches-warming.html">Caches and Query Warming</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/configuration-guide/requesthandlers-searchcomponents.html">Request Handlers and Search Components</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/configuration-guide/implicit-requesthandlers.html">Implicit Request Handlers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/configuration-guide/realtime-get.html">RealTime Get</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/configuration-guide/initparams.html">InitParams</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/configuration-guide/requestdispatcher.html">RequestDispatcher</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/configuration-guide/update-request-processors.html">Update Request Processors</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/configuration-guide/script-update-processor.html">Script Update Processor</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/configuration-guide/codec-factory.html">Codec Factory</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Configuration APIs</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/configuration-guide/config-api.html">Config API</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/configuration-guide/request-parameters-api.html">Request Parameters API</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/configuration-guide/managed-resources.html">Managed Resources</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/configuration-guide/collections-api.html">Collections API</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/configuration-guide/configsets-api.html">Configsets API</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/configuration-guide/coreadmin-api.html">CoreAdmin API</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/configuration-guide/v2-api.html">v2 API</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/configuration-guide/config-sets.html">Configsets</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/configuration-guide/resource-loading.html">Resource Loading</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/configuration-guide/solr-plugins.html">Solr Plugins</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/configuration-guide/libs.html">Lib Directories</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/configuration-guide/solr-modules.html">Solr Modules</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/configuration-guide/package-manager.html">Package Management</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/configuration-guide/package-manager-internals.html">Package Manager Internals</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/configuration-guide/cluster-plugins.html">Cluster Plugins</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/configuration-guide/replica-placement-plugins.html">Replica Placement Plugins</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Schema and Indexing Guide</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Solr Schema</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/indexing-guide/schema-elements.html">Schema Elements</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/indexing-guide/schema-api.html">Schema API</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/indexing-guide/schemaless-mode.html">Schemaless Mode</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/indexing-guide/schema-designer.html">Schema Designer</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/indexing-guide/schema-browser-screen.html">Schema Browser Screen</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Fields &amp; Schema Design</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/indexing-guide/fields.html">Fields</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Field Types</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/indexing-guide/field-type-definitions-and-properties.html">Field Type Definitions and Properties</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/indexing-guide/field-types-included-with-solr.html">Field Types Included with Solr</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/indexing-guide/currencies-exchange-rates.html">Currencies and Exchange Rates</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/indexing-guide/date-formatting-math.html">Date Formatting and Date Math</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/indexing-guide/enum-fields.html">Enum Fields</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/indexing-guide/external-files-processes.html">External Files and Processes</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/indexing-guide/field-properties-by-use-case.html">Field Properties by Use Case</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/indexing-guide/copy-fields.html">Copy Fields</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/indexing-guide/dynamic-fields.html">Dynamic Fields</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/indexing-guide/docvalues.html">DocValues</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/indexing-guide/luke-request-handler.html">Luke Request Handler</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/indexing-guide/document-analysis.html">Document Analysis in Solr</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/indexing-guide/analyzers.html">Analyzers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/indexing-guide/tokenizers.html">Tokenizers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/indexing-guide/filters.html">Filters</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/indexing-guide/charfilters.html">CharFilters</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/indexing-guide/language-analysis.html">Language Analysis</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/indexing-guide/phonetic-matching.html">Phonetic Matching</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/indexing-guide/analysis-screen.html">Analysis Screen</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Indexing &amp; Data Operations</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/indexing-guide/indexing-with-update-handlers.html">Indexing with Update Handlers</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/indexing-guide/transforming-and-indexing-custom-json.html">Transforming and Indexing Custom JSON</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/indexing-guide/indexing-with-cbor.html">Indexing with Update CBOR data format</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/indexing-guide/indexing-with-tika.html">Indexing with Solr Cell and Apache Tika</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/indexing-guide/indexing-nested-documents.html">Indexing Nested Documents</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/indexing-guide/post-tool.html">Post Tool</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/indexing-guide/documents-screen.html">Documents Screen</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/indexing-guide/partial-document-updates.html">Partial Document Updates</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/indexing-guide/reindexing.html">Reindexing</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/indexing-guide/language-detection.html">Language Detection</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/indexing-guide/de-duplication.html">De-Duplication</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/indexing-guide/content-streams.html">Content Streams</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Query Guide</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/query-syntax-and-parsers.html">Query Syntax and Parsers</a>
+<ul class="nav-list">
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/common-query-parameters.html">Common Query Parameters</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/standard-query-parser.html">Standard Query Parser</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/dismax-query-parser.html">DisMax Query Parser</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/edismax-query-parser.html">Extended DisMax (eDisMax) Query Parser</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/function-queries.html">Function Queries</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/expression-value-source-parser.html">Expression Value Source Parser</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/local-params.html">Local Params</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/json-request-api.html">JSON Request API</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/json-query-dsl.html">JSON Query DSL</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/searching-nested-documents.html">Searching Nested Child Documents</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/block-join-query-parser.html">Block Join Query Parser</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/join-query-parser.html">Join Query Parser</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/spatial-search.html">Spatial Search</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/dense-vector-search.html">Dense Vector Search</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/other-parsers.html">Other Query Parsers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/sql-query.html">SQL Query Language</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/jdbc-dbvisualizer.html">JDBC with DbVisualizer</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/jdbc-squirrel.html">JDBC with SQuirreL SQL</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/jdbc-zeppelin.html">JDBC with Apache Zeppelin</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/jdbc-python-jython.html">JDBC with Python/Jython</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/jdbc-r.html">JDBC with R</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/query-screen.html">Query Screen</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/sql-screen.html">SQL Query Screen</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Enhancing Queries</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/spell-checking.html">Spell Checking</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/suggester.html">Suggester</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/morelikethis.html">MoreLikeThis</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/query-re-ranking.html">Query Re-Ranking</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/learning-to-rank.html">Learning To Rank</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/tagger-handler.html">Tagger Handler</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/analytics.html">Analytics Component</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/analytics-expression-sources.html">Analytics Expression Sources</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/analytics-mapping-functions.html">Analytics Mapping Functions</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/analytics-reduction-functions.html">Analytics Reduction Functions</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/terms-component.html">Terms Component</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/term-vector-component.html">Term Vector Component</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/stats-component.html">Stats Component</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Controlling Results</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/faceting.html">Faceting</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/json-facet-api.html">JSON Facet API</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/json-faceting-domain-changes.html">JSON Faceting Domain Changes</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/collapse-and-expand-results.html">Collapse and Expand Results</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/result-grouping.html">Result Grouping</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/result-clustering.html">Result Clustering</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/highlighting.html">Highlighting</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/query-elevation-component.html">Query Elevation Component</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/document-transformers.html">Document Transformers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/response-writers.html">Response Writers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/exporting-result-sets.html">Exporting Result Sets</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/pagination-of-results.html">Pagination of Results</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/streaming-expressions.html">Streaming Expressions</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/stream-source-reference.html">Stream Source Reference</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/stream-decorator-reference.html">Stream Decorator Reference</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/stream-evaluator-reference.html">Stream Evaluator Reference</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/math-expressions.html">Streaming Expressions and Math Expressions</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/visualization.html">Visualization</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/math-start.html">Getting Started</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/loading.html">Loading Data</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/search-sample.html">Searching, Sampling and Aggregation</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/transform.html">Transforming Data</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/scalar-math.html">Scalar Math</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/vector-math.html">Vector Math</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/variables.html">Variables</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/matrix-math.html">Matrices and Matrix Math</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/term-vectors.html">Text Analysis and Term Vectors</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/probability-distributions.html">Probability Distributions</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/statistics.html">Statistics</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/regression.html">Linear Regression</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/curve-fitting.html">Curve Fitting</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/time-series.html">Time Series</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/numerical-analysis.html">Interpolation, Derivatives and Integrals</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/dsp.html">Digital Signal Processing</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/simulations.html">Monte Carlo Simulations</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/machine-learning.html">Machine Learning</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/graph.html">Graph</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/computational-geometry.html">Computational Geometry</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/logs.html">Log Analytics</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/graph-traversal.html">Graph Traversal</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/stream-api.html">Stream Request Handler API</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/query-guide/stream-screen.html">Stream Screen</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/upgrade-notes/solr-upgrade-notes.html">Solr Upgrade Notes</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/upgrade-notes/major-changes-in-solr-9.html">Major Changes in Solr 9</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/upgrade-notes/major-changes-in-solr-8.html">Major Changes in Solr 8</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/upgrade-notes/major-changes-in-solr-7.html">Major Changes in Solr 7</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/upgrade-notes/major-changes-in-solr-6.html">Major Changes in Solr 6</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="https://solr.apache.org/guide/solr/latest/how-to-contribute/how-to-contribute.html">How To Contribute</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<!-- Solr Changes - End -->
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="https://solr.apache.org/guide/solr/latest/index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="https://solr.apache.org/guide/solr/latest/index.html">Solr Reference Guide</a></li>
+    <li>Query Guide</li>
+    <li><a href="https://solr.apache.org/guide/solr/latest/query-guide/query-syntax-and-parsers.html">Query Syntax and Parsers</a></li>
+    <li><a href="https://solr.apache.org/guide/solr/latest/query-guide/common-query-parameters.html">Common Query Parameters</a></li>
+  </ul>
+</nav>
+<div class="page-versions">
+  <button class="version-menu-toggle" title="Show other versions of page">9.10</button>
+  <div class="version-menu">
+    <a class="version" href="https://solr.apache.org/guide/solr/10_0/query-guide/common-query-parameters.html">10.0-alpha</a>
+    <a class="version is-current" href="https://solr.apache.org/guide/solr/latest/query-guide/common-query-parameters.html">9.10</a>
+    <a class="version" href="https://solr.apache.org/guide/solr/9_9/query-guide/common-query-parameters.html">9.9</a>
+    <a class="version" href="https://solr.apache.org/guide/solr/9_8/query-guide/common-query-parameters.html">9.8</a>
+    <a class="version" href="https://solr.apache.org/guide/solr/9_7/query-guide/common-query-parameters.html">9.7</a>
+    <a class="version" href="https://solr.apache.org/guide/solr/9_6/query-guide/common-query-parameters.html">9.6</a>
+    <a class="version" href="https://solr.apache.org/guide/solr/9_5/query-guide/common-query-parameters.html">9.5</a>
+    <a class="version" href="https://solr.apache.org/guide/solr/9_4/query-guide/common-query-parameters.html">9.4</a>
+    <a class="version" href="https://solr.apache.org/guide/solr/9_3/query-guide/common-query-parameters.html">9.3</a>
+    <a class="version" href="https://solr.apache.org/guide/solr/9_2/query-guide/common-query-parameters.html">9.2</a>
+    <a class="version" href="https://solr.apache.org/guide/solr/9_1/query-guide/common-query-parameters.html">9.1</a>
+    <a class="version" href="https://solr.apache.org/guide/solr/9_0/query-guide/common-query-parameters.html">9.0</a>
+  </div>
+</div>
+<!-- Solr Additions - Start -->
+<!-- Solr New File -->
+<span class="perma-link-copy" version="9_10">
+</span><!-- Solr Additions - End -->
+  <div class="edit-this-page"><a href="https://github.com/apache/solr/tree/main/solr/solr-ref-guide/modules/query-guide/pages/common-query-parameters.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<!-- Solr Changes - Start -->
+<nav class="toc sidebar" data-title="On This Page" data-levels="2">
+  <div class="toc-menu"></div>
+</nav>
+<!-- Solr Changes - End --><article class="doc">
+<h1 class="page">Common Query Parameters</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Several query parsers share supported query parameters.</p>
+</div>
+<div class="paragraph">
+<p>The following sections describe Solr&#8217;s common query parameters, which are supported by the <a href="https://solr.apache.org/guide/solr/latest/configuration-guide/requesthandlers-searchcomponents.html#search-handlers" class="xref page">search request handlers</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="deftype-parameter"><a class="anchor" href="#deftype-parameter"></a>defType Parameter</h2>
+<div class="sectionbody">
+<table class="tableblock frame-none grid-all fit-content">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Default: <code>lucene</code></p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>The <code>defType</code> parameter selects the <a href="https://solr.apache.org/guide/solr/latest/query-guide/query-syntax-and-parsers.html" class="xref page">query parser</a> to process the main query parameter (<code>q</code>) in the request. Acceptable values include: <code>lucene</code> (<a href="https://solr.apache.org/guide/solr/latest/query-guide/standard-query-parser.html" class="xref page">Standard Query Parser</a>), <code>dismax</code> (<a href="https://solr.apache.org/guide/solr/latest/query-guide/dismax-query-parser.html" class="xref page">DisMax Query Parser</a>), <code>edismax</code> (<a href="https://solr.apache.org/guide/solr/latest/query-guide/edismax-query-parser.html" class="xref page">Extended DisMax (eDisMax) Query Parser</a>), or one of the <a href="https://solr.apache.org/guide/solr/latest/query-guide/query-syntax-and-parsers.html" class="xref page">other query parsers</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="sort-parameter"><a class="anchor" href="#sort-parameter"></a>sort Parameter</h2>
+<div class="sectionbody">
+<table class="tableblock frame-none grid-all fit-content">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Default: <code>score desc</code></p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>The <code>sort</code> parameter specifies the order of the returned documents.</p>
+</div>
+<div class="paragraph">
+<p>Here are some sample sort values:</p>
+</div>
+<table class="tableblock frame-all grid-all fit-content stretch">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Example</th>
+<th class="tableblock halign-left valign-top">Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>score desc</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sorts in descending order from the highest score to the lowest score.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>price asc</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sorts in ascending order of the price field, from lowest to highest.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>div(popularity,price) desc</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sorts in descending order of the result of the function <code>popularity / price</code>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>inStock desc, price asc</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sorts by the contents of the <code>inStock</code> field in descending order, then when multiple documents have the same value for the <code>inStock</code> field, those results are sorted in ascending order by the contents of the <code>price</code> field.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>categories asc</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Since <code>categories</code> is a multivalued field and we are sorting ascending, this sorts by the lowest value of the <code>categories</code> field in ascending order. This is equivalent to <code>field(categories,min) asc</code></p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>More specifically, Solr can sort query responses according to:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Document score</p>
+</li>
+<li>
+<p><a href="https://solr.apache.org/guide/solr/latest/query-guide/function-queries.html#sort-by-function" class="xref page">Function results</a></p>
+</li>
+<li>
+<p>Single-valued primitive fields (numerics, string, boolean, dates, etc.) which have <code>docValues="true"</code> (or <code>indexed="true"</code>, in which case the indexed terms will be used to build DocValue like structures on the fly at runtime).</p>
+</li>
+<li>
+<p>Single-valued SortableTextField which implicitly uses <code>docValues="true"</code> by default to allow sorting on the original input string regardless of the analyzers used for Searching.</p>
+</li>
+<li>
+<p>Single-valued TextField which have an analyzer (such as the KeywordTokenizer) that produces only a single term per document.
+Since TextField does not support <code>docValues="true"</code>, a DocValue-like structure will be built on the fly at runtime.</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>NOTE:</strong> If you want to be able to sort on a field whose contents you want to tokenize to facilitate searching, <a href="https://solr.apache.org/guide/solr/latest/indexing-guide/copy-fields.html" class="xref page">use a <code>copyField</code> directive</a> in the Schema to clone the field.
+Then search on the field and sort on its clone.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Multi-valued primitive fields with <code>docValues="true"</code> or SortableTextFields. In this case, a representative value is used for each document, depending on the sort direction. When ascending, the minimum value is used. When descending, the maximum value is used. This is equivalent to explicitly sorting using the 2 argument <a href="https://solr.apache.org/guide/solr/latest/query-guide/function-queries.html#field-function" class="xref page"><code>field()</code></a> function: <code>sort=field(name,min) asc</code> and <code>sort=field(name,max) desc</code>.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>You can specify multiple sort orderings by separating them with commas, e.g. <code>inStock desc, price asc</code>.
+When multiple sort criteria are provided, the second entry will only be used if the first entry results
+in a tie. If there is a third entry, it will only be used if the first AND second entries are tied. And
+so on.</p>
+</div>
+<div class="paragraph">
+<p>If documents tie in all of the explicit sort criteria, Solr uses each document&#8217;s Lucene document ID as the final tie-breaker.
+This internal property is subject to change during segment merges and document updates, which can lead to unexpected result ordering changes.
+Users looking to avoid this behavior can define an additional sort criteria on a unique or rarely-shared field such as <code>id</code> to prevent ties from occurring (e.g., <code>price desc,id asc</code>).</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+A sort ordering must always include a field name (or <code>score</code> as a pseudo field), followed by whitespace (escaped as + or <code>%20</code> in URL strings), followed by a sort direction (<code>asc</code> or <code>desc</code>, case insensitive).
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="start-parameter"><a class="anchor" href="#start-parameter"></a>start Parameter</h2>
+<div class="sectionbody">
+<table class="tableblock frame-none grid-all fit-content">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Default: <code>0</code></p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>The <code>start</code> parameter specifies an offset into a query&#8217;s result set and instructs Solr to begin displaying results from this offset.</p>
+</div>
+<div class="paragraph">
+<p>In other words, setting the <code>start</code> parameter to a number other than 0, such as 3, causes Solr to skip over the first 3 records and start at the document identified by the offset.</p>
+</div>
+<div class="paragraph">
+<p>You can use the <code>start</code> parameter this way for paging.
+For example, if the <code>rows</code> parameter is set to 10, you could display three successive pages of results by setting start to 0, then re-issuing the same query and setting start to 10, then issuing the query again and setting start to 20.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="rows-parameter"><a class="anchor" href="#rows-parameter"></a>rows Parameter</h2>
+<div class="sectionbody">
+<table class="tableblock frame-none grid-all fit-content">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Default: <code>10</code></p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>The <code>rows</code> parameter specifies the number of documents from the complete result to return in the response.
+You can use the <code>rows</code> parameter to paginate results from a query.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="cancancel-parameter"><a class="anchor" href="#cancancel-parameter"></a>canCancel Parameter</h2>
+<div class="sectionbody">
+<table class="tableblock frame-none grid-all fit-content">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Default: <code>false</code></p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>The <code>canCancel</code> parameter specifies if the query can be cancelled during its execution using the
+<a href="https://solr.apache.org/guide/solr/latest/deployment-guide/task-management.html" class="xref page">task management</a> interface.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="queryuuid-parameter"><a class="anchor" href="#queryuuid-parameter"></a>queryUUID Parameter</h2>
+<div class="sectionbody">
+<table class="tableblock frame-none grid-all fit-content">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Default: none</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>For cancellable queries, the <code>queryUUID</code> parameter allows specifying a custom UUID to identify the query with. Otherwise an auto-generated UUID will be assigned.</p>
+</div>
+<div class="paragraph">
+<p>When using <code>queryUUID</code>, the responsibility of ensuring uniqueness of the UUID lies with the caller.
+If a query UUID is reused while the original query UUID is still active, it will cause an exception to be thrown for the second query.</p>
+</div>
+<div class="paragraph">
+<p>It is recommended that to either use all custom UUIDs or depends completely on the system to generate UUID to avoid UUID conflicts.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="fq-filter-query-parameter"><a class="anchor" href="#fq-filter-query-parameter"></a>fq (Filter Query) Parameter</h2>
+<div class="sectionbody">
+<table class="tableblock frame-none grid-all fit-content">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Default: none</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>The <code>fq</code> parameter defines a query that can be used to restrict the superset of documents that can be returned, without influencing score.
+It can be very useful for speeding up complex queries, since the queries specified with <code>fq</code> are cached independently of the main query.
+When a later query uses the same filter, there&#8217;s a cache hit, and filter results are returned quickly from the cache.</p>
+</div>
+<div class="paragraph">
+<p>When using the <code>fq</code> parameter, keep in mind the following:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The <code>fq</code> parameter can be specified multiple times in a query.
+Documents will only be included in the result if they are in the intersection of the document sets resulting from each instance of the parameter.
+In the example below, only documents which have a popularity greater than 10 and have a section of 0 will match.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">fq=popularity:[10 TO *]&amp;fq=section:0</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Filter queries can involve complicated Boolean queries.
+The above example could also be written as a single <code>fq</code> with two mandatory clauses like so:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">fq=+popularity:[10 TO *] +section:0</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>The document sets from each filter query are cached independently.
+Thus, concerning the previous examples: use a single <code>fq</code> containing two mandatory clauses if those clauses appear together often, and use two separate <code>fq</code> parameters if they are relatively independent.
+(To learn about tuning cache sizes and making sure a filter cache actually exists, see <a href="https://solr.apache.org/guide/solr/latest/configuration-guide/caches-warming.html#caches" class="xref page">Caches</a>.)</p>
+</li>
+<li>
+<p>It is also possible to use <a href="https://solr.apache.org/guide/solr/latest/query-guide/standard-query-parser.html#differences-between-lucenes-classic-query-parser-and-solrs-standard-query-parser" class="xref page">filter(condition) syntax</a> inside the <code>fq</code> to cache clauses individually and - among other things - to achieve union of cached filter queries.</p>
+</li>
+<li>
+<p>As with all parameters: special characters in a URL need to be properly escaped and encoded as hex values.
+Online tools are available to help you with URL-encoding.
+For example: <a href="http://meyerweb.com/eric/tools/dencoder/" class="bare">http://meyerweb.com/eric/tools/dencoder/</a>.</p>
+</li>
+</ul>
+</div>
+<div class="sect2">
+<h3 id="cache-local-parameter"><a class="anchor" href="#cache-local-parameter"></a>cache Local Parameter</h3>
+<div class="paragraph">
+<p>Solr caches the results of filter queries by default in the <a href="https://solr.apache.org/guide/solr/latest/configuration-guide/caches-warming.html#filter-cache" class="xref page">filter cache</a>.
+To disable it, use the boolean <code>cache</code> <a href="https://solr.apache.org/guide/solr/latest/query-guide/local-params.html" class="xref page">local param</a>, such as <code>fq={!geofilt cache=false}&#8230;&#8203;</code>.
+Do this when you think a query is unlikely to be repeated.</p>
+</div>
+<div class="paragraph">
+<p>Non-cached filter queries also support the <code>cost</code> local parameter to provide a <em>hint</em> as to the order in which they are evaluated.
+This allows you to order less expensive non-cached filters before expensive non-cached filters.
+At the Lucene layer, this maps to <code>TwoPhaseIterator.matchCost</code> if the query has a TPI.</p>
+</div>
+<div class="paragraph">
+<p><strong>Post Filters</strong>: For very high cost filters, if <code>cache=false</code> <em>and</em> <code>cost&gt;=100</code>, <em>and</em> the query implements the <code>PostFilter</code> interface, a Collector will be requested from that query and used to filter documents after they have matched the main query and all other filter queries.
+There can be multiple post filters; they are also ordered by cost.</p>
+</div>
+<div class="paragraph">
+<p>For most queries the default behavior is <code>cost=0</code>, but some types of queries (such as <code>{!frange}</code>) default to <code>cost=100</code>, because they are most efficient when used as a <code>PostFilter</code>.</p>
+</div>
+<div class="paragraph">
+<p>This is an example of 3 regular filters, where all matching documents generated by each are computed up front and cached independently:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">q=some keywords
+fq=quantity_in_stock:[5 TO *]
+fq={!frange l=10 u=100}mul(popularity,price)
+fq={!frange cost=200 l=0}pow(mul(sum(1, query('tag:smartphone')), div(1,avg_rating)), 2.3)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>These are the same filters run without caching.
+The simple range query on the <code>quantity_in_stock</code> field will be run in parallel with the main query like a traditional Lucene filter, while the 2 <code>frange</code> filters will only be checked against each document has already matched the main query and the <code>quantity_in_stock</code> range query&#8201;&#8212;&#8201;first the simpler <code>mul(popularity,price)</code> will be checked (because of its implicit <code>cost=100</code>) and only if it matches will the final very complex filter (with its higher <code>cost=200</code>) be checked.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">q=some keywords
+fq={!cache=false}quantity_in_stock:[5 TO *]
+fq={!frange cache=false l=10 u=100}mul(popularity,price)
+fq={!frange cache=false cost=200 l=0}pow(mul(sum(1, query('tag:smartphone')), div(1,avg_rating)), 2.3)</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="fl-field-list-parameter"><a class="anchor" href="#fl-field-list-parameter"></a>fl (Field List) Parameter</h2>
+<div class="sectionbody">
+<table class="tableblock frame-none grid-all fit-content">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Default: <code>*</code></p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>The <code>fl</code> parameter limits the information included in a query response to a specified list of fields.
+The fields must be either <code>stored="true"</code> or <code>docValues="true"`</code>.`</p>
+</div>
+<div class="paragraph">
+<p>The field list can be specified as a space-separated or comma-separated list of field names.
+The string "score" can be used to indicate that the score of each document for the particular query should be returned as a field.
+The wildcard character <code>*</code> selects all the fields in the document which are either <code>stored="true"</code> or <code>docValues="true"</code> and <code>useDocValuesAsStored="true"</code> (which is the default when docValues are enabled).
+Combine the wildcard character with field name to make a glob pattern for matching multiple field names.</p>
+</div>
+<div class="paragraph">
+<p>You can also add pseudo-fields, functions and transformers to the field list request.</p>
+</div>
+<div class="paragraph">
+<p>This table shows some basic examples of how to use <code>fl</code>:</p>
+</div>
+<table class="tableblock frame-all grid-all fit-content stretch">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Field List</th>
+<th class="tableblock halign-left valign-top">Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">id name price</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Return only the id, name, and price fields.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">id,name,price</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Return only the id, name, and price fields.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">id name, price</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Return only the id, name, and price fields.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">id na* price</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Return the id, name, name_exact, and price fields.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">id na*e price</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Return the id, name, and price fields.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">id score</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Return the id field and the score.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">*</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Return all the <code>stored</code> fields in each document, as well as any <code>docValues</code> fields that have <code>useDocValuesAsStored="true"</code>. This is the default value of the fl parameter.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">* score</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Return all the fields in each document, along with each field&#8217;s score.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">*,dv_field_name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Return all the <code>stored</code> fields in each document, and any <code>docValues</code> fields that have <code>useDocValuesAsStored="true"</code> and the docValues from dv_field_name even if it has <code>useDocValuesAsStored="false"</code></p></td>
+</tr>
+</tbody>
+</table>
+<div class="sect2">
+<h3 id="functions-with-fl"><a class="anchor" href="#functions-with-fl"></a>Functions with fl</h3>
+<div class="paragraph">
+<p><a href="https://solr.apache.org/guide/solr/latest/query-guide/function-queries.html" class="xref page">Function Queries</a> can be computed for each document in the result and returned as a pseudo-field:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">fl=id,title,product(price,popularity)</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="document-transformers-with-fl"><a class="anchor" href="#document-transformers-with-fl"></a>Document Transformers with fl</h3>
+<div class="paragraph">
+<p><a href="https://solr.apache.org/guide/solr/latest/query-guide/document-transformers.html" class="xref page">Document Transformers</a> can be used to modify the information returned about each documents in the results of a query:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">fl=id,title,[explain]</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="field-name-aliases"><a class="anchor" href="#field-name-aliases"></a>Field Name Aliases</h3>
+<div class="paragraph">
+<p>You can change the key used to in the response for a field, function, or transformer by prefixing it with a <code><em>displayName</em>:</code> value.</p>
+</div>
+<div class="paragraph">
+<p>For example, <code>why_score</code> is the display name below:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">fl=id,sales_price:price,secret_sauce:product(price,popularity),why_score:[explain style=nl]</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">{
+"response": {
+    "numFound": 2,
+    "start": 0,
+    "docs": [{
+        "id": "6H500F0",
+        "secret_sauce": 2100.0,
+        "sales_price": 350.0,
+        "why_score": {
+            "match": true,
+            "value": 1.052226,
+            "description": "weight(features:cache in 2) [DefaultSimilarity], result of:",
+            "details": [{
+                "..."
+}]}}]}}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="debug-parameter"><a class="anchor" href="#debug-parameter"></a>debug Parameter</h2>
+<div class="sectionbody">
+<table class="tableblock frame-none grid-all fit-content">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Default: none</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>The <code>debug</code> parameter can be specified multiple times and supports the following arguments:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>debug=query</code>: return debug information about the query only.</p>
+</li>
+<li>
+<p><code>debug=timing</code>: return debug information about how long the query took to process.</p>
+</li>
+<li>
+<p><code>debug=results</code>: return debug information about the score results (also known as "explain").</p>
+<div class="ulist">
+<ul>
+<li>
+<p>By default, score explanations are returned as large string values, using newlines and tab indenting for structure &amp; readability, but an additional <code>debug.explain.structured=true</code> parameter may be specified to return this information as nested data structures native to the response format requested by <code>wt</code>.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><code>debug=all</code>: return all available debug information about the request request.
+An alternative usage is <code>debug=true</code>.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>For backwards compatibility with older versions of Solr, <code>debugQuery=true</code> may instead be specified as an alternative way to indicate <code>debug=all</code>.</p>
+</div>
+<div class="paragraph">
+<p>The default behavior is not to include debugging information.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="explainother-parameter"><a class="anchor" href="#explainother-parameter"></a>explainOther Parameter</h2>
+<div class="sectionbody">
+<table class="tableblock frame-none grid-all fit-content">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Default: none</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>The <code>explainOther</code> parameter specifies a Lucene query in order to identify a set of documents.
+If this parameter is included and is set to a non-blank value, the query will return debugging information, along with the "explain info" of each document that matches the Lucene query, relative to the main query (which is specified by the <code>q</code> parameter).
+For example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">q=supervillains&amp;debug=all&amp;explainOther=id:juggernaut</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The query above allows you to examine the scoring explain info of the top matching documents, compare it to the explain info for documents matching <code>id:juggernaut</code>, and determine why the rankings are not as you expect.</p>
+</div>
+<div class="paragraph">
+<p>The default value of this parameter is blank, which causes no extra "explain info" to be returned.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="partialresults-parameter"><a class="anchor" href="#partialresults-parameter"></a>partialResults Parameter</h2>
+<div class="sectionbody">
+<table class="tableblock frame-none grid-all fit-content">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Default: <code>true</code></p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>This parameter controls Solr&#8217;s behavior when a query execution limit is reached (e.g. <code>timeAllowed</code> or <code>cpuAllowed</code>).</p>
+</div>
+<div class="paragraph">
+<p>When this parameter is set to <code>true</code> (default) then Solr will return the results collected prior to detecting the limit violation.
+If <code>shards.tolerant=true</code> is also set, all non-limited responses will still be collected. If you are seeking a best-effort response use of the <a href="https://solr.apache.org/guide/solr/latest/deployment-guide/solrcloud-distributed-requests.html#shards-tolerant-parameter" class="xref page">shards.tolerant Parameter</a> is recommended.</p>
+</div>
+<div class="paragraph">
+<p>If incomplete results are returned the <code>partialResults</code> response header will be set to <code>true</code></p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+These results may be incomplete in a non-deterministic way (e.g. only some matching documents, documents without fields, missing facets or pivots, no spellcheck results, etc).
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>When this parameter is set to <code>false</code> then upon reaching a limit, Solr will stop collecting results and will not return any partial results already collected.
+In this case, the partialResults response header will be set to <code>omitted</code> and no result documents are returned.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The response will be 200 OK because the system has correctly provided the requested behavior.
+This is not an error condition.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="timeallowed-parameter"><a class="anchor" href="#timeallowed-parameter"></a>timeAllowed Parameter</h2>
+<div class="sectionbody">
+<table class="tableblock frame-none grid-all fit-content">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Default: none</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>This parameter specifies the amount of time, in milliseconds, allowed for a search to complete.
+If this time expires before the search is complete, any partial results will be returned, but values such as <code>numFound</code>, <a href="https://solr.apache.org/guide/solr/latest/query-guide/faceting.html" class="xref page">facet</a> counts, and result <a href="https://solr.apache.org/guide/solr/latest/query-guide/stats-component.html" class="xref page">stats</a> may not be accurate for the entire result set.
+In case of expiration, if <code>omitHeader</code> isn&#8217;t set to <code>true</code> the response header contains a special flag called <code>partialResults</code>.
+When using <code>timeAllowed</code> in combination with <a href="https://solr.apache.org/guide/solr/latest/query-guide/pagination-of-results.html#using-cursors" class="xref page"><code>cursorMark</code></a>, and the <code>partialResults</code> flag is present, some matching documents may have been skipped in the result set.
+Additionally, if  the <code>partialResults</code> flag is present, <code>cursorMark</code> can match <code>nextCursorMark</code> even if there may be more results</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">{
+  "responseHeader": {
+    "status": 0,
+    "zkConnected": true,
+    "partialResults": true,
+    "QTime": 20,
+    "params": {
+      "q": "*:*"
+    }
+  },
+  "response": {
+    "numFound": 77,
+    "start": 0,
+    "docs": [ "..." ]
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This value is only checked at the time of:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Query Expansion, and</p>
+</li>
+<li>
+<p>Document collection</p>
+</li>
+<li>
+<p>Doc Values reading</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>As this check is periodically performed, the actual time for which a request can be processed before it is aborted would be marginally greater than or equal to the value of <code>timeAllowed</code>.
+If the request consumes more time in other stages, custom components, etc., this parameter is not expected to abort the request.
+Regular search, JSON Facet and the Analytics component abandon requests in accordance with this parameter.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="cpuallowed-parameter"><a class="anchor" href="#cpuallowed-parameter"></a>cpuAllowed Parameter</h2>
+<div class="sectionbody">
+<table class="tableblock frame-none grid-all fit-content">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Default: none</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>This parameter specifies the amount of CPU time, in milliseconds, allowed for a search to complete.
+In contrast to the <code>timeAllowed</code> this parameter monitors the actual CPU usage by the thread that executes the query. The same CPU usage limit is applied to the query coordinator as to each replica that participates in the distributed search (although reaching this limit first in the query coordinator is unlikely).
+Should any replica locally exceed the allowed CPU time the whole distributed search will be terminated (by canceling requests to other shards).</p>
+</div>
+<div class="paragraph">
+<p>Note: the same CPU limit is applied to each stage in the distributed query processing. Typically this involves two or more stages where the request is processed by different
+Solr nodes (e.g. getting top document id-s, retrieving their fields, additional stages may be required for faceting, grouping, etc).
+For example, setting <code>cpuAllowed=500</code> gives a limit of at most 500 ms of CPU time for each of these stages - meaning that the total CPU usage by the query may reach a multiple of the <code>cpuAllowed</code> value depending on the number of stages.</p>
+</div>
+<div class="paragraph">
+<p>All other considerations regarding partial results listed for the <code>timeAllowed</code> parameter apply here, too.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="maxhitsallowed-parameter"><a class="anchor" href="#maxhitsallowed-parameter"></a>maxHitsAllowed Parameter</h2>
+<div class="sectionbody">
+<table class="tableblock frame-none grid-all fit-content">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Default: none</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>This parameter specifies the max number of hits a searcher will iterate through.
+Searchers will arbitrarily ignore any number of additional hits beyond this value.
+In a multi-sharded collection, this parameter will be used independently <strong>per-shard</strong>.
+When utilizing multi-threaded search, the limit will be best-effort and collectors may iterate through a few more documents than specified in <code>maxHitsAllowed</code>.</p>
+</div>
+<div class="paragraph">
+<p>The intention of this feature is to favor speed over perfect relevancy &amp; recall.
+The trade-off is that if one shard contains many relevant hits and another contains a few less relevant hits the less relevant hits from the second shard may get returned instead of the more relevant hits that were clustered in the first shard.</p>
+</div>
+<div class="paragraph">
+<p>This parameter works in conjunction with other parameters that could early terminate a search, ex: <code>timeAllowed</code> etc.
+In case the search was early terminated due to it exceeding maxHits a <code>maxHitsTerminatedEarly</code> header in the response will be set along with <code>partialResults</code> to indicate the same.
+The <code>partialResults</code> flag could be set in the absence of the <code>maxHitsAllowed</code> parameter due to other limits like <code>timeAllowed</code> or <code>cpuAllowed</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="memallowed-parameter"><a class="anchor" href="#memallowed-parameter"></a>memAllowed Parameter</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This parameter specifies the amount of memory (a float value, in MiB) allowed for a search thread to allocate
+during query execution. This parameter monitors additional memory allocated in the thread that executes the
+current query. The same limit is applied both to the query coordinator and to each replica that participates in
+the distributed search. As is the case with the <code>cpuAllowed</code> also here the limit is applied separately to each stage
+of the distributed query processing.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="segmentterminateearly-parameter"><a class="anchor" href="#segmentterminateearly-parameter"></a>segmentTerminateEarly Parameter</h2>
+<div class="sectionbody">
+<table class="tableblock frame-none grid-all fit-content">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Default: <code>false</code></p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>If set to <code>true</code>, and if <a href="https://solr.apache.org/guide/solr/latest/configuration-guide/index-segments-merging.html#mergepolicyfactory" class="xref page">the mergePolicyFactory</a> for this collection is a <a href="https://solr.apache.org/docs/9_10_1/core/org/apache/solr/index/SortingMergePolicyFactory.html"><code>SortingMergePolicyFactory</code></a> which uses a <code>sort</code> option compatible with <a href="#sort-parameter">the sort parameter</a> specified for this query, then Solr will be able to skip documents on a per-segment basis that are definitively not candidates for the current page of results.</p>
+</div>
+<div class="paragraph">
+<p>If early termination is used, a <code>segmentTerminatedEarly</code> header will be included in the <code>responseHeader</code>.</p>
+</div>
+<div class="paragraph">
+<p>Similar to using <a href="#timeallowed-parameter">the <code>timeAllowed</code> Parameter</a>, when early segment termination happens values such as <code>numFound</code>, <a href="https://solr.apache.org/guide/solr/latest/query-guide/faceting.html" class="xref page">Facet</a> counts, and result <a href="https://solr.apache.org/guide/solr/latest/query-guide/stats-component.html" class="xref page">Stats</a> may not be accurate for the entire result set.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="multithreaded-parameter"><a class="anchor" href="#multithreaded-parameter"></a>multiThreaded Parameter</h2>
+<div class="sectionbody">
+<table class="tableblock frame-none grid-all fit-content">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Default: <code>false</code></p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>This parameter set to <code>true</code> or <code>false</code> controls if Solr may use more than one thread to satisfy the request.
+A <code>true</code> value presently allows the IndexSearcher to search across Lucene&#8217;s segments in parallel, and the <a href="https://solr.apache.org/guide/solr/latest/configuration-guide/configuring-solr-xml.html#indexSearcherExecutorThreads" class="xref page">indexSearcherExecutorThreads</a> value can be customised in the <code>solr.xml</code> file.
+This parameter is ignored in the presence of <code>&amp;segmentsTerminateEarly=true</code> (future work may enable it).
+This is a new parameter and is considered experimental and subject to change or removal in subsequent releases.
+Please share your feedback and experiences with it on our mailing lists.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="omitheader-parameter"><a class="anchor" href="#omitheader-parameter"></a>omitHeader Parameter</h2>
+<div class="sectionbody">
+<table class="tableblock frame-none grid-all fit-content">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Default: <code>false</code></p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>If set to <code>true</code>, the <code>omitHeader</code> parameter excludes the header from the returned results.
+The header contains information about the request, such as the time it took to complete.</p>
+</div>
+<div class="paragraph">
+<p>When using parameters such as <a href="#timeallowed-parameter"><code>timeAllowed</code></a>, and <a href="https://solr.apache.org/guide/solr/latest/deployment-guide/solrcloud-distributed-requests.html#shards-tolerant-parameter" class="xref page"><code>shards.tolerant</code></a>, which can lead to partial results, it is advisable to keep the header, so that the <code>partialResults</code> flag can be checked, and values such as <code>numFound</code>, <code>nextCursorMark</code>, <a href="https://solr.apache.org/guide/solr/latest/query-guide/faceting.html" class="xref page">Facet</a> counts, and result <a href="https://solr.apache.org/guide/solr/latest/query-guide/stats-component.html" class="xref page">Stats</a> can be interpreted in the context of partial results.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="wt-parameter"><a class="anchor" href="#wt-parameter"></a>wt Parameter</h2>
+<div class="sectionbody">
+<table class="tableblock frame-none grid-all fit-content">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Default: <code>json</code></p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>The <code>wt</code> parameter selects the Response Writer that Solr should use to format the query&#8217;s response.
+For detailed descriptions of Response Writers, see <a href="https://solr.apache.org/guide/solr/latest/query-guide/response-writers.html" class="xref page">Response Writers</a>.</p>
+</div>
+<div class="paragraph">
+<p>If you do not define the <code>wt</code> parameter in your queries, JSON will be returned as the format of the response.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="logparamslist-parameter"><a class="anchor" href="#logparamslist-parameter"></a>logParamsList Parameter</h2>
+<div class="sectionbody">
+<table class="tableblock frame-none grid-all fit-content">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Default: all parameters</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>By default, Solr logs all query parameters on each request.
+The <code>logParamsList</code> parameter allows users to override this behavior, by specifying a comma-separated "allowlist" of parameter names that should be logged.
+This may help control logging to only those parameters considered important to your organization.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<code>logParamsList</code> only governs the logging of query parameters.
+It does not apply to parameters specified in the request path, body, etc.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>For example, you could define this like:</p>
+</div>
+<div class="paragraph">
+<p><code>logParamsList=q,fq</code></p>
+</div>
+<div class="paragraph">
+<p>And only the 'q' and 'fq' parameters will be logged.</p>
+</div>
+<div class="paragraph">
+<p>If no parameters should be logged, you can send <code>logParamsList</code> as empty (i.e., <code>logParamsList=</code>).</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+This parameter not only applies to query requests, but to any kind of request to Solr.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="echoparams-parameter"><a class="anchor" href="#echoparams-parameter"></a>echoParams Parameter</h2>
+<div class="sectionbody">
+<table class="tableblock frame-none grid-all fit-content">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Default: <code>none</code> or default in <code>solrconfig.xml</code></p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>The <code>echoParams</code> parameter controls what information about request parameters is included in the response header.</p>
+</div>
+<div class="paragraph">
+<p>The <code>echoParams</code> parameter accepts the following values:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>explicit</code>: Only parameters included in the actual request will be added to the <code>params</code> section of the response header.</p>
+</li>
+<li>
+<p><code>all</code>: Include all request parameters that contributed to the query.
+This will include everything defined in the request handler definition found in <code>solrconfig.xml</code> as well as parameters included with the request, plus the <code>_</code> parameter.
+If a parameter is included in the request handler definition AND the request, it will appear multiple times in the response header.</p>
+</li>
+<li>
+<p><code>none</code>: Entirely removes the <code>params</code> section of the response header.
+No information about the request parameters will be available in the response.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The default value is <code>none</code>, though many <code>solrconfig.xml</code> handlers set default to be <code>explicit</code>.
+Here is an example of a JSON response where the echoParams parameter was set in that SearchHandler&#8217;s default,
+so it itself was not echoed, but only three parameters from the request itself - <code>q</code>, <code>wt</code>, and <code>indent</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">{
+  "responseHeader": {
+    "status": 0,
+    "QTime": 0,
+    "params": {
+      "q": "solr",
+      "indent": "true",
+      "wt": "json",
+      "_": "1458227751857"
+    }
+  },
+  "response": {
+    "numFound": 0,
+    "start": 0,
+    "docs": []
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This is what happens if a similar request is sent that adds <code>echoParams=all</code> to the three parameters used in the previous example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">{
+  "responseHeader": {
+    "status": 0,
+    "QTime": 0,
+    "params": {
+      "q": "solr",
+      "df": "text",
+      "indent": "true",
+      "echoParams": "all",
+      "rows": "10",
+      "wt": "json",
+      "_": "1458228887287"
+    }
+  },
+  "response": {
+    "numFound": 0,
+    "start": 0,
+    "docs": []
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="minexactcount-parameter"><a class="anchor" href="#minexactcount-parameter"></a>minExactCount Parameter</h2>
+<div class="sectionbody">
+<table class="tableblock frame-none grid-all fit-content">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Default: none</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>When this parameter is used, Solr will count the number of hits accurately at least until this value.
+After that, Solr can skip over documents that don&#8217;t have a score high enough to enter in the top N.
+This can greatly improve performance of search queries.
+On the other hand, when this parameter is used, the <code>numFound</code> may not be exact, and may instead be an approximation.
+The <code>numFoundExact</code> boolean attribute is included in all responses, indicating if the <code>numFound</code> value is exact or an approximation.
+If it&#8217;s an approximation, the real number of hits for the query is guaranteed to be greater or equal <code>numFound</code>.</p>
+</div>
+<div class="paragraph">
+<p>More about approximate document counting and <code>minExactCount</code>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The documents returned in the response are guaranteed to be the docs with the top scores.
+This parameter will not make Solr skip documents that are to be returned in the response, it will only allow Solr to skip counting docs that, while they match the query, their score is low enough to not be in the top N.</p>
+</li>
+<li>
+<p>Providing <code>minExactCount</code> doesn&#8217;t guarantee that Solr will use approximate hit counting (and thus, provide the speedup).
+Some types of queries, or other parameters (like if facets are requested) will require accurate counting.</p>
+</li>
+<li>
+<p>Approximate counting can only be used when sorting by <code>score desc</code> first (which is the default sort in Solr).
+Other fields can be used after <code>score desc</code>, but if any other type of sorting is used before score, then the approximation won&#8217;t be applied.</p>
+</li>
+<li>
+<p>When doing distributed queries across multiple shards, each shard will accurately count hits until <code>minExactCount</code> (which means the query could be hitting <code>numShards * minExactCount</code> docs and <code>numFound</code> in the response would still be accurate)
+For example:</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">q=quick brown fox&amp;minExactCount=100&amp;rows=10</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">"response": {
+    "numFound": 153,
+    "start": 0,
+    "numFoundExact": false,
+    "docs": [{"doc1"}]
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Since <code>numFoundExact=false</code>, we know the number of documents matching the query is greater or equal to 153.
+If we specify a higher value for <code>minExactCount</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">q=quick brown fox&amp;minExactCount=200&amp;rows=10</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">"response": {
+    "numFound": 163,
+    "start": 0,
+    "numFoundExact": true,
+    "docs": [{"doc1"}]
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this case we know that <code>163</code> is the exact number of hits for the query.
+Both queries must have returned the same number of documents in the top 10.</p>
+</div>
+</div>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <!-- Solr Changes - Start -->
+  <p> &copy; Apache Software Foundation. All rights reserved.</p>
+  <script async src="https://solr.apache.org/guide/_/js/vendor/tabs.js"></script>
+  <!-- Solr Changes - End -->
+</footer>
+<script src="https://solr.apache.org/guide/_/js/site.js"></script>
+<script async src="https://solr.apache.org/guide/_/js/vendor/highlight.js"></script>
+<script src="https://solr.apache.org/guide/_/js/vendor/lunr.js"></script>
+<script src="https://solr.apache.org/guide/_/js/search-ui.js" id="search-ui-script" data-site-root-path="../../.." data-snippet-length="100" data-stylesheet="../../../_/css/search.css"></script>
+<script async src="https://solr.apache.org/guide/search-index.js"></script>
+  </body>
+
+<!-- Mirrored from solr.apache.org/guide/solr/latest/query-guide/common-query-parameters.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 26 Feb 2026 00:40:00 GMT -->
+</html>

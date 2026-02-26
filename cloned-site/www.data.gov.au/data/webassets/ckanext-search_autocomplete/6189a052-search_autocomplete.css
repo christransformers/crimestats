@@ -1,0 +1,95 @@
+.suggestion-box {
+    position: absolute;
+    z-index: 1000;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    padding: 0px;
+    background: white;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    list-style: none;
+    transform: translate(0, 100%);
+    border: 2px solid #c3c3c3;
+    border-radius: 4px;
+    margin: 0 15px;
+    display: none;
+}
+
+.suggestion-box .suggestion-section .suggestions {
+    padding: 0px;
+    margin: 20px 24px;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 19px;
+    list-style: none;
+}
+
+.suggestion-box .suggestion-section .suggestions:empty {
+    display: none;
+}
+
+.suggestion-box .suggestion-section .suggestions:before {
+    display: block;
+    color: #001e73;
+    content: attr(data-label);
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 22px;
+}
+
+.suggestion-box .suggestion-section .suggestions li {
+    margin-top: 8px;
+}
+
+.suggestion-box .suggestion-section .suggestions li a {
+    color: #000;
+    text-decoration: unset;
+}
+
+.suggestion-box .suggestion-section .suggestions li a.selected {
+    text-decoration: underline;
+}
+
+.suggestion-box .suggestion-section .suggestions li:first-child {
+    margin-top: 12px;
+}
+
+.suggestion-box .suggestion-section .suggestions li .muted {
+    margin-left: 6px;
+    color: #c6c6c6;
+}
+
+.suggestion-box .suggestion-section .suggestions li strong {
+    font-weight: 700;
+}
+
+.pending-request {
+    position: absolute;
+    top: 50%;
+    display: none;
+    color: #000;
+    transform: translateY(-50%);
+    transform-origin: 50%;
+}
+
+.pending-request i {
+    animation: rotate 1s infinite linear;
+}
+
+.active-suggestions .suggestion-box {
+    display: block;
+}
+
+.pending-suggestions .pending-request {
+    display: block;
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0turn)
+    }
+    to {
+        transform: rotate(1turn);
+    }
+}

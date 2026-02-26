@@ -1,0 +1,8 @@
+https://www.crimestats.co.nz/ -O ./crime-stats-clone +*.html +*.php -*.jpg -*.png -*.svg -*.css -*.js
+File generated automatically on Thu, 26 Feb 2026 00:20:07, do NOT edit
+
+To update a mirror, just launch httrack without any parameters
+The existing cache will be used (and modified)
+To have other options, retype all parameters and launch HTTrack
+To continue an interrupted mirror, just launch httrack without any parameters
+
