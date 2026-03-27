@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /cloned-site/
+Disallow: /crime-stats-clone/
+Disallow: /data_gov_au/
+
+Sitemap: https://crimestats.com.au/sitemap.xml
